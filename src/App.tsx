@@ -5,7 +5,7 @@ import { theme } from "./theme/theme";
 import { MainPage } from "./pages/mainPage";
 import { LoginPage } from "./pages/loginPage";
 import { CssBaseline } from "@mui/material";
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SignupPage } from "./pages/signupPage";
 import { NoPage } from "./pages/noPage";
 import { UserPage } from "./pages/myPage";

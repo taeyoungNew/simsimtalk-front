@@ -8,11 +8,13 @@ declare module "@mui/material/styles" {
   interface Palette {
     backGroungColor: PaletteColor;
     fontColor: PaletteColor;
+    buttonColor: PaletteColor;
   }
 
   interface PaletteOptions {
     backGroungColor: PaletteColorOptions;
     fontColor: PaletteColorOptions;
+    buttonColor: PaletteColorOptions;
   }
 }
 export const theme = createTheme({
@@ -36,6 +38,9 @@ export const theme = createTheme({
     },
     backGroungColor: {
       main: "#EFEAEA",
+    },
+    buttonColor: {
+      main: "#7F7373",
     },
   },
 });
