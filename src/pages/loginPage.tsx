@@ -5,7 +5,9 @@ import "../assets/css/loginPage.css";
 export const LoginPage = () => {
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "3em" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginTop: "0.5em" }}
+      >
         <Grid2
           sx={{ paddingTop: "30px" }}
           direction="column"
