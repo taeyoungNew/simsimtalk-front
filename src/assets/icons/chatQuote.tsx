@@ -1,18 +1,9 @@
 import { SvgIcon } from "@mui/material";
-// import { SVGProps } from "react";
-// import React, { FunctionComponent } from "react";
-// enum postionType {
-//   "static",
-//   "relative",
-//   "absolute",
-//   "sticky",
-//   "fixed",
-// }
+
 type Props = {
   size?: number;
   color?: string;
   classVal?: string;
-  // position?: postionType;
 };
 export const ChatQuote = (props: Props) => {
   return (

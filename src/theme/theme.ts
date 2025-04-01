@@ -43,4 +43,21 @@ export const theme = createTheme({
       main: "#7F7373",
     },
   },
+
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        "*::-webkit-scrollbar": {
+          width: "5px",
+        },
+        "*::-webkit-scrollbar-track": {
+          background: "#FFFFFF",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          background: "#918A8A",
+          borderRadius: "2px",
+        },
+      },
+    },
+  },
 });

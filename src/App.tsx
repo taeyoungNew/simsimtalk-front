@@ -20,7 +20,7 @@ function App() {
             <Route path="/" element={<Applayout />}>
               <Route index element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />}></Route>
+              <Route path="/signup" element={<SignupPage />} />
               <Route path="/myPage/:id" element={<UserPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>

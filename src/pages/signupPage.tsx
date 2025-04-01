@@ -16,10 +16,11 @@ export const SignupPage = () => {
         }}
       >
         <Grid2
-          sx={{ paddingTop: "30px" }}
+          sx={{ paddingTop: { xs: "10px", sm: "20px" } }}
           direction="column"
           container
-          rowSpacing={3}
+          rowSpacing={{ xs: 1, sm: 2 }}
+          // rowSpacing={3}
         >
           <Grid2
             width={350}
