@@ -33,14 +33,22 @@ export const MainPage = () => {
           marginTop: "10em",
         }}
       >
-        <Box>
-          <FilterIcon />
+        <Box position="relative">
+          <Box
+            height={"50px"}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <FilterIcon />
+          </Box>
         </Box>
         <Box sx={{ overflowY: "scroll" }} height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
               {dummies.map((el, index) => (
-                <ListItem key={index}>
+                <ListItem sx={{ paddingTop: "0" }} key={index}>
                   <PostCard
                     title={el.title}
                     nickname={el.nickname}
