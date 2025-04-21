@@ -28,16 +28,19 @@ export const theme = createTheme({
 
   palette: {
     primary: {
-      light: "#757ce8",
-      main: "#f44336",
-      dark: "#002884",
-      contrastText: "#fff",
+      light: "#F9F6E6",
+      main: "#E1EACD",
+      dark: "#BAD8B6",
+      contrastText: "#8D77AB",
     },
     fontColor: {
+      light: "#FFFFFF",
       main: "#918A8A",
     },
     backGroungColor: {
-      main: "#EFEAEA",
+      light: "#8b8989",
+      main: "#414345",
+      dark: "#434343",
     },
     buttonColor: {
       main: "#7F7373",

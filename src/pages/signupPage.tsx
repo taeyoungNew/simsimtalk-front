@@ -1,5 +1,7 @@
 import { Box, Button, Grid2, TextField } from "@mui/material";
 import { ChatQuote } from "../assets/icons/chatQuote";
+import { theme } from "../theme/theme";
+import { SimSimTextField } from "../layout/common/simsimTextField";
 
 // const formData = [{
 
@@ -27,19 +29,26 @@ export const SignupPage = () => {
             size={12}
             sx={{ display: "flex", justifyContent: "center" }}
           >
-            <ChatQuote size={100}></ChatQuote>
+            <ChatQuote
+              color={theme.palette.primary.contrastText}
+              size={100}
+            ></ChatQuote>
           </Grid2>
           <Grid2 sx={{ width: "100%", paddingTop: "0.5em" }} flexGrow={1}>
-            <TextField
-              sx={{ width: "inherit" }}
-              size="small"
+            <SimSimTextField
               id="outlined-basic"
               label="email"
               variant="outlined"
-            />
+              sx={{
+                width: "inherit",
+                color: "#E1EACD",
+              }}
+              size="small"
+              placeholder="email"
+            ></SimSimTextField>
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <TextField
+            <SimSimTextField
               sx={{ width: "inherit" }}
               id="outlined-password-input"
               label="password"
@@ -49,7 +58,7 @@ export const SignupPage = () => {
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <TextField
+            <SimSimTextField
               sx={{ width: "inherit" }}
               id="outlined-nickname-basic"
               label="nickname"
@@ -58,7 +67,7 @@ export const SignupPage = () => {
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <TextField
+            <SimSimTextField
               sx={{ width: "inherit" }}
               id="outlined-username-basic"
               label="username"
@@ -67,7 +76,7 @@ export const SignupPage = () => {
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <TextField
+            <SimSimTextField
               sx={{ width: "inherit" }}
               id="outlined-multiline-static"
               label="aboutme"
@@ -79,8 +88,10 @@ export const SignupPage = () => {
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
             <Button
               variant="contained"
+              // color={theme.palette.primary.contrastText}
               sx={{
-                backgroundColor: (theme) => theme.palette.buttonColor.main,
+                backgroundColor: (theme) => theme.palette.primary.dark,
+                color: (theme) => theme.palette.primary.contrastText,
                 width: "inherit",
                 height: "40px",
                 fontSize: "10px",

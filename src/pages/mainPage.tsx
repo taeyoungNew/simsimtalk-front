@@ -1,6 +1,10 @@
-import { Box, Grid2, ListItem } from "@mui/material";
+import { Box, Button, Grid2, ListItem, TextField } from "@mui/material";
 import { PostCard } from "../components/common/postCard";
 import { FilterIcon } from "../assets/icons/filterIcon";
+import { theme } from "../theme/theme";
+import SearchIcon from "@mui/icons-material/Search";
+import { TextFieldsOutlined } from "@mui/icons-material";
+import { SimSimTextField } from "../layout/common/simsimTextField";
 
 const dummies = [
   {
@@ -11,6 +15,11 @@ const dummies = [
   {
     title: "title2",
     nickname: "nick2",
+    contents: "hihi",
+  },
+  {
+    title: "title3",
+    nickname: "nick3",
     contents: "hihi",
   },
   {
@@ -30,19 +39,52 @@ export const MainPage = () => {
           width: "80%",
           height: "100vh",
           overflow: "hidden",
-          marginTop: "10em",
+          marginTop: "3em",
         }}
       >
-        <Box position="relative">
-          <Box
-            height={"50px"}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <FilterIcon />
+        <Box
+          position="relative"
+          width="100%"
+          height="40px"
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: "2em",
+          }}
+        >
+          {/* <Grid2> */}
+          <Box>
+            <form action="" method="post">
+              <SimSimTextField
+                id="outlined-basic"
+                label="search"
+                variant="outlined"
+                sx={{
+                  width: "inherit",
+                  color: "#E1EACD",
+                }}
+                size="small"
+                placeholder="search"
+              ></SimSimTextField>
+              {/* <TextField sx={{ height: "10px" }}></TextField> */}
+              <Button>
+                <SearchIcon
+                  sx={{
+                    color: (theme) => theme.palette.primary.dark,
+                    fontSize: 30,
+                  }}
+                ></SearchIcon>
+              </Button>
+            </form>
           </Box>
+          <Box>
+            {/* <Box position="absolute" sx={{ transform: "translate(-100%, 10%)" }}> */}
+            {/* <FilterIcon
+              color={theme.palette.primary.contrastText}
+              fillColor={theme.palette.primary.light}
+            /> */}
+          </Box>
+          {/* </Grid2> */}
         </Box>
         <Box sx={{ overflowY: "scroll" }} height="inherit">
           <Grid2 container rowSpacing={3} direction="column">

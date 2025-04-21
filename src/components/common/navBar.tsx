@@ -7,14 +7,13 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { NavLink, Outlet } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/chatQuote";
+import { theme } from "../../theme/theme";
 
 export default function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar
-          sx={{ bgcolor: (theme) => theme.palette.backGroungColor.main }}
-        >
+        <Toolbar sx={{ bgcolor: (theme) => theme.palette.primary.dark }}>
           <IconButton
             size="large"
             edge="start"
@@ -26,18 +25,24 @@ export default function NavBar() {
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <NavLink to={"/"}>
-              <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
+              <Button
+                sx={{ color: (theme) => theme.palette.primary.contrastText }}
+              >
                 <Box sx={{ display: "flex", position: "relative" }}>
                   <Typography
                     variant="h6"
                     component="div"
                     sx={{
                       flexGrow: 1,
-                      color: (theme) => theme.palette.fontColor.main,
+                      color: (theme) => theme.palette.primary.contrastText,
                     }}
                   >
                     SimSimTalk
-                    <ChatQuote classVal="chatQuete" size={18}></ChatQuote>
+                    <ChatQuote
+                      color={theme.palette.primary.contrastText}
+                      classVal="chatQuete"
+                      size={18}
+                    ></ChatQuote>
                   </Typography>
                 </Box>
               </Button>
@@ -46,7 +51,7 @@ export default function NavBar() {
           <NavLink to={"/login"}>
             <Button
               color="inherit"
-              sx={{ color: (theme) => theme.palette.fontColor.main }}
+              sx={{ color: (theme) => theme.palette.primary.contrastText }}
             >
               Login
             </Button>
@@ -54,7 +59,7 @@ export default function NavBar() {
           <NavLink to={"/signup"}>
             <Button
               color="inherit"
-              sx={{ color: (theme) => theme.palette.fontColor.main }}
+              sx={{ color: (theme) => theme.palette.primary.contrastText }}
             >
               Signup
             </Button>
