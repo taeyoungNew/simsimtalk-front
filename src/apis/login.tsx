@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { Cookies } from "react-cookie";
 
 interface LoginForm {
   email: string;
@@ -6,6 +7,7 @@ interface LoginForm {
 }
 
 export const loginAPI = async (props: LoginForm) => {
+  let result;
   await axios
     .post(
       `${import.meta.env.VITE_API_BASE}auth/login`,
@@ -16,11 +18,16 @@ export const loginAPI = async (props: LoginForm) => {
       { withCredentials: true },
     )
     .then(function (response) {
-      console.log(response);
+      result = response.status;
     })
     .catch(function (error) {
-      console.log(error.response.data.message);
+      console.log(error.response);
+      result = error.response.status;
     });
+  const cookie = new Cookies();
+  const jwt = cookie.get("authorization");
+  console.log(jwt);
+  return result;
 };
 
 export const logoutAPI = async () => {

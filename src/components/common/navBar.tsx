@@ -8,8 +8,54 @@ import IconButton from "@mui/material/IconButton";
 import { NavLink, Outlet } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/chatQuote";
 import { theme } from "../../theme/theme";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import Badge from "@mui/material/Badge/Badge";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
 
 export default function NavBar() {
+  const isLogin = localStorage.getItem("isLogin");
+  // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  const menuId = "primary-search-account-menu";
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -48,22 +94,88 @@ export default function NavBar() {
               </Button>
             </NavLink>
           </Box>
-          <NavLink to={"/login"}>
-            <Button
-              color="inherit"
-              sx={{ color: (theme) => theme.palette.primary.contrastText }}
-            >
-              Login
-            </Button>
-          </NavLink>
-          <NavLink to={"/signup"}>
-            <Button
-              color="inherit"
-              sx={{ color: (theme) => theme.palette.primary.contrastText }}
-            >
-              Signup
-            </Button>
-          </NavLink>
+          {isLogin === "true" ? (
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailOutlineIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsNoneIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+
+              {/* <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton> */}
+            </Box>
+          ) : (
+            <Box>
+              <NavLink to={"/login"}>
+                <Button
+                  color="inherit"
+                  sx={{ color: (theme) => theme.palette.primary.contrastText }}
+                >
+                  Login
+                </Button>
+              </NavLink>
+              <NavLink to={"/signup"}>
+                <Button
+                  color="inherit"
+                  sx={{ color: (theme) => theme.palette.primary.contrastText }}
+                >
+                  Signup
+                </Button>
+              </NavLink>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Box>

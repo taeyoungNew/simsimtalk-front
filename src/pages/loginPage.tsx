@@ -5,23 +5,21 @@ import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/simsimTextField";
 import { loginAPI } from "../apis/login";
 import { useForm, Controller } from "react-hook-form";
+import { useAppSelector, useAppDispatch } from "../store/hook";
+import { SetUser } from "../store/slices/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 type LoginType = {
   email: string;
   password: string;
 };
 
-const login = (data: LoginType) => {
-  console.log(data.email);
-  console.log(data.password);
-  const props: LoginType = {
-    email: data.email,
-    password: data.password,
-  };
-  loginAPI(props);
-};
+// interface LoginProps {
+//   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
 export const LoginPage = () => {
+  const dispatch = useDispatch();
   const { handleSubmit, control } = useForm<LoginType>({
     defaultValues: {
       email: "",
@@ -29,6 +27,17 @@ export const LoginPage = () => {
     },
     mode: "onChange",
   });
+
+  const login = async (data: LoginType) => {
+    const dispath = useAppDispatch();
+    const props: LoginType = {
+      email: data.email,
+      password: data.password,
+    };
+    const isLogin = await loginAPI(props);
+    dispath(SetUser.setUser({ isLogin: true, nickname: "asd" }));
+    if (isLogin === 200) localStorage.setItem("isLogin", "true");
+  };
 
   return (
     <>

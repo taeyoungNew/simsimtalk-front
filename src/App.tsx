@@ -10,8 +10,15 @@ import { SignupPage } from "./pages/signupPage";
 import { NoPage } from "./pages/noPage";
 import { UserPage } from "./pages/myPage";
 import { Applayout } from "./layout/applayout";
+import { useEffect } from "react";
 
 function App() {
+  // redux를 체크하고
+  // redux가
+  useEffect(() => {
+    console.log("첫 렌더링");
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
