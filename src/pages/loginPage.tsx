@@ -6,20 +6,15 @@ import { SimSimTextField } from "../layout/common/simsimTextField";
 import { loginAPI } from "../apis/login";
 import { useForm, Controller } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../store/hook";
-import { SetUser } from "../store/slices/userSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
 
 type LoginType = {
   email: string;
   password: string;
 };
 
-// interface LoginProps {
-//   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
 export const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { handleSubmit, control } = useForm<LoginType>({
     defaultValues: {
       email: "",
@@ -29,14 +24,12 @@ export const LoginPage = () => {
   });
 
   const login = async (data: LoginType) => {
-    const dispath = useAppDispatch();
     const props: LoginType = {
       email: data.email,
       password: data.password,
     };
     const isLogin = await loginAPI(props);
-    dispath(SetUser.setUser({ isLogin: true, nickname: "asd" }));
-    if (isLogin === 200) localStorage.setItem("isLogin", "true");
+    if (isLogin === 200) dispatch(setUser("nick"));
   };
 
   return (

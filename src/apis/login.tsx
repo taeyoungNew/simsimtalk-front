@@ -24,9 +24,6 @@ export const loginAPI = async (props: LoginForm) => {
       console.log(error.response);
       result = error.response.status;
     });
-  const cookie = new Cookies();
-  const jwt = cookie.get("authorization");
-  console.log(jwt);
   return result;
 };
 

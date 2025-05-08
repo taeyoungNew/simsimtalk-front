@@ -3,7 +3,7 @@ import { userSlice } from "./slices/userSlice";
 import { composeWithDevTools } from "@redux-devtools/extension";
 
 const store = configureStore({
-  reducer: { user: userSlice.reducer },
+  reducer: { User: userSlice.reducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

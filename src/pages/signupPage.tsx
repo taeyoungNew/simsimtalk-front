@@ -1,21 +1,61 @@
-import { Box, Button, Grid2, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from "@mui/material";
 import { ChatQuote } from "../assets/icons/chatQuote";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/simsimTextField";
+import { useForm, Controller } from "react-hook-form";
+import React from "react";
 
-// const formData = [{
-
-// }]
+type SignupType = {
+  email: string;
+  password: string;
+  username: string;
+  nickname: string;
+  aboutMe: string;
+  age: number;
+};
 
 export const SignupPage = () => {
+  const [age, setAge] = React.useState("");
+  const ages = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
+  const { handleSubmit, control } = useForm<SignupType>({
+    defaultValues: {
+      email: "",
+      password: "",
+      username: "",
+      nickname: "",
+      aboutMe: "",
+      age: 0,
+    },
+  });
+
+  const signup = async (data: SignupType) => {
+    console.log("회원가입");
+    console.log(data);
+  };
+  // const age = 100;
   return (
     <>
       <Box
+        component={"form"}
         sx={{
           display: "flex",
           justifyContent: "center",
           marginTop: "0.5em",
         }}
+        onSubmit={handleSubmit(signup)}
       >
         <Grid2
           sx={{ paddingTop: { xs: "10px", sm: "20px" } }}
@@ -35,56 +75,126 @@ export const SignupPage = () => {
             ></ChatQuote>
           </Grid2>
           <Grid2 sx={{ width: "100%", paddingTop: "0.5em" }} flexGrow={1}>
-            <SimSimTextField
-              id="outlined-basic"
-              label="email"
-              variant="outlined"
-              sx={{
-                width: "inherit",
-                color: "#E1EACD",
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SimSimTextField
+                    {...field}
+                    id="outlined-basic"
+                    label="email"
+                    variant="outlined"
+                    sx={{
+                      width: "inherit",
+                      color: "#E1EACD",
+                    }}
+                    size="small"
+                    placeholder="email"
+                  ></SimSimTextField>
+                );
               }}
-              size="small"
-              placeholder="email"
-            ></SimSimTextField>
-          </Grid2>
-          <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <SimSimTextField
-              sx={{ width: "inherit" }}
-              id="outlined-password-input"
-              label="password"
-              variant="outlined"
-              type="password"
-              size="small"
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <SimSimTextField
-              sx={{ width: "inherit" }}
-              id="outlined-nickname-basic"
-              label="nickname"
-              variant="outlined"
-              size="small"
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SimSimTextField
+                    {...field}
+                    sx={{ width: "inherit" }}
+                    id="outlined-password-input"
+                    label="password"
+                    variant="outlined"
+                    type="password"
+                    size="small"
+                  />
+                );
+              }}
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <SimSimTextField
-              sx={{ width: "inherit" }}
-              id="outlined-username-basic"
-              label="username"
-              variant="outlined"
-              size="small"
+            <Controller
+              name="nickname"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SimSimTextField
+                    {...field}
+                    sx={{ width: "inherit" }}
+                    id="outlined-nickname-basic"
+                    label="nickname"
+                    variant="outlined"
+                    size="small"
+                  />
+                );
+              }}
             />
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
-            <SimSimTextField
-              sx={{ width: "inherit" }}
-              id="outlined-multiline-static"
-              label="aboutme"
-              multiline
-              rows={4}
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SimSimTextField
+                    {...field}
+                    sx={{ width: "inherit" }}
+                    id="outlined-username-basic"
+                    label="username"
+                    variant="outlined"
+                    size="small"
+                  />
+                );
+              }}
             />
           </Grid2>
-          {}
+          <Grid2 sx={{ width: "100%" }} flexGrow={1}>
+            <Controller
+              name="aboutMe"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SimSimTextField
+                    {...field}
+                    sx={{ width: "inherit" }}
+                    id="outlined-multiline-static"
+                    label="aboutMe"
+                    multiline
+                    rows={4}
+                  />
+                );
+              }}
+            />
+          </Grid2>
+          <Grid2 sx={{ width: "100%" }} flexGrow={1}>
+            <Controller
+              name="age"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+
+                    <Select
+                      {...field}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={age}
+                      label="Age"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                );
+              }}
+            />
+          </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
             <Button
               variant="contained"
@@ -96,6 +206,7 @@ export const SignupPage = () => {
                 height: "40px",
                 fontSize: "10px",
               }}
+              type="submit"
             >
               会員登録
             </Button>

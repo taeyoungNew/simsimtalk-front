@@ -14,9 +14,10 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import { useAppSelector } from "../../store/hook";
 
 export default function NavBar() {
-  const isLogin = localStorage.getItem("isLogin");
+  const isLogin = useAppSelector((state) => state.User.isLogin);
   // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
   //   setAnchorEl(event.currentTarget);
   // };
@@ -94,7 +95,7 @@ export default function NavBar() {
               </Button>
             </NavLink>
           </Box>
-          {isLogin === "true" ? (
+          {isLogin === true ? (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
                 size="large"

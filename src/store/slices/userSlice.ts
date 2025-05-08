@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface UserSlice {
+  isLogin: boolean;
+  nickname: string;
+}
+
+const initialState: UserSlice = {
   isLogin: false,
   nickname: "",
 };
@@ -10,7 +15,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      (state.isLogin = true), (state.nickname = action.payload.nickname);
+      (state.isLogin = true), (state.nickname = action.payload);
     },
 
     deleteUser: (state, action) => {
@@ -19,5 +24,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const SetUser = userSlice.actions;
-// export const
+export const { setUser, deleteUser } = userSlice.actions;
