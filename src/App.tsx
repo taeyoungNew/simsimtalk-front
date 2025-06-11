@@ -11,13 +11,19 @@ import { NoPage } from "./pages/noPage";
 import { UserPage } from "./pages/myPage";
 import { Applayout } from "./layout/applayout";
 import { useEffect } from "react";
+import { authMe } from "./apis/auth";
+import { useAppDispatch } from "./store/hook";
+import { setUser } from "./store/slices/userSlice";
 
 function App() {
-  // redux를 체크하고
-  // redux가
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    console.log("첫 렌더링");
-  }, []);
+    const checkAuth = async () => {
+      const isLogin = await authMe();
+      dispatch(setUser({ isLogin: isLogin, nickname: "nick" }));
+    };
+    checkAuth();
+  }, [dispatch]);
 
   return (
     <>

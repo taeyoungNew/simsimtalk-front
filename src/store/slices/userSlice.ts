@@ -15,7 +15,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      (state.isLogin = true), (state.nickname = action.payload);
+      (state.isLogin = action.payload.isLogin),
+        (state.nickname = action.payload.nickname);
     },
 
     deleteUser: (state, action) => {

@@ -20,10 +20,10 @@ export const signupAPI = async (props: SignupForm) => {
       aboutMe: props.aboutMe,
       age: props.age,
     })
-    .then(function (response) {
+    .then((response) => {
       result = response.status;
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error.response);
       result = error.response.status;
     });

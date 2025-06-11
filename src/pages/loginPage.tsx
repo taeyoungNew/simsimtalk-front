@@ -3,7 +3,7 @@ import { ChatQuote } from "../assets/icons/chatQuote";
 import "../assets/css/loginPage.css";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/simsimTextField";
-import { loginAPI } from "../apis/login";
+import { loginAPI } from "../apis/auth";
 import { useForm, Controller } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../store/hook";
 import { setUser } from "../store/slices/userSlice";

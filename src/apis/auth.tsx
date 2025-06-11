@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { Cookies } from "react-cookie";
+import { useAppDispatch } from "../store/hook";
 
 interface LoginForm {
   email: string;
@@ -21,7 +21,7 @@ export const loginAPI = async (props: LoginForm) => {
       result = response.status;
     })
     .catch(function (error) {
-      console.log(error.response);
+      console.log(error.response.data.message);
       result = error.response.status;
     });
   return result;
@@ -36,4 +36,19 @@ export const logoutAPI = async () => {
     .catch(function (error) {
       console.log(error.response.data.message);
     });
+};
+
+export const authMe = async () => {
+  try {
+    return await axios
+      .get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        return res.data.isLogin;
+      })
+      .catch((error) => {
+        console.log(error.response.data.isLogin);
+      });
+  } catch (error) {}
 };
