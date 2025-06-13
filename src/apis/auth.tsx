@@ -39,16 +39,14 @@ export const logoutAPI = async () => {
 };
 
 export const authMe = async () => {
-  try {
-    return await axios
-      .get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        return res.data.isLogin;
-      })
-      .catch((error) => {
-        console.log(error.response.data.isLogin);
-      });
-  } catch (error) {}
+  return await axios
+    .get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      return res.data.isLogin;
+    })
+    .catch((error) => {
+      console.log(error.response.data.isLogin);
+    });
 };

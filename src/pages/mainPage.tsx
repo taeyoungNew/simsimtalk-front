@@ -1,10 +1,7 @@
-import { Box, Button, Grid2, ListItem, TextField } from "@mui/material";
-import { PostCard } from "../components/common/postCard";
-import { FilterIcon } from "../assets/icons/filterIcon";
-import { theme } from "../theme/theme";
+import { Box, Button, Grid2, ListItem } from "@mui/material";
+import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
-import { TextFieldsOutlined } from "@mui/icons-material";
-import { SimSimTextField } from "../layout/common/simsimTextField";
+import { SimSimTextField } from "../layout/common/SimsimTextField";
 
 const dummies = [
   {

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { NavLink, Outlet } from "react-router-dom";
-import { ChatQuote } from "../../assets/icons/chatQuote";
+import { ChatQuote } from "../../assets/icons/ChatQuote";
 import { theme } from "../../theme/theme";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
@@ -15,12 +15,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useAppSelector } from "../../store/hook";
+import { useEffect } from "react";
 
-export default function NavBar() {
-  const isLogin = useAppSelector((state) => state.User.isLogin);
-  // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+export default function NavBar(isLogin: boolean) {
+  // const isLogin = useAppSelector((state) => state.User.isLogin);
+
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =

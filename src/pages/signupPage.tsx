@@ -9,11 +9,13 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import { ChatQuote } from "../assets/icons/chatQuote";
+import { ChatQuote } from "../assets/icons/ChatQuote";
 import { theme } from "../theme/theme";
-import { SimSimTextField } from "../layout/common/simsimTextField";
+import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
 import React from "react";
+import { signupAPI } from "../apis/Signup";
+import { useNavigate } from "react-router-dom";
 
 type SignupType = {
   email: string;
@@ -25,6 +27,7 @@ type SignupType = {
 };
 
 export const SignupPage = () => {
+  const navigator = useNavigate();
   const [age, setAge] = React.useState("");
   const ages = [10, 20, 30, 40, 50, 60, 70, 80, 90];
   const handleChange = (event: SelectChangeEvent) => {
@@ -42,10 +45,13 @@ export const SignupPage = () => {
   });
 
   const signup = async (data: SignupType) => {
-    console.log("회원가입");
-    console.log(data);
+    try {
+      const result = await signupAPI(data);
+      if (result) if (result.status == 200) navigator("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  // const age = 100;
   return (
     <>
       <Box
@@ -62,7 +68,6 @@ export const SignupPage = () => {
           direction="column"
           container
           rowSpacing={{ xs: 1, sm: 2 }}
-          // rowSpacing={3}
         >
           <Grid2
             width={350}
@@ -95,6 +100,7 @@ export const SignupPage = () => {
                 );
               }}
             />
+            <Box id="emailErr">에러</Box>
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
             <Controller
