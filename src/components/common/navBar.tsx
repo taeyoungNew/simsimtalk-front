@@ -14,16 +14,23 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { useAppSelector } from "../../store/hook";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { useEffect } from "react";
+import { deleteUser } from "../../store/auth/authSlice";
+import { logoutAPI } from "../../apis/Auth";
 
-export default function NavBar(isLogin: boolean) {
-  // const isLogin = useAppSelector((state) => state.User.isLogin);
+interface Props {
+  isLogin: boolean;
+}
 
+export default function NavBar({ isLogin }: Props) {
+  const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
+
   const isMenuOpen = Boolean(anchorEl);
 
   const handleMobileMenuClose = () => {
@@ -36,6 +43,12 @@ export default function NavBar(isLogin: boolean) {
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const logout = async () => {
+    dispatch(deleteUser());
+    await logoutAPI();
+  };
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -124,6 +137,17 @@ export default function NavBar(isLogin: boolean) {
                 color="inherit"
               >
                 <AccountCircleIcon />
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={logout}
+                color="inherit"
+              >
+                <LogoutIcon />
               </IconButton>
 
               {/* <IconButton

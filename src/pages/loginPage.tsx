@@ -5,8 +5,8 @@ import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { loginAPI } from "../apis/Auth";
 import { useForm, Controller } from "react-hook-form";
-import { useAppSelector, useAppDispatch } from "../store/hook";
-import { setUser } from "../store/slices/userSlice";
+import { useAppDispatch } from "../store/hook";
+import { setAuth } from "../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 type LoginType = {
@@ -32,7 +32,7 @@ export const LoginPage = () => {
     };
     const isLogin = await loginAPI(props);
     if (isLogin === 200) {
-      dispatch(setUser("nick"));
+      dispatch(setAuth(true));
       navigator("/");
     }
   };

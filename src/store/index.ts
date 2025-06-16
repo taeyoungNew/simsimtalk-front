@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { userSlice } from "./slices/userSlice";
+import { userSlice } from "./auth/authSlice";
 import { composeWithDevTools } from "@redux-devtools/extension";
 
 const store = configureStore({

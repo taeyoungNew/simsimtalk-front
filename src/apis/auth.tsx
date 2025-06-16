@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useAppDispatch } from "../store/hook";
 
-interface LoginForm {
+export interface LoginForm {
   email: string;
   password: string;
 }
@@ -29,9 +29,11 @@ export const loginAPI = async (props: LoginForm) => {
 
 export const logoutAPI = async () => {
   await axios
-    .delete(`${import.meta.env.VITE_API_BASE}auth/logput`)
+    .delete(`${import.meta.env.VITE_API_BASE}auth/logout`, {
+      withCredentials: true,
+    })
     .then((res) => {
-      console.log(res.data);
+      console.log(res.data.message);
     })
     .catch(function (error) {
       console.log(error.response.data.message);
