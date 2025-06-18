@@ -15,16 +15,17 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { useEffect } from "react";
-import { deleteUser } from "../../store/auth/authSlice";
+import { useAppDispatch } from "../../store/hook";
+import { deleteAuth } from "../../store/auth/authSlice";
 import { logoutAPI } from "../../apis/Auth";
+import { useEffect } from "react";
 
 interface Props {
   isLogin: boolean;
 }
 
 export default function NavBar({ isLogin }: Props) {
+  useEffect(() => {});
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -45,7 +46,7 @@ export default function NavBar({ isLogin }: Props) {
   };
 
   const logout = async () => {
-    dispatch(deleteUser());
+    dispatch(deleteAuth());
     await logoutAPI();
   };
 

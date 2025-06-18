@@ -3,11 +3,10 @@ import { ChatQuote } from "../assets/icons/ChatQuote";
 import "../assets/css/loginPage.css";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
-import { loginAPI } from "../apis/Auth";
 import { useForm, Controller } from "react-hook-form";
 import { useAppDispatch } from "../store/hook";
-import { setAuth } from "../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { authMeThunk, loginThunk } from "../store/auth/authThunk";
 
 type LoginType = {
   email: string;
@@ -15,8 +14,8 @@ type LoginType = {
 };
 
 export const LoginPage = () => {
-  const navigator = useNavigate();
   const dispatch = useAppDispatch();
+  const navigator = useNavigate();
   const { handleSubmit, control } = useForm<LoginType>({
     defaultValues: {
       email: "",
@@ -30,11 +29,11 @@ export const LoginPage = () => {
       email: data.email,
       password: data.password,
     };
-    const isLogin = await loginAPI(props);
-    if (isLogin === 200) {
-      dispatch(setAuth(true));
-      navigator("/");
-    }
+
+    await dispatch(
+      loginThunk({ email: props.email, password: props.password }),
+    );
+    await navigator("/");
   };
 
   return (

@@ -11,18 +11,16 @@ import { NoPage } from "./pages/NoPage";
 import { UserPage } from "./pages/MyPage";
 import { Applayout } from "./layout/Applayout";
 import { useEffect, useState } from "react";
-import { authMe } from "./apis/Auth";
-import { useAppDispatch, useAppSelector } from "./store/hook";
-import { setUser } from "./store/auth/authSlice";
+import { useAppDispatch } from "./store/hook";
 import UnAuthRoute from "./route/UnAuthRoute";
+import { authMeThunk } from "./store/auth/authThunk";
 
 function App() {
   const dispatch = useAppDispatch();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     const checkAuth = async () => {
-      setIsLogin(await authMe());
-      dispatch(setUser({ isLogin: isLogin, nickname: "nick" }));
+      await dispatch(authMeThunk());
     };
     checkAuth();
   }, [dispatch]);

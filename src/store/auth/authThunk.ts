@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAPI } from "../../apis/Auth";
+import { authMeAPI, loginAPI } from "../../apis/Auth";
 
 interface LoginReq {
   email: string;
@@ -9,16 +9,30 @@ interface LoginReq {
 interface LoginRes {
   id: string;
   email: string;
+  nickname: string;
+}
+
+interface AuthMeRes {
+  id: string;
+  email: string;
+  nickname: string;
 }
 
 export const loginThunk = createAsyncThunk<
   LoginRes,
-  { id: string; email: string }
->("auth/login", async (payload) => {
+  LoginReq,
+  {
+    rejectValue: string;
+  }
+>("auth/login", async ({ email, password }) => {
   const res = await loginAPI({
-    email: payload.email,
-    password: payload.password,
+    email,
+    password,
   });
+  return res as LoginRes;
+});
 
-  return res;
+export const authMeThunk = createAsyncThunk("auth/auth-me", async () => {
+  const res = await authMeAPI();
+  return res as AuthMeRes;
 });
