@@ -18,7 +18,6 @@ export const loginAPI = async (props: LoginForm) => {
     )
     .then(function (response) {
       result = response.status;
-      console.log(response.data);
       return {
         id: response.data.id,
         email: response.data.email,
@@ -26,8 +25,7 @@ export const loginAPI = async (props: LoginForm) => {
       };
     })
     .catch(function (error) {
-      console.log(error.response.data.message);
-      result = error.response.status;
+      throw error;
     });
 };
 
@@ -40,7 +38,7 @@ export const logoutAPI = async () => {
       console.log(res.data.message);
     })
     .catch(function (error) {
-      console.log(error.response.data.message);
+      throw error;
     });
 };
 
@@ -53,6 +51,6 @@ export const authMeAPI = async () => {
       return res.data;
     })
     .catch((error) => {
-      console.log(error.response.data.isLogin);
+      throw error;
     });
 };

@@ -5,6 +5,5 @@ import { RootState } from "../store";
 
 export default function UnAuthRoute({ children }: { children: JSX.Element }) {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
-  console.log("isLogin = ", isLogin);
   return !isLogin ? children : <Navigate to="/" />;
 }

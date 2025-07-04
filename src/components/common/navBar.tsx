@@ -18,14 +18,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import { deleteAuth } from "../../store/auth/authSlice";
 import { logoutAPI } from "../../apis/Auth";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
-interface Props {
-  isLogin: boolean;
-}
+export default function NavBar() {
+  const isLogin = useSelector((state: RootState) => state.User.isLogin);
 
-export default function NavBar({ isLogin }: Props) {
-  useEffect(() => {});
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -48,6 +46,7 @@ export default function NavBar({ isLogin }: Props) {
   const logout = async () => {
     dispatch(deleteAuth());
     await logoutAPI();
+    alert("로그아웃되었습니다.");
   };
 
   const renderMenu = (

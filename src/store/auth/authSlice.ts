@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { authMeThunk, loginThunk } from "./authThunk";
 
 interface UserSlice {
@@ -43,11 +43,12 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(authMeThunk.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.isLogin = true;
-      state.id = action.payload.id;
-      state.email = action.payload.email;
-      state.nickname = action.payload.nickname;
+      if (action.payload != undefined) {
+        state.isLogin = true;
+        state.id = action.payload.id;
+        state.email = action.payload.email;
+        state.nickname = action.payload.nickname;
+      }
     });
   },
 });

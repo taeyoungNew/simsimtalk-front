@@ -2,6 +2,9 @@ import { Box, Button, Grid2, ListItem } from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
+import { useEffect } from "react";
+import { useAppDispatch } from "../store/hook";
+import { getPostsThunk } from "../store/post/postThunk";
 
 const dummies = [
   {
@@ -27,6 +30,14 @@ const dummies = [
 ];
 
 export const MainPage = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const getPosts = async () => {
+      await dispatch(getPostsThunk());
+    };
+    getPosts();
+  }, [dispatch]);
+
   return (
     <>
       <Box

@@ -17,7 +17,6 @@ import { authMeThunk } from "./store/auth/authThunk";
 
 function App() {
   const dispatch = useAppDispatch();
-  const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
@@ -31,7 +30,7 @@ function App() {
         <CssBaseline></CssBaseline>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Applayout isLogin={isLogin} />}>
+            <Route path="/" element={<Applayout />}>
               <Route index element={<MainPage />} />
               <Route
                 path="/login"
