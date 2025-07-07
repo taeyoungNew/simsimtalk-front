@@ -5,31 +5,35 @@ import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useEffect } from "react";
 import { useAppDispatch } from "../store/hook";
 import { getPostsThunk } from "../store/post/postThunk";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
-const dummies = [
-  {
-    title: "title",
-    nickname: "nick",
-    contents: "hihi",
-  },
-  {
-    title: "title2",
-    nickname: "nick2",
-    contents: "hihi",
-  },
-  {
-    title: "title3",
-    nickname: "nick3",
-    contents: "hihi",
-  },
-  {
-    title: "title3",
-    nickname: "nick3",
-    contents: "hihi",
-  },
-];
+// const dummies = [
+//   {
+//     title: "title",
+//     nickname: "nick",
+//     contents: "hihi",
+//   },
+//   {
+//     title: "title2",
+//     nickname: "nick2",
+//     contents: "hihi",
+//   },
+//   {
+//     title: "title3",
+//     nickname: "nick3",
+//     contents: "hihi",
+//   },
+//   {
+//     title: "title3",
+//     nickname: "nick3",
+//     contents: "hihi",
+//   },
+// ];
 
 export const MainPage = () => {
+  const getPosts = useSelector((state: RootState) => state.Post.posts);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getPosts = async () => {
@@ -97,12 +101,16 @@ export const MainPage = () => {
         <Box sx={{ overflowY: "scroll" }} height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
-              {dummies.map((el, index) => (
+              {getPosts.map((el, index) => (
                 <ListItem sx={{ paddingTop: "0" }} key={index}>
                   <PostCard
+                    postId={el.postId}
+                    userId={el.userId}
                     title={el.title}
-                    nickname={el.nickname}
-                    contents={el.contents}
+                    contents={el.content}
+                    userNickname={el.userNickname}
+                    likeCnt={el.likeCnt}
+                    commentsCnt={el.commentCnt}
                   ></PostCard>
                 </ListItem>
               ))}

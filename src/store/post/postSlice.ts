@@ -2,9 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./postThunk";
 
 interface Post {
+  postId: number;
   userId: string;
+  userNickname: string;
   title: string;
   content: string;
+  likeCnt: number;
+  commentCnt: number;
+  Comments: [{}];
 }
 
 interface PostSlice {
@@ -32,8 +37,19 @@ export const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getPostsThunk.fulfilled, (state, action) => {
-      if (action.payload.posts.length != 0) {
-        state.posts = action.payload.posts;
+      console.log(action.payload.posts);
+      for (let idx = 0; idx < action.payload.posts.length; idx++) {
+        console.log(action.payload.posts[idx]);
+        state.posts[idx] = {
+          postId: action.payload.posts[idx].postId,
+          userId: action.payload.posts[idx].userId,
+          title: action.payload.posts[idx].content,
+          content: action.payload.posts[idx].content,
+          userNickname: action.payload.posts[idx].userNickname,
+          likeCnt: action.payload.posts[idx].likeCnt,
+          commentCnt: action.payload.posts[idx].Comments.length,
+          Comments: action.payload.posts[idx].Comments,
+        };
       }
     });
   },

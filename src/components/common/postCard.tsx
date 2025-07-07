@@ -4,12 +4,24 @@ import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { theme } from "../../theme/theme";
 
 interface CardProps {
+  postId: number;
+  userId: string;
   title: string;
-  nickname: string;
   contents: string;
+  userNickname: string;
+  likeCnt: number;
+  commentsCnt: number;
 }
 
-export const PostCard = ({ title, nickname, contents }: CardProps) => {
+export const PostCard = ({
+  postId,
+  userId,
+  title,
+  userNickname,
+  contents,
+  likeCnt,
+  commentsCnt,
+}: CardProps) => {
   return (
     <>
       <Box
@@ -17,6 +29,7 @@ export const PostCard = ({ title, nickname, contents }: CardProps) => {
           width: "100%",
           padding: "10px",
           bgcolor: (theme) => theme.palette.primary.main,
+          cursor: "pointer",
         }}
         color={theme.palette.primary.contrastText}
       >
@@ -42,7 +55,7 @@ export const PostCard = ({ title, nickname, contents }: CardProps) => {
                 color: (theme) => theme.palette.primary.dark,
               }}
             ></Avatar>
-            {nickname}
+            {userNickname}
           </Grid2>
           <Grid2
             sx={{
@@ -63,16 +76,23 @@ export const PostCard = ({ title, nickname, contents }: CardProps) => {
           <Grid2 sx={{ padding: "5px", bgcolor: "none" }}>
             <Box>
               <Grid2 container spacing={1} sx={{ display: "flex" }}>
-                <HeartIcon
-                  color={theme.palette.primary.dark}
-                  fillColor={theme.palette.primary.light}
-                  size={30}
-                ></HeartIcon>
-                <ChatDuotone
-                  color={theme.palette.primary.dark}
-                  fillColor={theme.palette.primary.light}
-                  size={30}
-                ></ChatDuotone>
+                <label htmlFor="">
+                  <HeartIcon
+                    color={theme.palette.primary.dark}
+                    fillColor={theme.palette.primary.light}
+                    size={30}
+                  ></HeartIcon>
+                </label>
+                {likeCnt}
+
+                <label htmlFor="">
+                  <ChatDuotone
+                    color={theme.palette.primary.dark}
+                    fillColor={theme.palette.primary.light}
+                    size={30}
+                  ></ChatDuotone>
+                </label>
+                {commentsCnt}
               </Grid2>
             </Box>
           </Grid2>

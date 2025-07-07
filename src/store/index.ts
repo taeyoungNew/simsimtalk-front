@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./auth/authSlice";
-import { composeWithDevTools } from "@redux-devtools/extension";
 import { postSlice } from "./post/postSlice";
 
 const store = configureStore({
