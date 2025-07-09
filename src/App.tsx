@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "./store/hook";
 import UnAuthRoute from "./route/UnAuthRoute";
 import { authMeThunk } from "./store/auth/authThunk";
+import { DeTailPost } from "./pages/DetailPost";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -49,6 +50,10 @@ function App() {
                 }
               />
               <Route path="/myPage/:id" element={<UserPage />} />
+              <Route
+                path="/detailPost/:postId"
+                element={<DeTailPost></DeTailPost>}
+              />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

@@ -6,7 +6,7 @@ interface GetPostsReq {
 }
 
 interface Posts {
-  postId: number;
+  id: number;
   userId: string;
   title: string;
   content: string;
@@ -20,17 +20,7 @@ interface GetPostsRes {
   posts: Posts[];
 }
 
-export const getPostsThunk = createAsyncThunk(
-  // <
-  //   GetPostsReq,
-  //   GetPostsRes,
-  //   {
-  //     rejectValue: string;
-  //   }
-  // >
-  "post/",
-  async () => {
-    const res = await getPostsAPI();
-    return res as GetPostsRes;
-  },
-);
+export const getPostsThunk = createAsyncThunk("post/", async () => {
+  const res = await getPostsAPI();
+  return res as GetPostsRes;
+});
