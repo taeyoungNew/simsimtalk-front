@@ -37,6 +37,12 @@ export const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getPostsThunk.fulfilled, (state, action) => {
+      if (action.payload.posts == undefined) {
+        console.log("게시물이 없음");
+        return;
+      }
+      console.log("action.payload.posts = ", action.payload.posts[0]);
+
       for (let idx = 0; idx < action.payload.posts.length; idx++) {
         state.posts[idx] = {
           postId: action.payload.posts[idx].id,
@@ -45,8 +51,8 @@ export const postSlice = createSlice({
           content: action.payload.posts[idx].content,
           userNickname: action.payload.posts[idx].userNickname,
           likeCnt: action.payload.posts[idx].likeCnt,
-          commentCnt: action.payload.posts[idx].Comments.length,
           Comments: action.payload.posts[idx].Comments,
+          commentCnt: action.payload.posts[idx].Comments.length,
         };
       }
     });
