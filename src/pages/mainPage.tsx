@@ -2,38 +2,15 @@ import { Box, Button, Grid2, ListItem } from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../store/hook";
 import { getPostsThunk } from "../store/post/postThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
-// const dummies = [
-//   {
-//     title: "title",
-//     nickname: "nick",
-//     contents: "hihi",
-//   },
-//   {
-//     title: "title2",
-//     nickname: "nick2",
-//     contents: "hihi",
-//   },
-//   {
-//     title: "title3",
-//     nickname: "nick3",
-//     contents: "hihi",
-//   },
-//   {
-//     title: "title3",
-//     nickname: "nick3",
-//     contents: "hihi",
-//   },
-// ];
-
 export const MainPage = () => {
   const getPosts = useSelector((state: RootState) => state.Post.posts);
-
+  const scrollRef = useRef(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getPosts = async () => {
@@ -41,6 +18,10 @@ export const MainPage = () => {
     };
     getPosts();
   }, [dispatch]);
+
+  // const infiniteScroll = () => {
+
+  // }
 
   return (
     <>

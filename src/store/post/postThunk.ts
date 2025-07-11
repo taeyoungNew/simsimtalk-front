@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getPostsAPI } from "../../apis/Post";
+import { useSelector } from "react-redux";
+import { RootState } from "..";
 
 interface GetPostsReq {
   // posts: any;

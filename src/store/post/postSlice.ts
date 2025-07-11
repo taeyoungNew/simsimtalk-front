@@ -35,14 +35,12 @@ export const postSlice = createSlice({
       const deleteIdx = action.payload.idx;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: async (builder) => {
     builder.addCase(getPostsThunk.fulfilled, (state, action) => {
       if (action.payload.posts == undefined) {
         console.log("게시물이 없음");
         return;
       }
-      console.log("action.payload.posts = ", action.payload.posts[0]);
-
       for (let idx = 0; idx < action.payload.posts.length; idx++) {
         state.posts[idx] = {
           postId: action.payload.posts[idx].id,
