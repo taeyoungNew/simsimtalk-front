@@ -2,26 +2,53 @@ import { Box, Button, Grid2, ListItem } from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
 import { getPostsThunk } from "../store/post/postThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 export const MainPage = () => {
-  const getPosts = useSelector((state: RootState) => state.Post.posts);
-  const scrollRef = useRef(null);
+  const getPostDatas = useSelector((state: RootState) => state.Post.posts);
   const dispatch = useAppDispatch();
+  let postLastId = 0;
+
+  const lastPostRef = useRef(null);
+
+  const getPosts = async (postLastId: number) => {
+    await dispatch(getPostsThunk(postLastId));
+  };
+
   useEffect(() => {
-    const getPosts = async () => {
-      await dispatch(getPostsThunk());
+    getPosts(postLastId);
+  }, []);
+
+  useEffect(() => {
+    if (!lastPostRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        console.log("getPostDatas = ", getPostDatas.length - 1);
+
+        if (entry.isIntersecting) {
+          if (postLastId !== 0) {
+            getPosts(postLastId);
+          }
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.5,
+      },
+    );
+
+    observer.observe(lastPostRef.current);
+
+    return () => {
+      if (lastPostRef.current) observer.unobserve(lastPostRef.current);
     };
-    getPosts();
-  }, [dispatch]);
-
-  // const infiniteScroll = () => {
-
-  // }
+  }, [getPostDatas]);
 
   return (
     <>
@@ -45,7 +72,6 @@ export const MainPage = () => {
             marginBottom: "2em",
           }}
         >
-          {/* <Grid2> */}
           <Box>
             <form action="" method="post">
               <SimSimTextField
@@ -59,7 +85,6 @@ export const MainPage = () => {
                 size="small"
                 placeholder="search"
               ></SimSimTextField>
-              {/* <TextField sx={{ height: "10px" }}></TextField> */}
               <Button>
                 <SearchIcon
                   sx={{
@@ -70,31 +95,36 @@ export const MainPage = () => {
               </Button>
             </form>
           </Box>
-          <Box>
-            {/* <Box position="absolute" sx={{ transform: "translate(-100%, 10%)" }}> */}
-            {/* <FilterIcon
-              color={theme.palette.primary.contrastText}
-              fillColor={theme.palette.primary.light}
-            /> */}
-          </Box>
-          {/* </Grid2> */}
+          <Box></Box>
         </Box>
         <Box sx={{ overflowY: "scroll" }} height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
-              {getPosts.map((el, index) => (
-                <ListItem sx={{ paddingTop: "0" }} key={index}>
-                  <PostCard
-                    postId={el.postId}
-                    userId={el.userId}
-                    title={el.title}
-                    contents={el.content}
-                    userNickname={el.userNickname}
-                    likeCnt={el.likeCnt}
-                    commentsCnt={el.commentCnt}
-                  ></PostCard>
-                </ListItem>
-              ))}
+              {getPostDatas.map((el, index) => {
+                const isLast = index === getPostDatas.length - 1;
+                if (isLast) {
+                  // console.log("isLast = ", isLast);
+
+                  postLastId = getPostDatas[index].id;
+                }
+                return (
+                  <ListItem
+                    sx={{ paddingTop: "0" }}
+                    key={index}
+                    ref={isLast ? lastPostRef : null}
+                  >
+                    <PostCard
+                      id={el.id}
+                      userId={el.userId}
+                      title={el.title}
+                      contents={el.content}
+                      userNickname={el.userNickname}
+                      likeCnt={el.likeCnt}
+                      commentsCnt={el.commentCnt}
+                    ></PostCard>
+                  </ListItem>
+                );
+              })}
             </Grid2>
           </Grid2>
         </Box>

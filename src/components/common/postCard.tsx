@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 interface CardProps {
-  postId: number;
+  id: number;
   userId: string;
   title: string;
   contents: string;
@@ -14,9 +14,21 @@ interface CardProps {
   likeCnt: number;
   commentsCnt: number;
 }
+const DetailPostLink = styled(NavLink)`
+  text-decoration: none;
+  color: inherit;
+
+  &:visited {
+    color: inherit;
+  }
+
+  &.active {
+    font-weight: bold;
+  }
+`;
 
 export const PostCard = ({
-  postId,
+  id,
   userId,
   title,
   userNickname,
@@ -24,19 +36,6 @@ export const PostCard = ({
   likeCnt,
   commentsCnt,
 }: CardProps) => {
-  const DetailPostLink = styled(NavLink)`
-    text-decoration: none;
-    color: inherit;
-
-    &:visited {
-      color: inherit;
-    }
-
-    &.active {
-      font-weight: bold;
-    }
-  `;
-
   return (
     <>
       <Box
@@ -49,7 +48,7 @@ export const PostCard = ({
         color={theme.palette.primary.contrastText}
       >
         <DetailPostLink
-          to={`/detailPost/${postId}`}
+          to={`/detailPost/${id}`}
           className={({ isActive }) =>
             isActive
               ? "no-underline text-black font-bold"

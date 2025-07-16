@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getPostsAPI } from "../../apis/Post";
-import { useSelector } from "react-redux";
-import { RootState } from "..";
+// import { useSelector } from "react-redux";
+// import { RootState } from "..";
+// import { useDispatch } from "react-redux";
 
 interface GetPostsReq {
   // posts: any;
@@ -22,7 +23,10 @@ interface GetPostsRes {
   posts: Posts[];
 }
 
-export const getPostsThunk = createAsyncThunk("post/", async () => {
-  const res = await getPostsAPI();
-  return res as GetPostsRes;
-});
+export const getPostsThunk = createAsyncThunk(
+  "post/",
+  async (lastPostId: number) => {
+    const res = await getPostsAPI(lastPostId);
+    return res as GetPostsRes;
+  },
+);

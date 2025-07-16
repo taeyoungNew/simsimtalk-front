@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./postThunk";
 
 interface Post {
-  postId: number;
+  id: number;
   userId: string;
   userNickname: string;
   title: string;
@@ -16,13 +16,21 @@ interface PostSlice {
   posts: Post[];
 }
 
-const initialState: PostSlice = {
+interface IsLastIsLoading {
+  isLoading: boolean;
+  isLast: boolean;
+}
+
+const initialState: PostSlice & IsLastIsLoading = {
   posts: [],
+  isLoading: false,
+  isLast: false,
 };
 
 export const postSlice = createSlice({
   name: "Post",
   initialState,
+
   reducers: {
     setPosts: (state, action) => {
       const posts: Post[] = action.payload.posts;
@@ -36,23 +44,27 @@ export const postSlice = createSlice({
     },
   },
   extraReducers: async (builder) => {
-    builder.addCase(getPostsThunk.fulfilled, (state, action) => {
-      if (action.payload.posts == undefined) {
-        console.log("게시물이 없음");
-        return;
-      }
-      for (let idx = 0; idx < action.payload.posts.length; idx++) {
-        state.posts[idx] = {
-          postId: action.payload.posts[idx].id,
-          userId: action.payload.posts[idx].userId,
-          title: action.payload.posts[idx].title,
-          content: action.payload.posts[idx].content,
-          userNickname: action.payload.posts[idx].userNickname,
-          likeCnt: action.payload.posts[idx].likeCnt,
-          Comments: action.payload.posts[idx].Comments,
-          commentCnt: action.payload.posts[idx].Comments.length,
-        };
-      }
-    });
+    builder
+      .addCase(getPostsThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPostsThunk.fulfilled, (state, action) => {
+        if (action.payload.posts == undefined) {
+          return;
+        }
+        for (let idx = 0; idx < action.payload.posts.length; idx++) {
+          state.posts[idx] = {
+            id: action.payload.posts[idx].id,
+            userId: action.payload.posts[idx].userId,
+            title: action.payload.posts[idx].title,
+            content: action.payload.posts[idx].content,
+            userNickname: action.payload.posts[idx].userNickname,
+            likeCnt: action.payload.posts[idx].likeCnt,
+            Comments: action.payload.posts[idx].Comments,
+            commentCnt: action.payload.posts[idx].Comments.length,
+          };
+        }
+        state.isLoading = false;
+      });
   },
 });

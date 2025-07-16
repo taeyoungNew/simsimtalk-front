@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const getPostsAPI = async () => {
+export const getPostsAPI = async (lastPostId: number) => {
   return await axios
-    .get(`${import.meta.env.VITE_API_BASE}post/`, {
+    .get(`${import.meta.env.VITE_API_BASE}post?postLastId=${lastPostId}`, {
       withCredentials: true,
     })
     .then(function (response) {
