@@ -28,11 +28,11 @@ export const MainPage = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        console.log("getPostDatas = ", getPostDatas.length - 1);
-
         if (entry.isIntersecting) {
           if (postLastId !== 0) {
             getPosts(postLastId);
+
+            observer.unobserve(entry.target);
           }
         }
       },
@@ -44,10 +44,6 @@ export const MainPage = () => {
     );
 
     observer.observe(lastPostRef.current);
-
-    return () => {
-      if (lastPostRef.current) observer.unobserve(lastPostRef.current);
-    };
   }, [getPostDatas]);
 
   return (
@@ -103,8 +99,6 @@ export const MainPage = () => {
               {getPostDatas.map((el, index) => {
                 const isLast = index === getPostDatas.length - 1;
                 if (isLast) {
-                  // console.log("isLast = ", isLast);
-
                   postLastId = getPostDatas[index].id;
                 }
                 return (

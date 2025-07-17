@@ -52,8 +52,9 @@ export const postSlice = createSlice({
         if (action.payload.posts == undefined) {
           return;
         }
+
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
-          state.posts[idx] = {
+          state.posts.push({
             id: action.payload.posts[idx].id,
             userId: action.payload.posts[idx].userId,
             title: action.payload.posts[idx].title,
@@ -62,7 +63,7 @@ export const postSlice = createSlice({
             likeCnt: action.payload.posts[idx].likeCnt,
             Comments: action.payload.posts[idx].Comments,
             commentCnt: action.payload.posts[idx].Comments.length,
-          };
+          });
         }
         state.isLoading = false;
       });
