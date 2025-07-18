@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./postThunk";
 
+interface IsLastIsLoading {
+  isLoading: boolean;
+  isLast: boolean;
+}
 interface Post {
   id: number;
   userId: string;
@@ -14,11 +18,6 @@ interface Post {
 
 interface PostSlice {
   posts: Post[];
-}
-
-interface IsLastIsLoading {
-  isLoading: boolean;
-  isLast: boolean;
 }
 
 const initialState: PostSlice & IsLastIsLoading = {

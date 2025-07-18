@@ -1,16 +1,45 @@
-import { Box, Button, Grid2, ListItem } from "@mui/material";
+import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
+import CreateIcon from "@mui/icons-material/Create";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
-import { getPostsThunk } from "../store/post/postThunk";
+import { createPostThunk, getPostsThunk } from "../store/post/postThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { useForm, Controller } from "react-hook-form";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "40%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+interface WritePost {
+  title: string;
+  content: string;
+}
 
 export const MainPage = () => {
+  const [open, setOpen] = useState(false);
   const getPostDatas = useSelector((state: RootState) => state.Post.posts);
   const dispatch = useAppDispatch();
+  const { control, handleSubmit } = useForm<WritePost>({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+  });
+
   let postLastId = 0;
 
   const lastPostRef = useRef(null);
@@ -46,6 +75,19 @@ export const MainPage = () => {
     observer.observe(lastPostRef.current);
   }, [getPostDatas]);
 
+  const writePost = async (data: WritePost) => {
+    await dispatch(createPostThunk(data));
+    handleClose();
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Box
@@ -68,7 +110,7 @@ export const MainPage = () => {
             marginBottom: "2em",
           }}
         >
-          <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
             <form action="" method="post">
               <SimSimTextField
                 id="outlined-basic"
@@ -81,7 +123,7 @@ export const MainPage = () => {
                 size="small"
                 placeholder="search"
               ></SimSimTextField>
-              <Button>
+              <Button sx={{ minWidth: "40px" }}>
                 <SearchIcon
                   sx={{
                     color: (theme) => theme.palette.primary.dark,
@@ -90,6 +132,67 @@ export const MainPage = () => {
                 ></SearchIcon>
               </Button>
             </form>
+            <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
+              <CreateIcon
+                sx={{
+                  color: (theme) => theme.palette.primary.dark,
+                  fontSize: 30,
+                }}
+              ></CreateIcon>
+            </Button>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="child-modal-title"
+              aria-describedby="child-modal-description"
+            >
+              <form onSubmit={handleSubmit(writePost)}>
+                <Box sx={{ ...style }}>
+                  <Controller
+                    name="title"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        id="standard-basic"
+                        label="title"
+                        variant="standard"
+                        // defaultValue="title"
+                        {...field}
+                      />
+                    )}
+                  />
+
+                  <Box sx={{ width: "100%" }}>
+                    <Controller
+                      name="content"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          id="standard-multiline-static"
+                          label="contents"
+                          multiline
+                          rows={4}
+                          variant="standard"
+                          sx={{ width: "inherit" }}
+                          // defaultValue="contents"
+                          {...field}
+                        />
+                      )}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button type="submit">Write Post</Button>
+                    <Button onClick={handleClose}>Close</Button>
+                  </Box>
+                </Box>
+              </form>
+            </Modal>
           </Box>
           <Box></Box>
         </Box>
