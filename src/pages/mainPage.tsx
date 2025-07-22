@@ -31,7 +31,9 @@ interface WritePost {
 
 export const MainPage = () => {
   const [open, setOpen] = useState(false);
-  const getPostDatas = useSelector((state: RootState) => state.Post.posts);
+  const getPostDatas = useSelector(
+    (state: RootState) => state.GetAllPosts.posts,
+  );
   const dispatch = useAppDispatch();
   const { control, handleSubmit } = useForm<WritePost>({
     defaultValues: {
@@ -85,6 +87,8 @@ export const MainPage = () => {
   };
 
   const handleClose = () => {
+    console.log("모달닫기");
+
     setOpen(false);
   };
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPostsThunk } from "./postThunk";
+import { createPostThunk, getPostsThunk } from "./postThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -16,19 +16,45 @@ interface Post {
   Comments: [{}];
 }
 
-interface PostSlice {
+interface getAllPostsSlice {
   posts: Post[];
 }
 
-const initialState: PostSlice & IsLastIsLoading = {
+const getAllPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
   posts: [],
   isLoading: false,
   isLast: false,
 };
 
-export const postSlice = createSlice({
-  name: "Post",
-  initialState,
+// const createPostInittialState: getAllPostsSlice = {
+//   posts: [],
+// };
+
+export const createPostSlice = createSlice({
+  name: "Post/createPost",
+  initialState: getAllPostsInitialState,
+  reducers: {},
+  extraReducers: async (builder) => {
+    builder.addCase(createPostThunk.fulfilled, (state, action) => {
+      if (!action.payload) return;
+      // 새 게시물을 posts 배열 맨 앞에 추가 (최신순 가정)
+      state.posts.unshift({
+        id: action.payload.id,
+        userId: action.payload.userId,
+        title: action.payload.title,
+        content: action.payload.content,
+        userNickname: action.payload.userNickname,
+        likeCnt: action.payload.likeCnt,
+        Comments: action.payload.Comments,
+        commentCnt: action.payload.Comments.length,
+      });
+    });
+  },
+});
+
+export const getAllPostsSlice = createSlice({
+  name: "Post/getAllPosts",
+  initialState: getAllPostsInitialState,
 
   reducers: {
     setPosts: (state, action) => {
@@ -48,9 +74,7 @@ export const postSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getPostsThunk.fulfilled, (state, action) => {
-        if (action.payload.posts == undefined) {
-          return;
-        }
+        if (!action.payload) return;
 
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({

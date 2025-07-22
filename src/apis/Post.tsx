@@ -18,7 +18,7 @@ export const getPostsAPI = async (lastPostId: number) => {
 };
 
 export const createPostAPI = async (data: CreatePost) => {
-  await axios
+  return await axios
     .post(
       `${import.meta.env.VITE_API_BASE}post/`,
       {
@@ -30,9 +30,9 @@ export const createPostAPI = async (data: CreatePost) => {
       },
     )
     .then(function (response) {
-      console.log(response.data);
+      console.log("response.data = ", response.data.data);
 
-      return response.data;
+      return response.data.data;
     })
     .catch(function (error) {
       throw error;

@@ -26,18 +26,16 @@ interface CreatePost {
 }
 
 export const getPostsThunk = createAsyncThunk(
-  "post/",
+  "post/getAllPosts",
   async (lastPostId: number) => {
-    const res = await getPostsAPI(lastPostId);
-    console.log(res);
-
-    return res as GetPostsRes & IsLastIsLoading;
+    const posts = await getPostsAPI(lastPostId);
+    return posts as GetPostsRes & IsLastIsLoading;
   },
 );
 export const createPostThunk = createAsyncThunk(
-  "post/",
+  "post/createPost",
   async (createPostData: CreatePost) => {
-    console.log("createPostData  = ", createPostData);
-    await createPostAPI(createPostData);
+    const newPost = await createPostAPI(createPostData);
+    return newPost as Posts;
   },
 );

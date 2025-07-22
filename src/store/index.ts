@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./auth/authSlice";
-import { postSlice } from "./post/postSlice";
+import { createPostSlice, getAllPostsSlice } from "./post/postSlice";
 
 const store = configureStore({
-  reducer: { User: userSlice.reducer, Post: postSlice.reducer },
+  reducer: {
+    User: userSlice.reducer,
+    GetAllPosts: getAllPostsSlice.reducer,
+    CreatePost: createPostSlice.reducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
