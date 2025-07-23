@@ -30,8 +30,6 @@ export const createPostAPI = async (data: CreatePost) => {
       },
     )
     .then(function (response) {
-      console.log("response.data = ", response.data.data);
-
       return response.data.data;
     })
     .catch(function (error) {

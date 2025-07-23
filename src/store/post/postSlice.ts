@@ -26,34 +26,24 @@ const getAllPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
   isLast: false,
 };
 
-// const createPostInittialState: getAllPostsSlice = {
-//   posts: [],
-// };
-
 export const createPostSlice = createSlice({
-  name: "Post/createPost",
+  name: "post/createPost",
   initialState: getAllPostsInitialState,
   reducers: {},
   extraReducers: async (builder) => {
-    builder.addCase(createPostThunk.fulfilled, (state, action) => {
-      if (!action.payload) return;
-      // 새 게시물을 posts 배열 맨 앞에 추가 (최신순 가정)
-      state.posts.unshift({
-        id: action.payload.id,
-        userId: action.payload.userId,
-        title: action.payload.title,
-        content: action.payload.content,
-        userNickname: action.payload.userNickname,
-        likeCnt: action.payload.likeCnt,
-        Comments: action.payload.Comments,
-        commentCnt: action.payload.Comments.length,
-      });
-    });
+    // builder.addCase(getPostsThunk.pending, (state) => {
+    //   state.isLoading = true;
+    // });
+    // .addCase(createPostThunk.fulfilled, (state, action) => {
+    //   if (!action.payload) return;
+    //   // 새 게시물을 posts 배열 맨 앞에 추가 (최신순 가정)
+    //   state.posts.unshift(action.payload);
+    // });
   },
 });
 
 export const getAllPostsSlice = createSlice({
-  name: "Post/getAllPosts",
+  name: "post/getAllPosts",
   initialState: getAllPostsInitialState,
 
   reducers: {
@@ -62,6 +52,10 @@ export const getAllPostsSlice = createSlice({
       for (let idx = 0; idx < posts.length; idx++) {
         state.posts[idx] = posts[idx];
       }
+    },
+
+    addPostToAllPosts: (state, action) => {
+      state.posts.unshift(action.payload);
     },
 
     deleteMyPost: (state, action) => {
@@ -75,7 +69,7 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(getPostsThunk.fulfilled, (state, action) => {
         if (!action.payload) return;
-
+        state.isLoading = false;
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,

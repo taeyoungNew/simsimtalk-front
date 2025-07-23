@@ -1,4 +1,12 @@
-import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid2,
+  ListItem,
+  Modal,
+  TextField,
+} from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
@@ -41,8 +49,10 @@ export const MainPage = () => {
       content: "",
     },
   });
-
-  let postLastId = 0;
+  const isLoading = useSelector(
+    (state: RootState) => state.GetAllPosts.isLoading,
+  );
+  let postLastId = getPostDatas[getPostDatas.length - 1]?.id;
 
   const lastPostRef = useRef(null);
 
@@ -60,9 +70,10 @@ export const MainPage = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (postLastId !== 0) {
-            getPosts(postLastId);
+          console.log(isLoading);
 
+          if (postLastId !== 0 && !isLoading) {
+            getPosts(postLastId);
             observer.unobserve(entry.target);
           }
         }
@@ -70,10 +81,9 @@ export const MainPage = () => {
       {
         root: null,
         rootMargin: "0px",
-        threshold: 0.5,
+        threshold: 1,
       },
     );
-
     observer.observe(lastPostRef.current);
   }, [getPostDatas]);
 
@@ -87,8 +97,6 @@ export const MainPage = () => {
   };
 
   const handleClose = () => {
-    console.log("모달닫기");
-
     setOpen(false);
   };
 
@@ -99,8 +107,8 @@ export const MainPage = () => {
           marginRight: "auto",
           marginLeft: "auto",
           width: "80%",
-          height: "100vh",
-          overflow: "hidden",
+          height: "inherit",
+          overflow: "scoll",
           marginTop: "3em",
         }}
       >
@@ -198,9 +206,9 @@ export const MainPage = () => {
               </form>
             </Modal>
           </Box>
-          <Box></Box>
         </Box>
-        <Box sx={{ overflowY: "scroll" }} height="inherit">
+
+        <Box height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
               {getPostDatas.map((el, index) => {
@@ -226,6 +234,9 @@ export const MainPage = () => {
                   </ListItem>
                 );
               })}
+              {/* <Box sx={{ display: "flex"  }}>
+                <CircularProgress />
+              </Box> */}
             </Grid2>
           </Grid2>
         </Box>
