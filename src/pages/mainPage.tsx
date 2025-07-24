@@ -53,6 +53,9 @@ export const MainPage = () => {
     (state: RootState) => state.GetAllPosts.isLoading,
   );
   let postLastId = getPostDatas[getPostDatas.length - 1]?.id;
+  // console.log("getPostDatas = ", getPostDatas);
+
+  // console.log("postLastId = ", postLastId);
 
   const lastPostRef = useRef(null);
 
@@ -70,8 +73,6 @@ export const MainPage = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          console.log(isLoading);
-
           if (postLastId !== 0 && !isLoading) {
             getPosts(postLastId);
             observer.unobserve(entry.target);
@@ -213,6 +214,8 @@ export const MainPage = () => {
             <Grid2 size={12}>
               {getPostDatas.map((el, index) => {
                 const isLast = index === getPostDatas.length - 1;
+                console.log("isLast = ", isLast);
+
                 if (isLast) {
                   postLastId = getPostDatas[index].id;
                 }
