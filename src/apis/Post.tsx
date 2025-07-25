@@ -4,7 +4,22 @@ interface CreatePost {
   content: string;
 }
 
+export const getPostAPI = async (postId: number) => {
+  return await axios
+    .get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
+      withCredentials: true,
+    })
+    .then(function (response) {
+      return response.data.data;
+    })
+    .catch(function (error) {
+      throw error;
+    });
+};
+
 export const getPostsAPI = async (lastPostId: number) => {
+  console.log("getPostsAPI = ", lastPostId);
+
   return await axios
     .get(`${import.meta.env.VITE_API_BASE}post?postLastId=${lastPostId}`, {
       withCredentials: true,
@@ -29,6 +44,19 @@ export const createPostAPI = async (data: CreatePost) => {
         withCredentials: true,
       },
     )
+    .then(function (response) {
+      return response.data.data;
+    })
+    .catch(function (error) {
+      throw error;
+    });
+};
+
+export const deletePostAPI = async (postId: number) => {
+  return await axios
+    .delete(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
+      withCredentials: true,
+    })
     .then(function (response) {
       return response.data.data;
     })

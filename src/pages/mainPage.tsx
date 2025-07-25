@@ -1,19 +1,11 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Grid2,
-  ListItem,
-  Modal,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
 import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
-import { createPostThunk, getPostsThunk } from "../store/post/postThunk";
+import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useForm, Controller } from "react-hook-form";
@@ -53,16 +45,16 @@ export const MainPage = () => {
     (state: RootState) => state.GetAllPosts.isLoading,
   );
   let postLastId = getPostDatas[getPostDatas.length - 1]?.id;
-  // console.log("getPostDatas = ", getPostDatas);
-
-  // console.log("postLastId = ", postLastId);
 
   const lastPostRef = useRef(null);
 
   const getPosts = async (postLastId: number) => {
+    console.log("postLastId = ", postLastId);
+
     await dispatch(getPostsThunk(postLastId));
   };
-
+  const observer = useRef<IntersectionObserver | null>(null);
+  let isFetching = false;
   useEffect(() => {
     getPosts(postLastId);
   }, []);
@@ -70,13 +62,22 @@ export const MainPage = () => {
   useEffect(() => {
     if (!lastPostRef.current) return;
 
-    const observer = new IntersectionObserver(
+    // 기존 옵저버 해제
+    if (observer.current) {
+      observer.current.disconnect();
+    }
+
+    observer.current = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !isFetching) {
+          isFetching = true;
           if (postLastId !== 0 && !isLoading) {
-            getPosts(postLastId);
-            observer.unobserve(entry.target);
+            setTimeout(() => {
+              isFetching = true;
+              getPosts(postLastId);
+            }, 500);
           }
+          observer.current?.unobserve(entry.target);
         }
       },
       {
@@ -85,7 +86,11 @@ export const MainPage = () => {
         threshold: 1,
       },
     );
-    observer.observe(lastPostRef.current);
+    observer.current.observe(lastPostRef.current);
+    return () => {
+      // 클린업: 컴포넌트 언마운트 시에도 해제
+      observer.current?.disconnect();
+    };
   }, [getPostDatas]);
 
   const writePost = async (data: WritePost) => {
@@ -153,6 +158,8 @@ export const MainPage = () => {
                 }}
               ></CreateIcon>
             </Button>
+
+            {/* 새게시물입력창 */}
             <Modal
               open={open}
               onClose={handleClose}
@@ -214,7 +221,6 @@ export const MainPage = () => {
             <Grid2 size={12}>
               {getPostDatas.map((el, index) => {
                 const isLast = index === getPostDatas.length - 1;
-                console.log("isLast = ", isLast);
 
                 if (isLast) {
                   postLastId = getPostDatas[index].id;

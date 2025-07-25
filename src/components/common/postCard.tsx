@@ -2,7 +2,7 @@ import { Avatar, Box, Grid2 } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { theme } from "../../theme/theme";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 interface CardProps {
@@ -48,7 +48,7 @@ export const PostCard = ({
         color={theme.palette.primary.contrastText}
       >
         <DetailPostLink
-          to={`/detailPost/${id}`}
+          to={`/postDetail/${id}`}
           className={({ isActive }) =>
             isActive
               ? "no-underline text-black font-bold"

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createPostThunk, getPostsThunk } from "./postThunk";
+import { getPostsThunk } from "./allPostsThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -41,6 +41,11 @@ export const createPostSlice = createSlice({
     // });
   },
 });
+
+// export const getPostsSlice = createSlice({
+//   name: "post/getPost",
+
+// })
 
 export const getAllPostsSlice = createSlice({
   name: "post/getAllPosts",
