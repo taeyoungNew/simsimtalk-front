@@ -18,8 +18,6 @@ export const getPostAPI = async (postId: number) => {
 };
 
 export const getPostsAPI = async (lastPostId: number) => {
-  console.log("getPostsAPI = ", lastPostId);
-
   return await axios
     .get(`${import.meta.env.VITE_API_BASE}post?postLastId=${lastPostId}`, {
       withCredentials: true,

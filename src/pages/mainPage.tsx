@@ -49,8 +49,6 @@ export const MainPage = () => {
   const lastPostRef = useRef(null);
 
   const getPosts = async (postLastId: number) => {
-    console.log("postLastId = ", postLastId);
-
     await dispatch(getPostsThunk(postLastId));
   };
   const observer = useRef<IntersectionObserver | null>(null);

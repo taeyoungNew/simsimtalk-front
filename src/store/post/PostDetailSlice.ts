@@ -42,6 +42,8 @@ export const getPostDetailSlice = createSlice({
         if (!action.payload) return;
         state.isLoading = false;
         const postDetail = action.payload;
+        console.log(postDetail);
+
         state.id = postDetail.id;
         state.userId = postDetail.userId;
         state.title = postDetail.title;

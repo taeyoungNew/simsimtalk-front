@@ -21,7 +21,6 @@ export const signupAPI = async (props: SignupForm) => {
         age: props.age,
       })
       .then((response) => {
-        console.log(response.data.message);
         return { status: response.status, message: response.data };
       })
       .catch((error) => {

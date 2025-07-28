@@ -35,7 +35,7 @@ export const logoutAPI = async () => {
       withCredentials: true,
     })
     .then((res) => {
-      console.log(res.data.message);
+      alert(res.data.message);
     })
     .catch(function (error) {
       throw error;
