@@ -1,7 +1,5 @@
-import NavBar from "../components/common/navBar"
+import NavBar from "../components/common/NavBar";
 
 export const Applayout = () => {
-    return (
-        <NavBar></NavBar>
-    )
-}
+  return <NavBar></NavBar>;
+};
