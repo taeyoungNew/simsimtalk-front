@@ -36,6 +36,8 @@ export const userSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(loginThunk.fulfilled, (state, action) => {
+      console.log(action.payload);
+
       state.isLogin = true;
       state.id = action.payload.id;
       state.email = action.payload.email;
@@ -44,10 +46,10 @@ export const userSlice = createSlice({
 
     builder.addCase(authMeThunk.fulfilled, (state, action) => {
       if (action.payload != undefined) {
-        state.isLogin = true;
-        state.id = action.payload.id;
-        state.email = action.payload.email;
-        state.nickname = action.payload.nickname;
+        state.isLogin = action.payload?.isLogin;
+        state.id = action.payload.user.id;
+        state.email = action.payload.user.email;
+        state.nickname = action.payload.user.nickname;
       }
     });
   },

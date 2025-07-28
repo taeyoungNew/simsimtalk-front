@@ -4,7 +4,7 @@ interface CreatePost {
   content: string;
 }
 
-export const getPostAPI = async (postId: number) => {
+export const getPostAPI = async (postId: Number) => {
   return await axios
     .get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
       withCredentials: true,
