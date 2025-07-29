@@ -38,7 +38,6 @@ export const loginThunk = createAsyncThunk<
 
 export const authMeThunk = createAsyncThunk("auth/auth-me", async () => {
   const res = await authMeAPI();
-  console.log(res);
 
   return res as AuthMeRes;
 });

@@ -54,7 +54,7 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(getPostsThunk.fulfilled, (state, action) => {
         if (!action.payload) return;
-        state.isLoading = false;
+
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,
@@ -69,6 +69,14 @@ export const getAllPostsSlice = createSlice({
         }
         state.isLoading = false;
       });
-    builder.addCase(deletePostThunk.fulfilled, (state, action) => {});
+    builder
+      .addCase(deletePostThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(deletePostThunk.fulfilled, (state, action) => {
+        const postId = action.payload;
+        state.posts = state.posts.filter((el) => el.id !== postId);
+        state.isLoading = false;
+      });
   },
 });

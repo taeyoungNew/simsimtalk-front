@@ -4,6 +4,12 @@ interface CreatePost {
   content: string;
 }
 
+interface ModifyPost {
+  id: number;
+  title: string;
+  content: string;
+}
+
 export const getPostAPI = async (postId: Number) => {
   return await axios
     .get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
@@ -50,7 +56,29 @@ export const createPostAPI = async (data: CreatePost) => {
     });
 };
 
-export const deletePostAPI = async (postId: number) => {
+export const modifyPost = async (payload: ModifyPost) => {
+  return await axios
+    .put(
+      `${import.meta.env.VITE_API_BASE}post/${payload.id}`,
+      {
+        title: payload.title,
+        content: payload.content,
+      },
+      {
+        withCredentials: true,
+      },
+    )
+    .then(function (response) {
+      console.log("response = ", response);
+
+      return response.data.data;
+    })
+    .catch(function (error) {
+      throw error;
+    });
+};
+
+export const deletePostAPI = async (postId: Number) => {
   return await axios
     .delete(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
       withCredentials: true,
