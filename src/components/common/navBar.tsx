@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { NavLink, Outlet } from "react-router-dom";
-import { ChatQuote } from "../../assets/icons/ChatQuote";
+import { ChatQuote } from "../../assets/icons/chatQuote";
 import { theme } from "../../theme/theme";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
@@ -17,7 +17,7 @@ import Menu from "@mui/material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import { deleteAuth } from "../../store/auth/authSlice";
-import { logoutAPI } from "../../apis/Auth";
+import { logoutAPI } from "../../apis/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
@@ -149,36 +149,6 @@ export default function NavBar() {
               >
                 <LogoutIcon />
               </IconButton>
-
-              {/* <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton> */}
             </Box>
           ) : (
             <Box>

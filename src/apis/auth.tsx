@@ -5,10 +5,18 @@ export interface LoginForm {
   password: string;
 }
 
+interface LoginRes {
+  data: {
+    id: string;
+    email: string;
+    nickname: string;
+  };
+}
+
 export const loginAPI = async (props: LoginForm) => {
   let result;
   return await axios
-    .post<{ id: string; email: string; nickname: string }>(
+    .post<LoginRes>(
       `${import.meta.env.VITE_API_BASE}auth/login`,
       {
         email: props.email,
@@ -19,9 +27,9 @@ export const loginAPI = async (props: LoginForm) => {
     .then(function (response) {
       result = response.status;
       return {
-        id: response.data.id,
-        email: response.data.email,
-        nickname: response.data.nickname,
+        id: response.data.data.id,
+        email: response.data.data.email,
+        nickname: response.data.data.nickname,
       };
     })
     .catch(function (error) {

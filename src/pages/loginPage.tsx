@@ -1,5 +1,5 @@
 import { Box, Button, Grid2 } from "@mui/material";
-import { ChatQuote } from "../assets/icons/ChatQuote";
+import { ChatQuote } from "../assets/icons/chatQuote";
 import "../assets/css/loginPage.css";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
