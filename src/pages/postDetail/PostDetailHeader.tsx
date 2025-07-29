@@ -7,11 +7,7 @@ import { useState } from "react";
 import { theme } from "../../theme/theme";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../store/hook";
-<<<<<<< HEAD
 import { deletePostThunk } from "../../store/post/PostDetailThunk";
-=======
-import { deletePostThunk } from "../../store/post/postDetailThunk";
->>>>>>> 3cfd3e787d3c3fde1334848855b1f183808d7d90
 
 const style = {
   position: "absolute",
