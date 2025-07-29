@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
-import { deletePostThunk } from "./postDetailThunk";
+import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -68,6 +68,19 @@ export const getAllPostsSlice = createSlice({
           });
         }
         state.isLoading = false;
+      });
+
+    builder
+      .addCase(modifyPostThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(modifyPostThunk.fulfilled, (state, action) => {
+        const updatedPost = action.payload;
+        for (let idx = 0; idx < state.posts.length; idx++) {
+          if (state.posts[idx].id === updatedPost.id) {
+            state.posts[idx] = updatedPost;
+          }
+        }
       });
     builder
       .addCase(deletePostThunk.pending, (state, action) => {

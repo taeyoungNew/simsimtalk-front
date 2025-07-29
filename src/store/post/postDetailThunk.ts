@@ -30,7 +30,8 @@ export const getPostDetailThunk = createAsyncThunk(
 export const modifyPostThunk = createAsyncThunk(
   "post/modifyPost",
   async (payload: ModifyPost) => {
-    await modifyPost(payload);
+    const post = await modifyPost(payload);
+    return post as Post;
   },
 );
 

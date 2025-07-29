@@ -69,8 +69,6 @@ export const modifyPost = async (payload: ModifyPost) => {
       },
     )
     .then(function (response) {
-      console.log("response = ", response);
-
       return response.data.data;
     })
     .catch(function (error) {
