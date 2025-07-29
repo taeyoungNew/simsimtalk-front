@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deletePostThunk, getPostDetailThunk } from "./PostDetailThunk";
+import { deletePostThunk, getPostDetailThunk } from "./postDetailThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;

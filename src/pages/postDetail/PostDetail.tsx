@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { getPostDetailThunk } from "../../store/post/PostDetailThunk";
+import { getPostDetailThunk } from "../../store/post/postDetailThunk";
 import { useAppDispatch } from "../../store/hook";
 import { PostDetailBody } from "./PostDetailBody";
 import { PostDetailFooter } from "./PostDetailFooter";

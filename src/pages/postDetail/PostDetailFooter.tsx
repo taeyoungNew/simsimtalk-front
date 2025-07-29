@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
-import { HeartIcon } from "../../assets/icons/heart";
+import { HeartIcon } from "../../assets/icons/Heart";
 import { theme } from "../../theme/theme";
-import { ChatDuotone } from "../../assets/icons/chatDuotone";
+import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 
 interface PostDetailFooterProps {
   likeCnt: number;

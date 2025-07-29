@@ -1,8 +1,8 @@
 import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
-import { PostCard } from "../components/common/postCard";
+import { PostCard } from "../components/common/PostCard";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
-import { SimSimTextField } from "../layout/common/simsimTextField";
+import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
 import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";

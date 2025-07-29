@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { NavLink, Outlet } from "react-router-dom";
-import { ChatQuote } from "../../assets/icons/chatQuote";
+import { ChatQuote } from "../../assets/icons/ChatQuote";
 import { theme } from "../../theme/theme";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";

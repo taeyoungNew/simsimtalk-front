@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createPostAPI, getPostsAPI } from "../../apis/Post";
+import { createPostAPI, getPostsAPI } from "../../apis/post";
 import { getAllPostsSlice } from "./allPostsSlice";
 
 interface IsLastIsLoading {

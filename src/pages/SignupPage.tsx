@@ -14,7 +14,7 @@ import { theme } from "../theme/theme";
 import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
 import React from "react";
-import { signupAPI } from "../apis/Signup";
+import { signupAPI } from "../apis/signup";
 import { useNavigate } from "react-router-dom";
 
 type SignupType = {

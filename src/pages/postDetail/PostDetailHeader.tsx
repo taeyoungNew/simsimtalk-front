@@ -1,13 +1,13 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { Avatar } from "../../components/common/avatar";
+import { Avatar } from "../../components/common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useState } from "react";
 import { theme } from "../../theme/theme";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../store/hook";
-import { deletePostThunk } from "../../store/post/PostDetailThunk";
+import { deletePostThunk } from "../../store/post/postDetailThunk";
 
 const style = {
   position: "absolute",

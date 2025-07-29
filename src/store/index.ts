@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./auth/authSlice";
 import { getAllPostsSlice } from "./post/allPostsSlice";
-import { getPostDetailSlice } from "./post/PostDetailSlice";
+import { getPostDetailSlice } from "./post/postDetailSlice";
 
 const store = configureStore({
   reducer: {
