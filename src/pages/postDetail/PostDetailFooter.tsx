@@ -1,7 +1,9 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, List, Typography } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { theme } from "../../theme/theme";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
+import { CommentCard } from "../../components/common/CommentCard";
+import { useState } from "react";
 
 interface PostDetailFooterProps {
   likeCnt: number;
@@ -14,6 +16,14 @@ export const PostDetailFooter = ({
   commentCnt,
   Comments,
 }: PostDetailFooterProps) => {
+  const [openWriteCmmForm, setOpenWriteCmmForm] = useState(false);
+  const openCmmForm = () => {
+    setOpenWriteCmmForm(true);
+  };
+  const closeCmmForm = () => {
+    setOpenWriteCmmForm(false);
+  };
+  const writeComment = () => {};
   return (
     <>
       <Box
@@ -24,7 +34,7 @@ export const PostDetailFooter = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button>
+          <Button onClick={writeComment}>
             <HeartIcon
               color={theme.palette.primary.contrastText}
               fillColor={theme.palette.primary.light}
@@ -53,6 +63,11 @@ export const PostDetailFooter = ({
             {commentCnt}
           </Typography>
         </Box>
+      </Box>
+      <Box sx={{ width: "100%" }}>
+        <List sx={{ width: "auto", bgcolor: "background.paper" }}>
+          <CommentCard></CommentCard>
+        </List>
       </Box>
     </>
   );

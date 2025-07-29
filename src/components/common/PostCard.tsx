@@ -77,7 +77,6 @@ export const PostCard = ({
                   color: (theme) => theme.palette.primary.dark,
                 }}
               ></Avatar>
-              {userNickname}
               {title}
             </Grid2>
             <Grid2
