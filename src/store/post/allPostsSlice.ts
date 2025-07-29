@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
+import { deletePostThunk } from "./PostDetailThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -25,27 +26,6 @@ const getAllPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
   isLoading: false,
   isLast: false,
 };
-
-export const createPostSlice = createSlice({
-  name: "post/createPost",
-  initialState: getAllPostsInitialState,
-  reducers: {},
-  extraReducers: async (builder) => {
-    // builder.addCase(getPostsThunk.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // .addCase(createPostThunk.fulfilled, (state, action) => {
-    //   if (!action.payload) return;
-    //   // 새 게시물을 posts 배열 맨 앞에 추가 (최신순 가정)
-    //   state.posts.unshift(action.payload);
-    // });
-  },
-});
-
-// export const getPostsSlice = createSlice({
-//   name: "post/getPost",
-
-// })
 
 export const getAllPostsSlice = createSlice({
   name: "post/getAllPosts",
@@ -89,5 +69,6 @@ export const getAllPostsSlice = createSlice({
         }
         state.isLoading = false;
       });
+    builder.addCase(deletePostThunk.fulfilled, (state, action) => {});
   },
 });

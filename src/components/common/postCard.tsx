@@ -1,6 +1,6 @@
 import { Avatar, Box, Grid2 } from "@mui/material";
-import { HeartIcon } from "../../assets/icons/Heart";
-import { ChatDuotone } from "../../assets/icons/ChatDuotone";
+import { HeartIcon } from "../../assets/icons/heart";
+import { ChatDuotone } from "../../assets/icons/chatDuotone";
 import { theme } from "../../theme/theme";
 import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";

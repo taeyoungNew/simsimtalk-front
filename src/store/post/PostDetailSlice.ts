@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPostDetailThunk } from "./PostDetailThunk";
+import { deletePostThunk, getPostDetailThunk } from "./PostDetailThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -42,7 +42,6 @@ export const getPostDetailSlice = createSlice({
         if (!action.payload) return;
         state.isLoading = false;
         const postDetail = action.payload;
-        console.log(postDetail);
 
         state.id = postDetail.id;
         state.userId = postDetail.userId;

@@ -1,5 +1,4 @@
 import { SvgIcon } from "@mui/material";
-import { theme } from "../../theme/theme";
 
 type Props = {
   size?: number;
