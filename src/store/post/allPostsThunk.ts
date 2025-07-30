@@ -6,6 +6,15 @@ interface IsLastIsLoading {
   isLoading: boolean;
   isLast: boolean;
 }
+
+interface Comment {
+  commentId: number;
+  postId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+  createAt: string;
+}
 interface Posts {
   id: number;
   userId: string;
@@ -14,7 +23,7 @@ interface Posts {
   userNickname: string;
   likeCnt: number;
   commentCnt: number;
-  Comments: [{}];
+  Comments: Comment[];
 }
 
 interface GetPostsRes {

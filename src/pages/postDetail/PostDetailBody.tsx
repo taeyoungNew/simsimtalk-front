@@ -10,7 +10,7 @@ export const PostDetailBody = ({ title, content }: PostDetailBodyProps) => {
     <>
       <Typography
         sx={{ paddingLeft: "0.5em", paddingRight: "0.5em" }}
-        variant="h3"
+        variant="h4"
       >
         {title}
       </Typography>

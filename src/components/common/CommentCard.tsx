@@ -7,17 +7,27 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-export const CommentCard = () => {
+interface CommentsCardProps {
+  commentId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+}
+export const CommentCard = ({
+  commentId,
+  userId,
+  userNickname,
+  content,
+}: CommentsCardProps) => {
   return (
     <>
       <Box>
-        {" "}
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           </ListItemAvatar>
           <ListItemText
-            primary="Brunch this weekend?"
+            primary={content}
             secondary={
               <React.Fragment>
                 <Typography
@@ -25,14 +35,13 @@ export const CommentCard = () => {
                   variant="body2"
                   sx={{ color: "text.primary", display: "inline" }}
                 >
-                  Ali Connors
+                  {userNickname}
                 </Typography>
-                {" — I'll be in your neighborhood doing errands this…"}
               </React.Fragment>
             }
           />
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider sx={{ width: "80%" }} variant="inset" component="li" />
       </Box>
     </>
   );

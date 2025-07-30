@@ -1,29 +1,65 @@
-import { Box, Button, List, Typography } from "@mui/material";
+import { Box, Button, List, TextField, Typography } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { theme } from "../../theme/theme";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { CommentCard } from "../../components/common/CommentCard";
-import { useState } from "react";
+
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useAppDispatch } from "../../store/hook";
+import { createCommentThunk } from "../../store/comment/commentThunk";
+import React from "react";
+
+interface Comment {
+  commentId: number;
+  postId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+  createAt: string;
+}
 
 interface PostDetailFooterProps {
+  postId: number;
   likeCnt: number;
   commentCnt: number;
-  Comments: [{}];
+  Comments: Comment[];
+}
+interface CommentsCardProps {
+  commentId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+}
+
+interface WriteComment {
+  comment: string;
 }
 
 export const PostDetailFooter = ({
   likeCnt,
   commentCnt,
-  Comments,
+  postId,
 }: PostDetailFooterProps) => {
-  const [openWriteCmmForm, setOpenWriteCmmForm] = useState(false);
-  const openCmmForm = () => {
-    setOpenWriteCmmForm(true);
+  const dispatch = useAppDispatch();
+  const isLogin = useSelector((state: RootState) => state.User.isLogin);
+  const comments = useSelector(
+    (state: RootState) => state.GetPostDetail.Comments,
+  );
+  const { control, handleSubmit, reset } = useForm<WriteComment>({
+    defaultValues: { comment: "" },
+  });
+  const submitComment = async (data: WriteComment) => {
+    const payload = {
+      postId,
+      comment: data.comment,
+    };
+    await dispatch(createCommentThunk(payload));
+
+    reset({ comment: "" });
   };
-  const closeCmmForm = () => {
-    setOpenWriteCmmForm(false);
-  };
-  const writeComment = () => {};
+
   return (
     <>
       <Box
@@ -34,7 +70,7 @@ export const PostDetailFooter = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button onClick={writeComment}>
+          <Button>
             <HeartIcon
               color={theme.palette.primary.contrastText}
               fillColor={theme.palette.primary.light}
@@ -64,10 +100,77 @@ export const PostDetailFooter = ({
           </Typography>
         </Box>
       </Box>
-      <Box sx={{ width: "100%" }}>
-        <List sx={{ width: "auto", bgcolor: "background.paper" }}>
-          <CommentCard></CommentCard>
-        </List>
+
+      <Box sx={{ width: "100%", padding: "0.5em" }}>
+        {isLogin === true ? (
+          <form onSubmit={handleSubmit(submitComment)}>
+            <Box>
+              <Typography variant="h6" gutterBottom>
+                Comment
+              </Typography>
+              <Controller
+                name="comment"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    multiline
+                    placeholder="댓글을 남겨주세요"
+                    minRows={1}
+                    maxRows={3}
+                    inputProps={{ maxLength: 200 }}
+                    sx={{ width: "100%" }}
+                    id="outlined-basic"
+                    variant="outlined"
+                    // value={commentInputValue}
+                    onKeyDown={(e) => {
+                      if (!e.shiftKey && e.key === "Enter") {
+                        e.preventDefault();
+                        handleSubmit(submitComment)();
+                      }
+                    }}
+                    {...field}
+                  />
+                )}
+              />
+
+              <Box
+                sx={{
+                  marginTop: "0.5em",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Button type="submit" variant="outlined">
+                  Submit
+                </Button>
+              </Box>
+            </Box>
+            <br />
+          </form>
+        ) : (
+          <Box></Box>
+        )}
+        {comments.map((el, index) => {
+          return (
+            <List
+              key={index}
+              sx={{
+                width: "auto",
+                bgcolor: "background.paper",
+                marginBottom: "0.5em",
+              }}
+            >
+              <CommentCard
+                key={el.commentId}
+                commentId={el.commentId}
+                userId={el.userId}
+                userNickname={el.userNickname}
+                content={el.content}
+              ></CommentCard>
+            </List>
+          );
+        })}
       </Box>
     </>
   );
