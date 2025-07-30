@@ -4,9 +4,19 @@ import {
   getPostDetailThunk,
   modifyPostThunk,
 } from "./postDetailThunk";
+import { createCommentThunk } from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
+}
+
+interface Comment {
+  commentId: number;
+  postId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+  createAt: string;
 }
 
 interface Post {
@@ -17,7 +27,7 @@ interface Post {
   content: string;
   likeCnt: number;
   commentCnt: number;
-  Comments: [{}];
+  Comments: Comment[];
 }
 
 const postDetailInitialState: Post & IsLastIsLoading = {
@@ -29,7 +39,7 @@ const postDetailInitialState: Post & IsLastIsLoading = {
   content: "",
   likeCnt: 0,
   commentCnt: 0,
-  Comments: [{}],
+  Comments: [],
 };
 
 export const getPostDetailSlice = createSlice({
@@ -53,9 +63,8 @@ export const getPostDetailSlice = createSlice({
         state.userNickname = postDetail.userNickname;
         state.content = postDetail.content;
         state.likeCnt = postDetail.likeCnt;
-        state.commentCnt = postDetail.commentCnt;
+        state.commentCnt = postDetail.Comments.length;
         state.Comments = postDetail.Comments;
-
         state.isLoading = false;
       })
       .addCase(getPostDetailThunk.rejected, (state, action) => {
@@ -63,6 +72,7 @@ export const getPostDetailSlice = createSlice({
         return;
       });
 
+    // 게시물
     builder
       .addCase(modifyPostThunk.pending, (state, action) => {
         state.isLoading = true;
@@ -75,5 +85,11 @@ export const getPostDetailSlice = createSlice({
       .addCase(modifyPostThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
+    // 댓글생성
+    builder.addCase(createCommentThunk.fulfilled, (state, action) => {
+      const newComment = action.payload;
+      state.Comments.push(newComment);
+      state.commentCnt = state.Comments.length;
+    });
   },
 });

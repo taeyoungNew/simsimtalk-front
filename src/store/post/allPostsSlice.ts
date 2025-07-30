@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
+import { createCommentThunk } from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
   isLast: boolean;
+}
+interface Comment {
+  commentId: number;
+  postId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+  createAt: string;
 }
 interface Post {
   id: number;
@@ -14,7 +23,7 @@ interface Post {
   content: string;
   likeCnt: number;
   commentCnt: number;
-  Comments: [{}];
+  Comments: Comment[];
 }
 
 interface getAllPostsSlice {
@@ -39,12 +48,24 @@ export const getAllPostsSlice = createSlice({
       }
     },
 
+    getPosts: (state, action) => {
+      state.posts;
+    },
+
     addPostToAllPosts: (state, action) => {
       state.posts.unshift(action.payload);
     },
 
     deleteMyPost: (state, action) => {
       const deleteIdx = action.payload.idx;
+    },
+
+    updateCommentCnt: (state, action) => {
+      const { postId, delta } = action.payload;
+      console.log("postId = ", postId);
+
+      const post = state.posts.find((p) => p.id === postId);
+      if (post) post.commentCnt += delta;
     },
   },
   extraReducers: async (builder) => {
@@ -82,6 +103,7 @@ export const getAllPostsSlice = createSlice({
           }
         }
       });
+
     builder
       .addCase(deletePostThunk.pending, (state, action) => {
         state.isLoading = true;
@@ -93,3 +115,5 @@ export const getAllPostsSlice = createSlice({
       });
   },
 });
+
+export const { updateCommentCnt } = getAllPostsSlice.actions;

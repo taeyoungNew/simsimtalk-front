@@ -1,6 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { deletePostAPI, getPostAPI, modifyPost } from "../../apis/post";
 
+interface Comment {
+  commentId: number;
+  postId: number;
+  userId: string;
+  userNickname: string;
+  content: string;
+  createAt: string;
+}
+
 interface Post {
   id: number;
   userId: string;
@@ -9,7 +18,7 @@ interface Post {
   userNickname: string;
   likeCnt: number;
   commentCnt: number;
-  Comments: [{}];
+  Comments: Comment[];
 }
 
 interface ModifyPost {
