@@ -8,7 +8,7 @@ interface IsLastIsLoading {
 }
 
 interface Comment {
-  commentId: number;
+  id: number;
   postId: number;
   userId: string;
   userNickname: string;

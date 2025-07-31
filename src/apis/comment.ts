@@ -5,6 +5,12 @@ interface CreateComment {
   comment: string;
 }
 
+interface ModifyComment {
+  id: number;
+  postId: number;
+  content: string;
+}
+
 export const createCommentAPI = async (payload: CreateComment) => {
   return await axios
     .post(
@@ -18,6 +24,23 @@ export const createCommentAPI = async (payload: CreateComment) => {
     )
     .then(function (response) {
       return response.data.plainComment;
+    })
+    .catch(function (error) {
+      throw error;
+    });
+};
+
+export const modifyCommentAPI = async (payload: ModifyComment) => {
+  return await axios
+    .put(
+      `${import.meta.env.VITE_API_BASE}comment/${payload.id}`,
+      { comment: payload.content, postId: payload.postId },
+      {
+        withCredentials: true,
+      },
+    )
+    .then(function (response) {
+      return response.data.data.comment;
     })
     .catch(function (error) {
       throw error;

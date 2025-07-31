@@ -4,14 +4,18 @@ import {
   getPostDetailThunk,
   modifyPostThunk,
 } from "./postDetailThunk";
-import { createCommentThunk } from "../comment/commentThunk";
+import {
+  createCommentThunk,
+  modifyCommentThunk,
+} from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
+  errorMessage: string | undefined;
 }
 
 interface Comment {
-  commentId: number;
+  id: number;
   postId: number;
   userId: string;
   userNickname: string;
@@ -32,6 +36,7 @@ interface Post {
 
 const postDetailInitialState: Post & IsLastIsLoading = {
   isLoading: false,
+  errorMessage: "",
   id: 0,
   userId: "",
   userNickname: "",
@@ -69,7 +74,7 @@ export const getPostDetailSlice = createSlice({
       })
       .addCase(getPostDetailThunk.rejected, (state, action) => {
         state.isLoading = false;
-        return;
+        state.errorMessage = action.error.message;
       });
 
     // 게시물
@@ -91,5 +96,24 @@ export const getPostDetailSlice = createSlice({
       state.Comments.push(newComment);
       state.commentCnt = state.Comments.length;
     });
+    // 댓글수정
+    builder
+      .addCase(modifyCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(modifyCommentThunk.fulfilled, (state, action) => {
+        const modifyComment = action.payload;
+        for (let idx = 0; idx < state.Comments.length; idx++) {
+          if (state.Comments[idx].id === modifyComment.id) {
+            state.Comments[idx].content = modifyComment.content;
+            break;
+          }
+        }
+        state.isLoading = false;
+      })
+      .addCase(modifyCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.error.message;
+      });
   },
 });

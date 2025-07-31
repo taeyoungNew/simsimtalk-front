@@ -12,7 +12,7 @@ import { createCommentThunk } from "../../store/comment/commentThunk";
 import React from "react";
 
 interface Comment {
-  commentId: number;
+  id: number;
   postId: number;
   userId: string;
   userNickname: string;
@@ -162,8 +162,9 @@ export const PostDetailFooter = ({
               }}
             >
               <CommentCard
-                key={el.commentId}
-                commentId={el.commentId}
+                key={el.id}
+                postId={postId}
+                commentId={el.id}
                 userId={el.userId}
                 userNickname={el.userNickname}
                 content={el.content}

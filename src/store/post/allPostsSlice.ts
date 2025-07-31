@@ -8,7 +8,7 @@ interface IsLastIsLoading {
   isLast: boolean;
 }
 interface Comment {
-  commentId: number;
+  id: number;
   postId: number;
   userId: string;
   userNickname: string;
@@ -62,7 +62,6 @@ export const getAllPostsSlice = createSlice({
 
     updateCommentCnt: (state, action) => {
       const { postId, delta } = action.payload;
-      console.log("postId = ", postId);
 
       const post = state.posts.find((p) => p.id === postId);
       if (post) post.commentCnt += delta;
