@@ -14,7 +14,10 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { WidthFull } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { modifyCommentThunk } from "../../store/comment/commentThunk";
+import {
+  deleteCommentThunk,
+  modifyCommentThunk,
+} from "../../store/comment/commentThunk";
 import { useAppDispatch } from "../../store/hook";
 interface CommentsCardProps {
   commentId: number;
@@ -26,6 +29,11 @@ interface CommentsCardProps {
 
 interface ModifyComment {
   content: string;
+}
+
+interface DeleteComment {
+  id: number;
+  postId: number;
 }
 
 export const CommentCard = ({
@@ -58,8 +66,14 @@ export const CommentCard = ({
     closeModifyComment();
   };
 
-  const deleteComment = (commentId: number) => {
+  const deleteComment = async ({ postId, id }: DeleteComment) => {
     console.log(commentId);
+    const payload = {
+      id,
+      postId,
+    };
+    await dispatch(deleteCommentThunk(payload));
+    console.log("댓글삭제");
   };
 
   return (
@@ -145,7 +159,7 @@ export const CommentCard = ({
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  deleteComment(commentId);
+                  deleteComment({ postId, id: commentId });
                 }}
               >
                 <DeleteForeverIcon></DeleteForeverIcon>

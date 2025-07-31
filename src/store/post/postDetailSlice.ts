@@ -6,6 +6,7 @@ import {
 } from "./postDetailThunk";
 import {
   createCommentThunk,
+  deleteCommentThunk,
   modifyCommentThunk,
 } from "../comment/commentThunk";
 
@@ -112,6 +113,20 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(modifyCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.error.message;
+      });
+    // 댓글수정
+    builder
+      .addCase(deleteCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCommentThunk.fulfilled, (state, action) => {
+        console.log(action.payload);
+
+        state.isLoading = false;
+      })
+      .addCase(deleteCommentThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.error.message;
       });
