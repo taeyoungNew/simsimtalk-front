@@ -56,7 +56,7 @@ export const createPostAPI = async (data: CreatePost) => {
     });
 };
 
-export const modifyPost = async (payload: ModifyPost) => {
+export const modifyPostAPI = async (payload: ModifyPost) => {
   return await axios
     .put(
       `${import.meta.env.VITE_API_BASE}post/${payload.id}`,

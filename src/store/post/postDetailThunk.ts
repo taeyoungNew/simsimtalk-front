@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { deletePostAPI, getPostAPI, modifyPost } from "../../apis/post";
+import { deletePostAPI, getPostAPI, modifyPostAPI } from "../../apis/post";
 
 interface Comment {
-  commentId: number;
+  id: number;
   postId: number;
   userId: string;
   userNickname: string;
@@ -39,7 +39,7 @@ export const getPostDetailThunk = createAsyncThunk(
 export const modifyPostThunk = createAsyncThunk(
   "post/modifyPost",
   async (payload: ModifyPost) => {
-    const post = await modifyPost(payload);
+    const post = await modifyPostAPI(payload);
     return post as Post;
   },
 );
