@@ -31,6 +31,7 @@ interface WritePost {
 
 export const MainPage = () => {
   const [open, setOpen] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const getPostDatas = useSelector(
     (state: RootState) => state.GetAllPosts.posts,
   );
@@ -148,14 +149,18 @@ export const MainPage = () => {
                 ></SearchIcon>
               </Button>
             </form>
-            <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
-              <CreateIcon
-                sx={{
-                  color: (theme) => theme.palette.primary.dark,
-                  fontSize: 30,
-                }}
-              ></CreateIcon>
-            </Button>
+            {isLogin === true ? (
+              <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
+                <CreateIcon
+                  sx={{
+                    color: (theme) => theme.palette.primary.dark,
+                    fontSize: 30,
+                  }}
+                ></CreateIcon>
+              </Button>
+            ) : (
+              <Box></Box>
+            )}
 
             {/* 새게시물입력창 */}
             <Modal

@@ -1,5 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createCommentAPI, modifyCommentAPI } from "../../apis/comment";
+import {
+  createCommentAPI,
+  deleteCommentAPI,
+  modifyCommentAPI,
+} from "../../apis/comment";
 import { updateCommentCnt } from "../post/allPostsSlice";
 
 interface CreateComment {
@@ -22,6 +26,11 @@ interface ModifyComment {
   content: string;
 }
 
+interface DeleteComment {
+  id: number;
+  postId: number;
+}
+
 export const createCommentThunk = createAsyncThunk(
   "comment/createComment",
   async (payload: CreateComment, { dispatch }) => {
@@ -37,5 +46,13 @@ export const modifyCommentThunk = createAsyncThunk(
   async (data: ModifyComment) => {
     const result = await modifyCommentAPI(data);
     return result as ReturnComment;
+  },
+);
+
+export const deleteCommentThunk = createAsyncThunk(
+  "comment/deleteComment",
+  async (payload: DeleteComment) => {
+    await deleteCommentAPI(payload);
+    return payload as DeleteComment;
   },
 );
