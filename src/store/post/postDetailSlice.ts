@@ -94,6 +94,7 @@ export const getPostDetailSlice = createSlice({
     // 댓글생성
     builder.addCase(createCommentThunk.fulfilled, (state, action) => {
       const newComment = action.payload;
+
       state.Comments.push(newComment);
       state.commentCnt = state.Comments.length;
     });

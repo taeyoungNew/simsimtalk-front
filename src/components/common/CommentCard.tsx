@@ -18,13 +18,14 @@ import {
   deleteCommentThunk,
   modifyCommentThunk,
 } from "../../store/comment/commentThunk";
-import { useAppDispatch } from "../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 interface CommentsCardProps {
   commentId: number;
   userId: string;
   userNickname: string;
   content: string;
   postId: number;
+  myComment: boolean;
 }
 
 interface ModifyComment {
@@ -41,8 +42,10 @@ export const CommentCard = ({
   userNickname,
   content,
   postId,
+  myComment,
 }: CommentsCardProps) => {
   const [isOpenModifyComment, setOpenIsModifyComment] = useState(false);
+
   const dispatch = useAppDispatch();
   const { control, handleSubmit } = useForm<ModifyComment>({
     defaultValues: {
@@ -67,7 +70,6 @@ export const CommentCard = ({
   };
 
   const deleteComment = async ({ postId, id }: DeleteComment) => {
-    console.log(commentId);
     const payload = {
       id,
       postId,
@@ -145,27 +147,30 @@ export const CommentCard = ({
                 </React.Fragment>
               }
             />
-
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openModifyComment();
-                }}
-              >
-                <BorderColorIcon></BorderColorIcon>
-              </Button>
-              <Button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  deleteComment({ postId, id: commentId });
-                }}
-              >
-                <DeleteForeverIcon></DeleteForeverIcon>
-              </Button>
-            </Box>
+            {myComment === true ? (
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openModifyComment();
+                  }}
+                >
+                  <BorderColorIcon></BorderColorIcon>
+                </Button>
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteComment({ postId, id: commentId });
+                  }}
+                >
+                  <DeleteForeverIcon></DeleteForeverIcon>
+                </Button>
+              </Box>
+            ) : (
+              <Box></Box>
+            )}
           </ListItem>
         )}
 

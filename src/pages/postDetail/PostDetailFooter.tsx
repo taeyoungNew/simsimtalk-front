@@ -43,6 +43,7 @@ export const PostDetailFooter = ({
   postId,
 }: PostDetailFooterProps) => {
   const dispatch = useAppDispatch();
+  const userId = useSelector((state: RootState) => state.User.id);
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const comments = useSelector(
     (state: RootState) => state.GetPostDetail.Comments,
@@ -152,6 +153,8 @@ export const PostDetailFooter = ({
           <Box></Box>
         )}
         {comments.map((el, index) => {
+          const myComment = userId === el.userId;
+
           return (
             <List
               key={index}
@@ -163,6 +166,7 @@ export const PostDetailFooter = ({
             >
               <CommentCard
                 key={el.id}
+                myComment={myComment}
                 postId={postId}
                 commentId={el.id}
                 userId={el.userId}

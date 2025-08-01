@@ -46,6 +46,8 @@ export const createPostThunk = createAsyncThunk(
   "post/createPost",
   async (createPostData: CreatePost, { dispatch }) => {
     const newPost = await createPostAPI(createPostData);
+    console.log("newPost = ", newPost);
+
     dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
     return newPost as Posts;
   },

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 import { createCommentThunk } from "../comment/commentThunk";
+import { log } from "console";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -53,7 +54,11 @@ export const getAllPostsSlice = createSlice({
     },
 
     addPostToAllPosts: (state, action) => {
-      state.posts.unshift(action.payload);
+      const newPost = action.payload;
+      newPost.commentCnt = action.payload.Comments.length;
+      console.log(newPost);
+
+      state.posts.unshift(newPost);
     },
 
     deleteMyPost: (state, action) => {
