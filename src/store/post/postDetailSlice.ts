@@ -116,19 +116,23 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.error.message;
       });
-    // 댓글수정
+    // 댓글삭제
     builder
       .addCase(deleteCommentThunk.pending, (state, action) => {
         state.isLoading = true;
       })
       .addCase(deleteCommentThunk.fulfilled, (state, action) => {
         console.log(action.payload);
-
+        const deleteCommentId = action.payload.id;
+        const Comments = state.Comments;
+        const deleteComment = Comments.filter((el) => el.id != deleteCommentId);
+        state.Comments = deleteComment;
         state.isLoading = false;
       })
       .addCase(deleteCommentThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.error.message;
+        console.log(action.error);
       });
   },
 });

@@ -73,6 +73,7 @@ export const CommentCard = ({
       postId,
     };
     await dispatch(deleteCommentThunk(payload));
+
     console.log("댓글삭제");
   };
 
