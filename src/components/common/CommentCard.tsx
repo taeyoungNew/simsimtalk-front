@@ -12,8 +12,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { WidthFull } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
 import {
   deleteCommentThunk,
   modifyCommentThunk,

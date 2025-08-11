@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useState } from "react";
 import { theme } from "../../theme/theme";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../store/hook";
 import {
   deletePostThunk,
