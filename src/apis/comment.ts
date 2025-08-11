@@ -11,6 +11,11 @@ interface ModifyComment {
   content: string;
 }
 
+interface DeleteComment {
+  id: number;
+  postId: number;
+}
+
 export const createCommentAPI = async (payload: CreateComment) => {
   return await axios
     .post(
@@ -24,6 +29,24 @@ export const createCommentAPI = async (payload: CreateComment) => {
     )
     .then(function (response) {
       return response.data.plainComment;
+    })
+    .catch(function (error) {
+      throw error;
+    });
+};
+
+export const deleteCommentAPI = async (payload: DeleteComment) => {
+  return await axios
+    .delete(
+      `${import.meta.env.VITE_API_BASE}comment/${payload.id}?postId=${payload.postId}`,
+      {
+        withCredentials: true,
+      },
+    )
+    .then(function (response) {
+      console.log(response.data);
+
+      return response.data;
     })
     .catch(function (error) {
       throw error;
