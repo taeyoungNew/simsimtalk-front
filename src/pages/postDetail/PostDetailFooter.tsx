@@ -1,7 +1,4 @@
 import { Box, Button, List, TextField, Typography } from "@mui/material";
-import { HeartIcon } from "../../assets/icons/Heart";
-import { theme } from "../../theme/theme";
-import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { CommentCard } from "../../components/common/CommentCard";
 
 import { Controller, useForm } from "react-hook-form";
@@ -22,8 +19,7 @@ interface Comment {
 
 interface PostDetailFooterProps {
   postId: number;
-  likeCnt: number;
-  commentCnt: number;
+
   Comments: Comment[];
 }
 interface CommentsCardProps {
@@ -38,8 +34,8 @@ interface WriteComment {
 }
 
 export const PostDetailFooter = ({
-  likeCnt,
-  commentCnt,
+  // likeCnt,
+  // commentCnt,
   postId,
 }: PostDetailFooterProps) => {
   const dispatch = useAppDispatch();
@@ -62,45 +58,6 @@ export const PostDetailFooter = ({
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0.4em",
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button>
-            <HeartIcon
-              color={theme.palette.primary.contrastText}
-              fillColor={theme.palette.primary.light}
-              size={40}
-            ></HeartIcon>
-          </Button>
-          <Typography
-            color={theme.palette.primary.dark}
-            sx={{ fontSize: "1.2em" }}
-          >
-            {likeCnt}
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button>
-            <ChatDuotone
-              color={theme.palette.primary.dark}
-              fillColor={theme.palette.primary.light}
-              size={40}
-            ></ChatDuotone>
-          </Button>
-          <Typography
-            color={theme.palette.primary.dark}
-            sx={{ fontSize: "1.2em" }}
-          >
-            {commentCnt}
-          </Typography>
-        </Box>
-      </Box>
-
       <Box sx={{ width: "100%", padding: "0.5em" }}>
         {isLogin === true ? (
           <form onSubmit={handleSubmit(submitComment)}>

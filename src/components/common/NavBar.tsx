@@ -20,6 +20,9 @@ import { deleteAuth } from "../../store/auth/authSlice";
 import { logoutAPI } from "../../apis/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import { SimSimTextField } from "../../layout/common/SimsimTextField";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -72,7 +75,7 @@ export default function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{ bgcolor: (theme) => theme.palette.primary.dark }}>
+        <Toolbar sx={{ bgcolor: (theme) => theme.palette.background.paper }}>
           <IconButton
             size="large"
             edge="start"
@@ -93,20 +96,42 @@ export default function NavBar() {
                     component="div"
                     sx={{
                       flexGrow: 1,
-                      color: (theme) => theme.palette.primary.contrastText,
+                      color: (theme) => theme.palette.fontColor.main,
                     }}
                   >
                     SimSimTalk
-                    <ChatQuote
-                      color={theme.palette.primary.contrastText}
-                      classVal="chatQuete"
-                      size={18}
-                    ></ChatQuote>
+                    <ChatQuote classVal="chatQuete" size={18}></ChatQuote>
                   </Typography>
                 </Box>
               </Button>
             </NavLink>
           </Box>
+          <Box
+            sx={{ flexGrow: 1, color: (theme) => theme.palette.primary.main }}
+          >
+            <form action="" method="post">
+              <SimSimTextField
+                id="fill-basic"
+                label="search"
+                variant="filled"
+                sx={{
+                  width: "20rem",
+                  color: (theme) => theme.palette.fontColor.main,
+                }}
+                size="small"
+                placeholder="search"
+              ></SimSimTextField>
+              <Button sx={{ minWidth: "40px" }}>
+                <SearchIcon
+                  sx={{
+                    color: (theme) => theme.palette.fontColor.main,
+                    fontSize: 30,
+                  }}
+                ></SearchIcon>
+              </Button>
+            </form>
+          </Box>
+
           {isLogin === true ? (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
@@ -155,7 +180,7 @@ export default function NavBar() {
               <NavLink to={"/login"}>
                 <Button
                   color="inherit"
-                  sx={{ color: (theme) => theme.palette.primary.contrastText }}
+                  sx={{ color: (theme) => theme.palette.fontColor.main }}
                 >
                   Login
                 </Button>
@@ -163,7 +188,7 @@ export default function NavBar() {
               <NavLink to={"/signup"}>
                 <Button
                   color="inherit"
-                  sx={{ color: (theme) => theme.palette.primary.contrastText }}
+                  sx={{ color: (theme) => theme.palette.fontColor.main }}
                 >
                   Signup
                 </Button>
@@ -172,10 +197,6 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      <Box>
-        {/* <Toolbar></Toolbar>   */}
-        <Outlet />
-      </Box>
     </Box>
   );
 }

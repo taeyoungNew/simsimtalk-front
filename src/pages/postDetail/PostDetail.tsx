@@ -8,6 +8,7 @@ import { getPostDetailThunk } from "../../store/post/postDetailThunk";
 import { useAppDispatch } from "../../store/hook";
 import { PostDetailBody } from "./PostDetailBody";
 import { PostDetailFooter } from "./PostDetailFooter";
+import { theme } from "../../theme/theme";
 
 // 게시물
 // 타이틀, 내용, 유저닉네임, 댓글, 좋아요수
@@ -28,21 +29,38 @@ export const PostDetail = () => {
   return (
     <>
       <Box sx={{ padding: "5%" }}>
-        <PostDetailHeader
-          postId={postDetailInfo.id}
-          userNickname={postDetailInfo.userNickname}
-          userId={postDetailInfo.userId}
-        ></PostDetailHeader>
-        <PostDetailBody
-          title={postDetailInfo.title}
-          content={postDetailInfo.content}
-        ></PostDetailBody>
-        <PostDetailFooter
-          postId={Number(postId)}
-          Comments={postDetailInfo.Comments}
-          likeCnt={postDetailInfo.likeCnt}
-          commentCnt={postDetailInfo.commentCnt}
-        ></PostDetailFooter>
+        <Box
+          sx={{
+            background: (theme) => theme.palette.background.paper,
+            borderRadius: "10px",
+            padding: "1em",
+            marginBottom: "1em",
+          }}
+        >
+          <PostDetailHeader
+            postId={postDetailInfo.id}
+            userNickname={postDetailInfo.userNickname}
+            userId={postDetailInfo.userId}
+          ></PostDetailHeader>
+          <PostDetailBody
+            title={postDetailInfo.title}
+            content={postDetailInfo.content}
+            likeCnt={postDetailInfo.likeCnt}
+            commentCnt={postDetailInfo.commentCnt}
+          ></PostDetailBody>
+        </Box>
+        <Box
+          sx={{
+            background: (theme) => theme.palette.background.paper,
+            borderRadius: "10px",
+            padding: "1em",
+          }}
+        >
+          <PostDetailFooter
+            postId={Number(postId)}
+            Comments={postDetailInfo.Comments}
+          ></PostDetailFooter>
+        </Box>
       </Box>
     </>
   );

@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid2 } from "@mui/material";
+import { Avatar, Box, Grid2, Typography } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { theme } from "../../theme/theme";
@@ -36,16 +36,21 @@ export const PostCard = ({
   likeCnt,
   commentsCnt,
 }: CardProps) => {
+  // const maxLeng = 150;
+  // const postCardText =
+  //   contents.length > maxLeng ? contents.slice(0, maxLeng) + "..." : contents;
+
   return (
     <>
       <Box
         sx={{
+          borderRadius: "10px",
           width: "100%",
           padding: "10px",
-          bgcolor: (theme) => theme.palette.primary.main,
+          bgcolor: (theme) => theme.palette.background.paper,
           cursor: "pointer",
         }}
-        color={theme.palette.primary.contrastText}
+        color={theme.palette.fontColor.main}
       >
         <DetailPostLink
           to={`/postDetail/${id}`}
@@ -73,10 +78,15 @@ export const PostCard = ({
                 sx={{
                   width: "50px",
                   height: "50px",
-                  bgcolor: (theme) => theme.palette.primary.light,
-                  color: (theme) => theme.palette.primary.dark,
+                  bgcolor: (theme) => theme.palette.fontColor.placeholder,
+                  color: (theme) => theme.palette.background.paper,
                 }}
               ></Avatar>
+              <Typography
+                sx={{
+                  color: (theme) => theme.palette.fontColor.main,
+                }}
+              ></Typography>
               {title}
             </Grid2>
             <Grid2
@@ -88,11 +98,24 @@ export const PostCard = ({
             >
               <Box
                 padding="5px"
-                bgcolor={theme.palette.primary.light}
+                // bgcolor={theme.palette.primary.light}
                 width="100%"
-                height="50px"
+                height="auto"
+                overflow={"hidden"}
               >
-                {contents}...
+                <Typography
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    textOverflow: "ellipsis",
+                    maxHeight: "100px",
+                    WebkitLineClamp: 5,
+                    WebkitBoxOrient: "vertical",
+                    padding: "0 0.5em",
+                    color: (theme) => theme.palette.fontColor.main,
+                  }}
+                >
+                  {contents}
+                </Typography>
               </Box>
             </Grid2>
             <Grid2 sx={{ padding: "5px", bgcolor: "none" }}>
@@ -100,8 +123,8 @@ export const PostCard = ({
                 <Grid2 container spacing={1} sx={{ display: "flex" }}>
                   <label htmlFor="">
                     <HeartIcon
-                      color={theme.palette.primary.dark}
-                      fillColor={theme.palette.primary.light}
+                      color={theme.palette.fontColor.main}
+                      fillColor={theme.palette.background.paper}
                       size={30}
                     ></HeartIcon>
                   </label>
@@ -109,8 +132,8 @@ export const PostCard = ({
 
                   <label htmlFor="">
                     <ChatDuotone
-                      color={theme.palette.primary.dark}
-                      fillColor={theme.palette.primary.light}
+                      color={theme.palette.fontColor.main}
+                      fillColor={theme.palette.background.paper}
                       size={30}
                     ></ChatDuotone>
                   </label>
