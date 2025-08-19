@@ -110,46 +110,19 @@ export const MainPage = () => {
     <>
       <Box
         sx={{
-          marginRight: "auto",
-          marginLeft: "auto",
           width: "100%",
           height: "inherit",
           overflow: "scoll",
-          marginTop: "3em",
         }}
       >
         <Box
-          position="relative"
           width="100%"
-          height="40px"
           sx={{
             display: "flex",
             justifyContent: "flex-end",
-            marginBottom: "2em",
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-            <form action="" method="post">
-              <SimSimTextField
-                id="fill-basic"
-                label="search"
-                variant="filled"
-                sx={{
-                  width: "inherit",
-                  color: (theme) => theme.palette.fontColor.main,
-                }}
-                size="small"
-                placeholder="search"
-              ></SimSimTextField>
-              <Button sx={{ minWidth: "40px" }}>
-                <SearchIcon
-                  sx={{
-                    color: (theme) => theme.palette.fontColor.main,
-                    fontSize: 30,
-                  }}
-                ></SearchIcon>
-              </Button>
-            </form>
             {isLogin === true ? (
               <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
                 <CreateIcon

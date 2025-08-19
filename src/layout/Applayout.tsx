@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import NavBar from "../components/common/NavBar";
 import { Outlet } from "react-router-dom";
+import { MyFollowings } from "../components/common/myFollowings";
 
 export const Applayout = () => {
   return (
@@ -9,7 +10,7 @@ export const Applayout = () => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr 7fr 2fr",
+          gridTemplateColumns: "1.4fr 7fr 2fr",
           maxWidth: {
             xs: "100%", // 모바일에서는 꽉 채우기
             sm: "600px", // 태블릿 세로
@@ -20,7 +21,7 @@ export const Applayout = () => {
           p: 2,
         }}
       >
-        <Box>test1</Box>
+        <MyFollowings></MyFollowings>
         <Outlet />
         <Box>test3</Box>
       </Box>
