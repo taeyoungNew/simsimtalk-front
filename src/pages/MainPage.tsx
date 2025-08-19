@@ -9,6 +9,7 @@ import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useForm, Controller } from "react-hook-form";
+import { theme } from "../theme/theme";
 
 const style = {
   position: "absolute",
@@ -111,7 +112,7 @@ export const MainPage = () => {
         sx={{
           marginRight: "auto",
           marginLeft: "auto",
-          width: "80%",
+          width: "100%",
           height: "inherit",
           overflow: "scoll",
           marginTop: "3em",
@@ -130,12 +131,12 @@ export const MainPage = () => {
           <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
             <form action="" method="post">
               <SimSimTextField
-                id="outlined-basic"
+                id="fill-basic"
                 label="search"
-                variant="outlined"
+                variant="filled"
                 sx={{
                   width: "inherit",
-                  color: "#E1EACD",
+                  color: (theme) => theme.palette.fontColor.main,
                 }}
                 size="small"
                 placeholder="search"
@@ -143,7 +144,7 @@ export const MainPage = () => {
               <Button sx={{ minWidth: "40px" }}>
                 <SearchIcon
                   sx={{
-                    color: (theme) => theme.palette.primary.dark,
+                    color: (theme) => theme.palette.fontColor.main,
                     fontSize: 30,
                   }}
                 ></SearchIcon>
@@ -153,7 +154,7 @@ export const MainPage = () => {
               <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
                 <CreateIcon
                   sx={{
-                    color: (theme) => theme.palette.primary.dark,
+                    color: (theme) => theme.palette.fontColor.main,
                     fontSize: 30,
                   }}
                 ></CreateIcon>
@@ -197,7 +198,6 @@ export const MainPage = () => {
                           rows={4}
                           variant="standard"
                           sx={{ width: "inherit" }}
-                          // defaultValue="contents"
                           {...field}
                         />
                       )}
@@ -246,9 +246,6 @@ export const MainPage = () => {
                   </ListItem>
                 );
               })}
-              {/* <Box sx={{ display: "flex"  }}>
-                <CircularProgress />
-              </Box> */}
             </Grid2>
           </Grid2>
         </Box>

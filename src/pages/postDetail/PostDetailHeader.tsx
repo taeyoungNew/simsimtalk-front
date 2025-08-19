@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { Avatar } from "../../components/common/Avatar";
+import { CustomAvatar } from "../../assets/icons/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useState } from "react";
@@ -96,7 +96,9 @@ export const PostDetailHeader = ({
           }}
         >
           <NavLink to={"/"}>
-            <Button>Back</Button>
+            <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
+              Back
+            </Button>
           </NavLink>
           {isMyPost === true ? (
             <Box>
@@ -185,14 +187,57 @@ export const PostDetailHeader = ({
         </Box>
 
         <Box
-          sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Button>
-            <Typography>{userNickname}</Typography>
-          </Button>
-          <Button>
-            <Avatar></Avatar>
-          </Button>
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <Box>
+              <Button>
+                <CustomAvatar></CustomAvatar>
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "1.2rem",
+                  color: (theme) => theme.palette.fontColor.main,
+                }}
+              >
+                {userNickname}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "0.9rem",
+                  color: (theme) => theme.palette.fontColor.icon,
+                }}
+              >
+                팔로워 1
+              </Typography>
+            </Box>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                background: (theme) => theme.palette.primary.main,
+                color: (theme) => theme.palette.background.paper,
+              }}
+            >
+              팔로잉
+            </Button>
+          </Box>
         </Box>
       </Box>
     </>
