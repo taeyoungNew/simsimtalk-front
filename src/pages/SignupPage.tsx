@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { ChatQuote } from "../assets/icons/ChatQuote";
 import { theme } from "../theme/theme";
-import { SimSimTextField } from "../layout/common/SimsimTextField";
+import { SimSimTextField } from "../components/atoms/inputs/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
 import React from "react";
 import { signupAPI } from "../apis/signup";

@@ -1,15 +1,13 @@
 import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
-import { PostCard } from "../components/common/PostCard";
-import SearchIcon from "@mui/icons-material/Search";
+import { PostCard } from "../components/oraganisms/PostCard";
 import CreateIcon from "@mui/icons-material/Create";
-import { SimSimTextField } from "../layout/common/SimsimTextField";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
 import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useForm, Controller } from "react-hook-form";
-import { theme } from "../theme/theme";
+import { WritePost } from "../components/WritePost";
 
 const style = {
   position: "absolute",
@@ -191,6 +189,7 @@ export const MainPage = () => {
             </Modal>
           </Box>
         </Box>
+        {isLogin === true ? <WritePost></WritePost> : <Box></Box>}
 
         <Box height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
@@ -203,7 +202,11 @@ export const MainPage = () => {
                 }
                 return (
                   <ListItem
-                    sx={{ paddingTop: "0" }}
+                    sx={{
+                      paddingTop: "0",
+                      paddingLeft: "0",
+                      paddingRight: "0",
+                    }}
                     key={index}
                     ref={isLast ? lastPostRef : null}
                   >

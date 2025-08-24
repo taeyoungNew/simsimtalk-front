@@ -72,7 +72,6 @@ export const PostCard = ({
               direction="row"
               display={"flex"}
               spacing={1}
-              sx={{ padding: "5px" }}
             >
               <Avatar
                 sx={{
@@ -97,8 +96,7 @@ export const PostCard = ({
               }}
             >
               <Box
-                padding="5px"
-                // bgcolor={theme.palette.primary.light}
+                // padding="5px"
                 width="100%"
                 height="auto"
                 overflow={"hidden"}

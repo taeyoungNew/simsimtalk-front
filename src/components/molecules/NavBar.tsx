@@ -21,8 +21,9 @@ import { logoutAPI } from "../../apis/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
-import { SimSimTextField } from "../../layout/common/SimsimTextField";
+import { SimSimTextField } from "../atoms/inputs/SimsimTextField";
 import SearchIcon from "@mui/icons-material/Search";
+import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -73,19 +74,16 @@ export default function NavBar() {
     </Menu>
   );
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
-        <Toolbar sx={{ bgcolor: (theme) => theme.palette.background.paper }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            {/* <MenuIcon /> */}
-          </IconButton>
-          <Box sx={{ flexGrow: 1 }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            bgcolor: (theme) => theme.palette.background.paper,
+          }}
+        >
+          <Box sx={{}}>
             <NavLink to={"/"}>
               <Button
                 sx={{ color: (theme) => theme.palette.primary.contrastText }}
@@ -106,29 +104,9 @@ export default function NavBar() {
               </Button>
             </NavLink>
           </Box>
-          <Box
-            sx={{ flexGrow: 1, color: (theme) => theme.palette.primary.main }}
-          >
+          <Box sx={{ color: (theme) => theme.palette.primary.main }}>
             <form action="" method="post">
-              <SimSimTextField
-                id="fill-basic"
-                label="search"
-                variant="filled"
-                sx={{
-                  width: "20rem",
-                  color: (theme) => theme.palette.fontColor.main,
-                }}
-                size="small"
-                placeholder="search"
-              ></SimSimTextField>
-              <Button sx={{ minWidth: "40px" }}>
-                <SearchIcon
-                  sx={{
-                    color: (theme) => theme.palette.fontColor.main,
-                    fontSize: 30,
-                  }}
-                ></SearchIcon>
-              </Button>
+              <NavSearchInput></NavSearchInput>
             </form>
           </Box>
 

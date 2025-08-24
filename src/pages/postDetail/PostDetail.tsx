@@ -28,7 +28,7 @@ export const PostDetail = () => {
 
   return (
     <>
-      <Box sx={{ padding: "5%" }}>
+      <Box sx={{ padding: "0 1rem" }}>
         <Box
           sx={{
             background: (theme) => theme.palette.background.paper,

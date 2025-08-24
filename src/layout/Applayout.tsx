@@ -1,9 +1,13 @@
 import Box from "@mui/material/Box";
-import NavBar from "../components/common/NavBar";
+import NavBar from "../components/molecules/NavBar";
 import { Outlet } from "react-router-dom";
 import { MyFollowings } from "../components/common/myFollowings";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export const Applayout = () => {
+  const isLogin = useSelector((state: RootState) => state.User.isLogin);
+
   return (
     <>
       <NavBar></NavBar>
@@ -21,9 +25,10 @@ export const Applayout = () => {
           p: 2,
         }}
       >
-        <MyFollowings></MyFollowings>
+        {isLogin == true ? <MyFollowings></MyFollowings> : <Box></Box>}
+
         <Outlet />
-        <Box>test3</Box>
+        {isLogin == true ? <Box>test3</Box> : <Box></Box>}
       </Box>
     </>
   );
