@@ -64,6 +64,13 @@ export const theme = createTheme({
   },
 
   components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "#d32f2f",
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         "*::-webkit-scrollbar": {

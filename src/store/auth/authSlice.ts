@@ -6,6 +6,11 @@ interface UserSlice {
   id: string;
   email: string;
   nickname: string;
+  error: null | {
+    status: number;
+    errorCode: string;
+    message: string;
+  };
 }
 
 const initialState: UserSlice = {
@@ -13,6 +18,7 @@ const initialState: UserSlice = {
   id: "",
   email: "",
   nickname: "",
+  error: null,
 };
 
 export const userSlice = createSlice({

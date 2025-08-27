@@ -8,7 +8,6 @@ import styled from "styled-components";
 interface CardProps {
   id: number;
   userId: string;
-  title: string;
   contents: string;
   userNickname: string;
   likeCnt: number;
@@ -30,7 +29,6 @@ const DetailPostLink = styled(NavLink)`
 export const PostCard = ({
   id,
   userId,
-  title,
   userNickname,
   contents,
   likeCnt,
@@ -86,7 +84,6 @@ export const PostCard = ({
                   color: (theme) => theme.palette.fontColor.main,
                 }}
               ></Typography>
-              {title}
             </Grid2>
             <Grid2
               sx={{

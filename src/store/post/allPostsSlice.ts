@@ -19,7 +19,6 @@ interface Post {
   id: number;
   userId: string;
   userNickname: string;
-  title: string;
   content: string;
   likeCnt: number;
   commentCnt: number;
@@ -79,7 +78,7 @@ export const getAllPostsSlice = createSlice({
           state.posts.push({
             id: action.payload.posts[idx].id,
             userId: action.payload.posts[idx].userId,
-            title: action.payload.posts[idx].title,
+
             content: action.payload.posts[idx].content,
             userNickname: action.payload.posts[idx].userNickname,
             likeCnt: action.payload.posts[idx].likeCnt,

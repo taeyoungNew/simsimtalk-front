@@ -1,12 +1,10 @@
 import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
 import { PostCard } from "../components/oraganisms/PostCard";
-import CreateIcon from "@mui/icons-material/Create";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
 import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { useForm, Controller } from "react-hook-form";
 import { WritePost } from "../components/WritePost";
 
 const style = {
@@ -35,12 +33,7 @@ export const MainPage = () => {
     (state: RootState) => state.GetAllPosts.posts,
   );
   const dispatch = useAppDispatch();
-  const { control, handleSubmit } = useForm<WritePost>({
-    defaultValues: {
-      title: "",
-      content: "",
-    },
-  });
+
   const isLoading = useSelector(
     (state: RootState) => state.GetAllPosts.isLoading,
   );
@@ -119,76 +112,7 @@ export const MainPage = () => {
             display: "flex",
             justifyContent: "flex-end",
           }}
-        >
-          <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-            {isLogin === true ? (
-              <Button sx={{ minWidth: "40px" }} onClick={handleOpen}>
-                <CreateIcon
-                  sx={{
-                    color: (theme) => theme.palette.fontColor.main,
-                    fontSize: 30,
-                  }}
-                ></CreateIcon>
-              </Button>
-            ) : (
-              <Box></Box>
-            )}
-
-            {/* 새게시물입력창 */}
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="child-modal-title"
-              aria-describedby="child-modal-description"
-            >
-              <form onSubmit={handleSubmit(writePost)}>
-                <Box sx={{ ...style }}>
-                  <Controller
-                    name="title"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        id="standard-basic"
-                        label="title"
-                        variant="standard"
-                        // defaultValue="title"
-                        {...field}
-                      />
-                    )}
-                  />
-
-                  <Box sx={{ width: "100%" }}>
-                    <Controller
-                      name="content"
-                      control={control}
-                      render={({ field }) => (
-                        <TextField
-                          id="standard-multiline-static"
-                          label="contents"
-                          multiline
-                          rows={4}
-                          variant="standard"
-                          sx={{ width: "inherit" }}
-                          {...field}
-                        />
-                      )}
-                    />
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Button type="submit">Write Post</Button>
-                    <Button onClick={handleClose}>Close</Button>
-                  </Box>
-                </Box>
-              </form>
-            </Modal>
-          </Box>
-        </Box>
+        ></Box>
         {isLogin === true ? <WritePost></WritePost> : <Box></Box>}
 
         <Box height="inherit">
@@ -213,7 +137,6 @@ export const MainPage = () => {
                     <PostCard
                       id={el.id}
                       userId={el.userId}
-                      title={el.title}
                       contents={el.content}
                       userNickname={el.userNickname}
                       likeCnt={el.likeCnt}

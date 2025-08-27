@@ -1,12 +1,10 @@
 import axios from "axios";
 interface CreatePost {
-  title: string;
   content: string;
 }
 
 interface ModifyPost {
   id: number;
-  title: string;
   content: string;
 }
 
@@ -41,7 +39,6 @@ export const createPostAPI = async (data: CreatePost) => {
     .post(
       `${import.meta.env.VITE_API_BASE}post/`,
       {
-        title: data.title,
         content: data.content,
       },
       {
@@ -61,7 +58,6 @@ export const modifyPostAPI = async (payload: ModifyPost) => {
     .put(
       `${import.meta.env.VITE_API_BASE}post/${payload.id}`,
       {
-        title: payload.title,
         content: payload.content,
       },
       {

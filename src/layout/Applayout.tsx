@@ -14,6 +14,7 @@ export const Applayout = () => {
       <Box
         sx={{
           display: "grid",
+          gap: "1rem",
           gridTemplateColumns: "1.4fr 7fr 2fr",
           maxWidth: {
             xs: "100%", // 모바일에서는 꽉 채우기

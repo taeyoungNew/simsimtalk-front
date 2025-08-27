@@ -43,10 +43,10 @@ export const PostDetail = () => {
             userId={postDetailInfo.userId}
           ></PostDetailHeader>
           <PostDetailBody
-            title={postDetailInfo.title}
             content={postDetailInfo.content}
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}
+            isEditing={false}
           ></PostDetailBody>
         </Box>
         <Box

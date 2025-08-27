@@ -6,6 +6,7 @@ import TagFacesIcon from "@mui/icons-material/TagFaces";
 import { useForm, Controller } from "react-hook-form";
 import { createPostThunk } from "../store/post/allPostsThunk";
 import { useAppDispatch } from "../store/hook";
+import { SimSimTextField } from "./atoms/inputs/SimsimTextField";
 
 interface WritePost {
   title: string;
@@ -23,6 +24,15 @@ export const WritePost = () => {
   const writePost = async (data: WritePost) => {
     await dispatch(createPostThunk(data));
   };
+
+  const imoge = () => {
+    console.log("이모지");
+  };
+
+  const live = () => {
+    console.log("live");
+  };
+
   return (
     <form onSubmit={handleSubmit(writePost)}>
       <Box
@@ -38,7 +48,7 @@ export const WritePost = () => {
         <Box sx={{ padding: "0", marginRight: "0.8rem" }}>
           <Avatar></Avatar>
         </Box>
-        <Box sx={{ width: "inherit" }}>
+        <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               marginBottom: "0.5rem",
@@ -48,18 +58,30 @@ export const WritePost = () => {
               background: (theme) => theme.palette.background.default,
             }}
           >
-            <CustomTextArea></CustomTextArea>
+            <Controller
+              name="content"
+              control={control}
+              render={({ field }) => (
+                <CustomTextArea {...field}></CustomTextArea>
+              )}
+            />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box sx={{ display: "felx", alignItems: "center" }}>
-              <Button sx={{ color: (theme) => theme.palette.fontColor.icon }}>
+              <Button
+                onClick={live}
+                sx={{ color: (theme) => theme.palette.fontColor.icon }}
+              >
                 <VideocamIcon></VideocamIcon>
               </Button>
-              <Button sx={{ color: (theme) => theme.palette.fontColor.icon }}>
+              <Button
+                onClick={imoge}
+                sx={{ color: (theme) => theme.palette.fontColor.icon }}
+              >
                 <TagFacesIcon></TagFacesIcon>
               </Button>
             </Box>
-            <Button>게시</Button>
+            <Button type="submit">게시</Button>
           </Box>
         </Box>
       </Box>
