@@ -9,11 +9,6 @@ interface SignupData {
   aboutMe?: string;
   age?: number;
 }
-
-// interface Success {
-//   message: string;
-// }
-
 interface Error {
   status: number;
   errorCode: string;

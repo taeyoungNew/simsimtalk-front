@@ -18,10 +18,12 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { signupUserThunk } from "../store/user/userSignupThunk";
-import { register } from "module";
-import { signupSlice } from "../store/user/userSignupSlice";
+import { resetInit } from "../store/user/userSignupSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
+import { SuccessNotification } from "../components/atoms/notifications/SuccessNotificationBar";
+import { relative } from "path";
 
 type SignupType = {
   email: string;
@@ -39,15 +41,25 @@ export const SignupPage = () => {
   const isSignupSuccess = useSelector(
     (state: RootState) => state.Signup.success,
   );
-  const isSignupSuccessMsg = useSelector(
+  const signupSuccessMsg = useSelector(
     (state: RootState) => state.Signup.successMessage,
   );
 
+  const isSignupError = useSelector((state: RootState) => state.Signup.error);
+  const errorMsg = useSelector(
+    (state: RootState) => state.Signup.error?.message,
+  );
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (isSignupSuccess) {
-      console.log(isSignupSuccessMsg);
+      const timer = setTimeout(() => {
+        navigator("/login");
+        dispatch(resetInit());
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [isSignupSuccess]);
+  }, [isSignupSuccess, navigator, dispatch]);
 
   const ages = [10, 20, 30, 40, 50, 60, 70, 80, 90];
   const handleChange = (event: SelectChangeEvent) => {
@@ -63,7 +75,6 @@ export const SignupPage = () => {
       age: 0,
     },
   });
-  const dispatch = useAppDispatch();
   const signup = async (data: SignupType) => {
     await dispatch(signupUserThunk(data));
   };
@@ -94,8 +105,16 @@ export const SignupPage = () => {
               size={100}
             ></ChatQuote>
           </Grid2>
-          {}
-          <Box>서버에러</Box>
+          {isSignupSuccess === true ? (
+            <SuccessNotification
+              successMessage={signupSuccessMsg}
+            ></SuccessNotification>
+          ) : isSignupError?.errorCode !== "" && isSignupError !== null ? (
+            <ErrNotificationBar errorMessage={errorMsg}></ErrNotificationBar>
+          ) : (
+            <Box></Box>
+          )}
+
           <Grid2 sx={{ width: "100%", paddingTop: "0.5em" }} flexGrow={1}>
             <Controller
               name="email"
@@ -135,6 +154,7 @@ export const SignupPage = () => {
               render={({ field, fieldState: { error } }) => {
                 return (
                   <SimSimTextField
+                    autoComplete="new-password"
                     helperText={error?.message}
                     {...field}
                     sx={{ width: "inherit" }}
@@ -258,7 +278,7 @@ export const SignupPage = () => {
               }}
               type="submit"
             >
-              会員登録
+              회원가입
             </Button>
           </Grid2>
         </Grid2>

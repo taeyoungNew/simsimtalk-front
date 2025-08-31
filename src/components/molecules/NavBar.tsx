@@ -5,25 +5,21 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/ChatQuote";
-import { theme } from "../../theme/theme";
+
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import { deleteAuth } from "../../store/auth/authSlice";
 import { logoutAPI } from "../../apis/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
-import { SimSimTextField } from "../atoms/inputs/SimsimTextField";
-import SearchIcon from "@mui/icons-material/Search";
+
 import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
+import { CustomAvatar } from "../../assets/icons/Avatar";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -31,18 +27,7 @@ export default function NavBar() {
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
 
-  const isMenuOpen = Boolean(anchorEl);
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,26 +38,6 @@ export default function NavBar() {
     alert("로그아웃되었습니다.");
   };
 
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
   return (
     <Box>
       <AppBar position="static">
@@ -112,13 +77,11 @@ export default function NavBar() {
 
           {isLogin === true ? (
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
+              <IconButton size="large" aria-label="show 4 new mails">
                 <Badge badgeContent={4} color="error">
-                  <MailOutlineIcon />
+                  <MailOutlineIcon
+                    sx={{ color: (theme) => theme.palette.fontColor.icon }}
+                  />
                 </Badge>
               </IconButton>
               <IconButton
@@ -127,7 +90,9 @@ export default function NavBar() {
                 color="inherit"
               >
                 <Badge badgeContent={17} color="error">
-                  <NotificationsNoneIcon />
+                  <NotificationsNoneIcon
+                    sx={{ color: (theme) => theme.palette.fontColor.icon }}
+                  />
                 </Badge>
               </IconButton>
               <IconButton
@@ -139,7 +104,7 @@ export default function NavBar() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircleIcon />
+                <CustomAvatar sx={{ width: "2rem" }}></CustomAvatar>
               </IconButton>
               <IconButton
                 size="large"
@@ -150,7 +115,9 @@ export default function NavBar() {
                 onClick={logout}
                 color="inherit"
               >
-                <LogoutIcon />
+                <LogoutIcon
+                  sx={{ color: (theme) => theme.palette.fontColor.icon }}
+                />
               </IconButton>
             </Box>
           ) : (

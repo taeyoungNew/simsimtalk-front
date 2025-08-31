@@ -29,7 +29,16 @@ export const signupSlice = createSlice({
   name: "user/signup",
   initialState: signupUserInitialState,
 
-  reducers: {},
+  reducers: {
+    resetSignupError: (state) => {
+      state.error = null;
+    },
+    resetInit: (state) => {
+      state.success = false;
+      state.successMessage = "";
+      state.error = null;
+    },
+  },
   extraReducers: async (builder) => {
     builder
       .addCase(signupUserThunk.pending, (state) => {
@@ -49,3 +58,6 @@ export const signupSlice = createSlice({
       });
   },
 });
+
+export const { resetInit, resetSignupError } = signupSlice.actions;
+export default signupSlice.reducer;

@@ -1,12 +1,23 @@
 import Box from "@mui/material/Box";
 import NavBar from "../components/molecules/NavBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { MyFollowings } from "../components/common/myFollowings";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { useAppDispatch } from "../store/hook";
+import { useEffect } from "react";
+import { resetUserError } from "../store/auth/authSlice";
+import { resetSignupError } from "../store/user/userSignupSlice";
 
 export const Applayout = () => {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    dispatch(resetSignupError());
+    dispatch(resetUserError());
+  }, [location]);
 
   return (
     <>
