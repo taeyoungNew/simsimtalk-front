@@ -37,6 +37,9 @@ export const theme = createTheme({
   },
 
   palette: {
+    success: {
+      main: "#22c55e",
+    },
     primary: {
       main: "#1976d2",
     },
@@ -44,7 +47,7 @@ export const theme = createTheme({
       main: "#ed6c02",
     },
     error: {
-      main: "#d32f2f",
+      main: "#ef4444",
     },
     fontColor: {
       main: "#1e293b", // text-slate-800 (메인 텍스트)
@@ -64,6 +67,13 @@ export const theme = createTheme({
   },
 
   components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "#d32f2f",
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         "*::-webkit-scrollbar": {

@@ -11,11 +11,19 @@ import {
 } from "@mui/material";
 import { ChatQuote } from "../assets/icons/ChatQuote";
 import { theme } from "../theme/theme";
-import { SimSimTextField } from "../layout/common/SimsimTextField";
+import { SimSimTextField } from "../components/atoms/inputs/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
-import React from "react";
-import { signupAPI } from "../apis/signup";
+import React, { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import { signupUserThunk } from "../store/user/userSignupThunk";
+import { resetInit } from "../store/user/userSignupSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
+import { SuccessNotification } from "../components/atoms/notifications/SuccessNotificationBar";
+import { relative } from "path";
 
 type SignupType = {
   email: string;
@@ -29,11 +37,35 @@ type SignupType = {
 export const SignupPage = () => {
   const navigator = useNavigate();
   const [age, setAge] = React.useState("");
+
+  const isSignupSuccess = useSelector(
+    (state: RootState) => state.Signup.success,
+  );
+  const signupSuccessMsg = useSelector(
+    (state: RootState) => state.Signup.successMessage,
+  );
+
+  const isSignupError = useSelector((state: RootState) => state.Signup.error);
+  const errorMsg = useSelector(
+    (state: RootState) => state.Signup.error?.message,
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isSignupSuccess) {
+      const timer = setTimeout(() => {
+        navigator("/login");
+        dispatch(resetInit());
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSignupSuccess, navigator, dispatch]);
+
   const ages = [10, 20, 30, 40, 50, 60, 70, 80, 90];
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
-  const { handleSubmit, control } = useForm<SignupType>({
+  const { handleSubmit, control, register } = useForm<SignupType>({
     defaultValues: {
       email: "",
       password: "",
@@ -43,14 +75,8 @@ export const SignupPage = () => {
       age: 0,
     },
   });
-
   const signup = async (data: SignupType) => {
-    try {
-      const result = await signupAPI(data);
-      if (result) if (result.status == 200) navigator("/login");
-    } catch (error) {
-      console.log(error);
-    }
+    await dispatch(signupUserThunk(data));
   };
   return (
     <>
@@ -79,43 +105,72 @@ export const SignupPage = () => {
               size={100}
             ></ChatQuote>
           </Grid2>
+          {isSignupSuccess === true ? (
+            <SuccessNotification
+              successMessage={signupSuccessMsg}
+            ></SuccessNotification>
+          ) : isSignupError?.errorCode !== "" && isSignupError !== null ? (
+            <ErrNotificationBar errorMessage={errorMsg}></ErrNotificationBar>
+          ) : (
+            <Box></Box>
+          )}
+
           <Grid2 sx={{ width: "100%", paddingTop: "0.5em" }} flexGrow={1}>
             <Controller
               name="email"
               control={control}
-              render={({ field }) => {
+              render={({ field, fieldState: { error } }) => {
                 return (
                   <SimSimTextField
+                    helperText={error?.message}
                     {...field}
                     id="outlined-basic"
                     label="email"
                     variant="outlined"
                     sx={{
                       width: "inherit",
-                      color: "#E1EACD",
+                      color: (theme) => theme.palette.fontColor.main,
                     }}
                     size="small"
-                    placeholder="email"
+                    placeholder="email@example.com"
+                    {...register("email", {
+                      required: "이메일은 필수 입력 항목입니다.",
+                      pattern: {
+                        value:
+                          /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+                        message: "이메일 형식이 올바르지 않습니다.",
+                      },
+                    })}
                   ></SimSimTextField>
                 );
               }}
             />
-            <Box id="emailErr">에러</Box>
+            <Box id="emailErr"></Box>
           </Grid2>
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
             <Controller
               name="password"
               control={control}
-              render={({ field }) => {
+              render={({ field, fieldState: { error } }) => {
                 return (
                   <SimSimTextField
+                    autoComplete="new-password"
+                    helperText={error?.message}
                     {...field}
                     sx={{ width: "inherit" }}
                     id="outlined-password-input"
                     label="password"
                     variant="outlined"
                     type="password"
+                    placeholder="숫자 1~30"
                     size="small"
+                    {...register("password", {
+                      required: "패스워드는 필수 입력 항목입니다.",
+                      pattern: {
+                        value: /[1-9]{1,30}/,
+                        message: "패스워드의 형식이 올바르지 않습니다. ",
+                      },
+                    })}
                   />
                 );
               }}
@@ -125,15 +180,24 @@ export const SignupPage = () => {
             <Controller
               name="nickname"
               control={control}
-              render={({ field }) => {
+              render={({ field, fieldState: { error } }) => {
                 return (
                   <SimSimTextField
+                    helperText={error?.message}
                     {...field}
                     sx={{ width: "inherit" }}
                     id="outlined-nickname-basic"
                     label="nickname"
                     variant="outlined"
+                    placeholder="숫자영문 1~10"
                     size="small"
+                    {...register("nickname", {
+                      required: "닉네임은 필수 입력 항목입니다.",
+                      pattern: {
+                        value: /[a-zA-Z0-9]{1,10}/,
+                        message: "닉네임형식이 올바르지 않습니다. ",
+                      },
+                    })}
                   />
                 );
               }}
@@ -214,7 +278,7 @@ export const SignupPage = () => {
               }}
               type="submit"
             >
-              会員登録
+              회원가입
             </Button>
           </Grid2>
         </Grid2>

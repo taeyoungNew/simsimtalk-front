@@ -6,12 +6,6 @@ interface LoginReq {
   password: string;
 }
 
-interface LoginRes {
-  id: string;
-  email: string;
-  nickname: string;
-}
-
 interface AuthMeRes {
   isLogin: boolean;
   user: {
@@ -21,19 +15,40 @@ interface AuthMeRes {
   };
 }
 
+interface Error {
+  status: number;
+  errorCode: string;
+  message: string;
+}
+
 export const loginThunk = createAsyncThunk<
-  LoginRes,
+  {
+    data: {
+      id: string;
+      email: string;
+      nickname: string;
+    };
+    message: string;
+  },
   LoginReq,
   {
-    rejectValue: string;
+    rejectValue: Error;
   }
->("auth/login", async ({ email, password }) => {
-  const res = await loginAPI({
-    email,
-    password,
-  });
+>("auth/login", async ({ email, password }, thunkAPI) => {
+  try {
+    const loginResult = await loginAPI({
+      email,
+      password,
+    });
 
-  return res as unknown as LoginRes;
+    return { message: loginResult.data.message, data: loginResult.data.data };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
 });
 
 export const authMeThunk = createAsyncThunk("auth/auth-me", async () => {

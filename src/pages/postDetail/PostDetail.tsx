@@ -28,7 +28,7 @@ export const PostDetail = () => {
 
   return (
     <>
-      <Box sx={{ padding: "5%" }}>
+      <Box sx={{ padding: "0 1rem" }}>
         <Box
           sx={{
             background: (theme) => theme.palette.background.paper,
@@ -43,10 +43,10 @@ export const PostDetail = () => {
             userId={postDetailInfo.userId}
           ></PostDetailHeader>
           <PostDetailBody
-            title={postDetailInfo.title}
             content={postDetailInfo.content}
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}
+            isEditing={false}
           ></PostDetailBody>
         </Box>
         <Box

@@ -8,7 +8,6 @@ import styled from "styled-components";
 interface CardProps {
   id: number;
   userId: string;
-  title: string;
   contents: string;
   userNickname: string;
   likeCnt: number;
@@ -30,7 +29,6 @@ const DetailPostLink = styled(NavLink)`
 export const PostCard = ({
   id,
   userId,
-  title,
   userNickname,
   contents,
   likeCnt,
@@ -72,7 +70,6 @@ export const PostCard = ({
               direction="row"
               display={"flex"}
               spacing={1}
-              sx={{ padding: "5px" }}
             >
               <Avatar
                 sx={{
@@ -87,7 +84,6 @@ export const PostCard = ({
                   color: (theme) => theme.palette.fontColor.main,
                 }}
               ></Typography>
-              {title}
             </Grid2>
             <Grid2
               sx={{
@@ -97,8 +93,7 @@ export const PostCard = ({
               }}
             >
               <Box
-                padding="5px"
-                // bgcolor={theme.palette.primary.light}
+                // padding="5px"
                 width="100%"
                 height="auto"
                 overflow={"hidden"}

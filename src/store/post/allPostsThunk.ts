@@ -18,7 +18,6 @@ interface Comment {
 interface Posts {
   id: number;
   userId: string;
-  title: string;
   content: string;
   userNickname: string;
   likeCnt: number;
@@ -31,7 +30,6 @@ interface GetPostsRes {
 }
 
 interface CreatePost {
-  title: string;
   content: string;
 }
 

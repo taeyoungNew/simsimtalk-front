@@ -3,19 +3,24 @@ import { Typography } from "@mui/material";
 import { theme } from "../../theme/theme";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
+import { CustomTextArea } from "../../components/atoms/inputs/CustomTextArea";
 
 interface PostDetailBodyProps {
-  title: string;
   content: string;
   likeCnt: number;
   commentCnt: number;
 }
+
+interface PostEditingProps {
+  isEditing: boolean;
+}
+
 export const PostDetailBody = ({
-  title,
   content,
   likeCnt,
   commentCnt,
-}: PostDetailBodyProps) => {
+  isEditing,
+}: PostDetailBodyProps & PostEditingProps) => {
   return (
     <>
       <Typography
@@ -26,26 +31,28 @@ export const PostDetailBody = ({
           paddingLeft: "0.9rem",
         }}
         variant="h4"
-      >
-        {title}
-      </Typography>
+      ></Typography>
       <Box
         sx={{
           padding: "1rem",
           height: "auto",
           minHeight: "40vh",
-          // borderBottom: 1,
-          // borderBottomColor: "gray",
         }}
       >
-        <Typography
-          sx={{
-            fontSize: "1.3rem",
-            color: (theme) => theme.palette.fontColor.main,
-          }}
-        >
-          {content}
-        </Typography>
+        {isEditing === false ? (
+          <CustomTextArea
+            sx={{ height: "inherit", padding: "10px", width: "100%" }}
+          ></CustomTextArea>
+        ) : (
+          <Typography
+            sx={{
+              fontSize: "1.3rem",
+              color: (theme) => theme.palette.fontColor.main,
+            }}
+          >
+            {content}
+          </Typography>
+        )}
       </Box>
       <Box
         sx={{
