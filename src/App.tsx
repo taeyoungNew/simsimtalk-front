@@ -8,7 +8,7 @@ import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SignupPage } from "./pages/SignupPage";
 import { NoPage } from "./pages/NoPage";
-import { UserPage } from "./pages/MyPage";
+import { UserPageDetail } from "./pages/userPageDetail/UserPageDetail";
 import { Applayout } from "./layout/Applayout";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "./store/hook";
@@ -49,7 +49,7 @@ function App() {
                   </UnAuthRoute>
                 }
               />
-              <Route path="/myPage/:id" element={<UserPage />} />
+              <Route path="/userPage/:id" element={<UserPageDetail />} />
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}

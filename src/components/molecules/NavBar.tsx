@@ -23,6 +23,7 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
+  const userId = useSelector((state: RootState) => state.User.id);
 
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
@@ -95,17 +96,19 @@ export default function NavBar() {
                   />
                 </Badge>
               </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <CustomAvatar sx={{ width: "2rem" }}></CustomAvatar>
-              </IconButton>
+              <NavLink to={`/userPage/${userId}`}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <CustomAvatar sx={{ width: "2rem" }}></CustomAvatar>
+                </IconButton>
+              </NavLink>
               <IconButton
                 size="large"
                 edge="end"
