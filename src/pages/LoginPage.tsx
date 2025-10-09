@@ -5,13 +5,9 @@ import { theme } from "../theme/theme";
 import { SimSimTextField } from "../components/atoms/inputs/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
 import { useAppDispatch } from "../store/hook";
-import { useNavigate } from "react-router-dom";
-import { authMeThunk, loginThunk } from "../store/auth/authThunk";
-import { useEffect } from "react";
+import { loginThunk } from "../store/auth/authThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { resetIsLoginSuccess } from "../store/auth/authSlice";
-import { SuccessNotification } from "../components/atoms/notifications/SuccessNotificationBar";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 
 type LoginType = {

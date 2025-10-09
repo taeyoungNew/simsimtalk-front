@@ -15,15 +15,23 @@ import { useAppDispatch } from "./store/hook";
 import UnAuthRoute from "./route/UnAuthRoute";
 import { authMeThunk } from "./store/auth/authThunk";
 import { PostDetail } from "./pages/postDetail/PostDetail";
+import AuthRoute from "./route/AuthRoute";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 
 function App() {
   const dispatch = useAppDispatch();
+  const { initialized } = useSelector((state: RootState) => state.User);
   useEffect(() => {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
     };
     checkAuth();
   }, [dispatch]);
+
+  if (!initialized) {
+    return <div>로딩중</div>;
+  }
 
   return (
     <>
@@ -49,7 +57,14 @@ function App() {
                   </UnAuthRoute>
                 }
               />
-              <Route path="/userPage/:id" element={<UserPageDetail />} />
+              <Route
+                path="/userPage/:id"
+                element={
+                  <AuthRoute>
+                    <UserPageDetail />
+                  </AuthRoute>
+                }
+              />
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}

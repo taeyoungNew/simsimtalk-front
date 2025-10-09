@@ -8,6 +8,7 @@ import { useAppDispatch } from "../store/hook";
 import { useEffect } from "react";
 import { resetUserError } from "../store/auth/authSlice";
 import { resetSignupError } from "../store/user/userSignupSlice";
+import { resetEditMyInfoError } from "../store/user/userInfoSlice";
 
 export const Applayout = () => {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -16,6 +17,7 @@ export const Applayout = () => {
 
   useEffect(() => {
     dispatch(resetSignupError());
+    dispatch(resetEditMyInfoError());
     dispatch(resetUserError());
   }, [location]);
 

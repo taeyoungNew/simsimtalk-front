@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createPostAPI, getPostsAPI } from "../../apis/post";
 import { getAllPostsSlice } from "./allPostsSlice";
+import { getUserPostsSlice } from "./userPostsSlice";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -45,6 +46,7 @@ export const createPostThunk = createAsyncThunk(
   async (createPostData: CreatePost, { dispatch }) => {
     const newPost = await createPostAPI(createPostData);
     dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
+    dispatch(getUserPostsSlice.actions.addPostToUserPosts(newPost));
     return newPost as Posts;
   },
 );

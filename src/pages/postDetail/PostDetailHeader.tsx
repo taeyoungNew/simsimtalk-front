@@ -26,6 +26,7 @@ const style = {
   pb: 3,
 };
 interface PostDetailHeaderProps {
+  from: string;
   postId: number;
   userNickname: String;
   userId: String;
@@ -38,6 +39,7 @@ interface ModifyPost {
 }
 
 export const PostDetailHeader = ({
+  from,
   postId,
   userNickname,
   userId,
@@ -82,7 +84,7 @@ export const PostDetailHeader = ({
   const deletePost = async () => {
     await dispatch(deletePostThunk(postId));
     deletePostHandleClose();
-    window.location.href = "/";
+    window.location.href = `${from}`;
   };
 
   return (
@@ -95,7 +97,7 @@ export const PostDetailHeader = ({
             justifyContent: "space-between",
           }}
         >
-          <NavLink to={"/"}>
+          <NavLink to={`${from}`}>
             <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
               Back
             </Button>

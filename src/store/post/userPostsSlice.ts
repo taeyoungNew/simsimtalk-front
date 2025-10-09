@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPostsThunk } from "./allPostsThunk";
+import { getUserPostsThunk } from "./userPostsThunk";
+import { modifyCommentThunk } from "../comment/commentThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
-import { createCommentThunk } from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
   isLast: boolean;
+}
+interface Error {
+  status: number;
+  errorCode: string;
+  message: string;
 }
 interface Comment {
   id: number;
@@ -27,41 +32,30 @@ interface Post {
 
 interface getAllPostsSlice {
   posts: Post[];
+  error: null | Error;
 }
 
-const getAllPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
-  posts: [],
+const getUserPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
   isLoading: false,
   isLast: false,
+  posts: [],
+  error: {
+    status: 0,
+    errorCode: "",
+    message: "",
+  },
 };
 
-export const getAllPostsSlice = createSlice({
-  name: "post/getAllPosts",
-  initialState: getAllPostsInitialState,
+export const getUserPostsSlice = createSlice({
+  name: "post/getUserPosts",
+  initialState: getUserPostsInitialState,
 
   reducers: {
-    setPosts: (state, action) => {
-      const posts: Post[] = action.payload.posts;
-      for (let idx = 0; idx < posts.length; idx++) {
-        state.posts[idx] = posts[idx];
-      }
-    },
-
-    getPosts: (state, action) => {
-      state.posts;
-    },
-
-    addPostToAllPosts: (state, action) => {
+    addPostToUserPosts: (state, action) => {
       state.posts.unshift(action.payload);
     },
-
-    deleteMyPost: (state, action) => {
-      const deleteIdx = action.payload.idx;
-    },
-
-    updatePostCommentCnt: (state, action) => {
+    updateUserPostCommentCnt: (state, action) => {
       const { postId, delta, role } = action.payload;
-
       if (role === "add") {
         const post = state.posts.find((p) => p.id === postId);
         if (post) post.commentCnt += delta;
@@ -73,18 +67,14 @@ export const getAllPostsSlice = createSlice({
   },
   extraReducers: async (builder) => {
     builder
-      .addCase(getPostsThunk.pending, (state) => {
+      .addCase(getUserPostsThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getPostsThunk.fulfilled, (state, action) => {
-        if (!action.payload) return;
-        console.log(action.payload);
-
+      .addCase(getUserPostsThunk.fulfilled, (state, action) => {
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,
             userId: action.payload.posts[idx].userId,
-
             content: action.payload.posts[idx].content,
             userNickname: action.payload.posts[idx].userNickname,
             likeCnt: action.payload.posts[idx].likeCnt,
@@ -92,7 +82,12 @@ export const getAllPostsSlice = createSlice({
             commentCnt: action.payload.posts[idx].Comments.length,
           });
         }
+
         state.isLoading = false;
+      })
+      .addCase(getUserPostsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as Error;
       });
 
     builder
@@ -106,8 +101,11 @@ export const getAllPostsSlice = createSlice({
             state.posts[idx] = updatedPost;
           }
         }
+      })
+      .addCase(modifyPostThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as Error;
       });
-
     builder
       .addCase(deletePostThunk.pending, (state, action) => {
         state.isLoading = true;
@@ -116,8 +114,12 @@ export const getAllPostsSlice = createSlice({
         const postId = action.payload;
         state.posts = state.posts.filter((el) => el.id !== postId);
         state.isLoading = false;
+      })
+      .addCase(deletePostThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as Error;
       });
   },
 });
 
-export const { updatePostCommentCnt } = getAllPostsSlice.actions;
+export const { updateUserPostCommentCnt } = getUserPostsSlice.actions;

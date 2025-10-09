@@ -18,7 +18,7 @@ const signupUserInitialState: SignupInitialState = {
   isLoading: false,
   success: false,
   successMessage: "",
-  error: null || {
+  error: {
     status: 0,
     errorCode: "",
     message: "",
@@ -33,7 +33,7 @@ export const signupSlice = createSlice({
     resetSignupError: (state) => {
       state.error = null;
     },
-    resetInit: (state) => {
+    resetInitSignup: (state) => {
       state.success = false;
       state.successMessage = "";
       state.error = null;
@@ -59,5 +59,5 @@ export const signupSlice = createSlice({
   },
 });
 
-export const { resetInit, resetSignupError } = signupSlice.actions;
+export const { resetInitSignup, resetSignupError } = signupSlice.actions;
 export default signupSlice.reducer;
