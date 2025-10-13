@@ -51,8 +51,26 @@ export const loginThunk = createAsyncThunk<
   }
 });
 
-export const authMeThunk = createAsyncThunk("auth/auth-me", async () => {
-  const res = await authMeAPI();
-
-  return res as AuthMeRes;
+export const authMeThunk = createAsyncThunk<
+  AuthMeRes,
+  void,
+  { rejectValue: Error }
+>("auth/auth-me", async (_, thunkAPI) => {
+  try {
+    const res = await authMeAPI();
+    return {
+      isLogin: res.data.isLogin,
+      user: {
+        id: res.data.user.id,
+        email: res.data.user.email,
+        nickname: res.data.user.nickname,
+      },
+    };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
 });

@@ -15,6 +15,7 @@ interface UserInitialState {
   nickname: string;
   isLoginSuccess: boolean;
   error: null | Error;
+  initialized: boolean;
 }
 
 const initialState: UserInitialState = {
@@ -24,7 +25,8 @@ const initialState: UserInitialState = {
   email: "",
   nickname: "",
   isLoginSuccess: false,
-  error: null || {
+  initialized: false,
+  error: {
     status: 0,
     errorCode: "",
     message: "",
@@ -60,12 +62,13 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.pending, (state) => {
-        state.isLoading = false;
+        state.isLoading = true;
         state.isLoginSuccess = false;
         state.error = null;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.isLogin = true;
+        state.isLoading = false;
         state.isLoginSuccess = true;
         state.id = action.payload?.data.id;
         state.email = action.payload?.data.email;
@@ -73,8 +76,31 @@ export const userSlice = createSlice({
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload as Error;
+      })
+      .addCase(authMeThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(authMeThunk.fulfilled, (state, action) => {
+        state.isLogin = action.payload.isLogin;
+        state.isLoading = false;
+        state.isLoginSuccess = action.payload.isLogin;
+        state.nickname = action.payload.user.nickname;
+        state.email = action.payload.user.email;
+        state.id = action.payload.user.id;
+        state.initialized = true;
+      })
+      .addCase(authMeThunk.rejected, (state, action) => {
+        console.log("authMeThunk.rejected");
 
         state.error = action.payload as Error;
+        state.isLoading = false;
+        state.isLogin = false;
+        state.isLoginSuccess = false;
+        state.nickname = "";
+        state.email = "";
+        state.id = "";
+        state.initialized = true;
       });
   },
 });

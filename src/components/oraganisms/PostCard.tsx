@@ -34,16 +34,14 @@ export const PostCard = ({
   likeCnt,
   commentsCnt,
 }: CardProps) => {
-  // const maxLeng = 150;
-  // const postCardText =
-  //   contents.length > maxLeng ? contents.slice(0, maxLeng) + "..." : contents;
-
+  const to = location.pathname;
+  // console.log("postCard", to);
   return (
     <>
       <Box
         sx={{
           borderRadius: "10px",
-          width: "100%",
+          width: "inherit",
           padding: "10px",
           bgcolor: (theme) => theme.palette.background.paper,
           cursor: "pointer",
@@ -57,6 +55,7 @@ export const PostCard = ({
               ? "no-underline text-black font-bold"
               : "no-underline text-gray-500"
           }
+          state={{ from: to }}
         >
           <Grid2
             sx={{ display: "flex", justifyContent: "center" }}

@@ -8,6 +8,7 @@ import { getPostDetailThunk } from "../../store/post/postDetailThunk";
 import { useAppDispatch } from "../../store/hook";
 import { PostDetailBody } from "./PostDetailBody";
 import { PostDetailFooter } from "./PostDetailFooter";
+import { useLocation } from "react-router-dom";
 import { theme } from "../../theme/theme";
 
 // 게시물
@@ -19,6 +20,8 @@ export const PostDetail = () => {
   const getPostDetail = async (postId: number) => {
     await dispatch(getPostDetailThunk(postId));
   };
+  const from = useLocation().state.from;
+  // console.log("postDetail", from);
 
   useEffect(() => {
     getPostDetail(Number(postId));
@@ -38,6 +41,7 @@ export const PostDetail = () => {
           }}
         >
           <PostDetailHeader
+            from={from}
             postId={postDetailInfo.id}
             userNickname={postDetailInfo.userNickname}
             userId={postDetailInfo.userId}
@@ -46,7 +50,7 @@ export const PostDetail = () => {
             content={postDetailInfo.content}
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}
-            isEditing={false}
+            isEditing={true}
           ></PostDetailBody>
         </Box>
         <Box

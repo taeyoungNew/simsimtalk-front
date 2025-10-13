@@ -122,7 +122,6 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(deleteCommentThunk.fulfilled, (state, action) => {
-        console.log(action.payload);
         const deleteCommentId = action.payload.id;
         const Comments = state.Comments;
         const deleteComment = Comments.filter((el) => el.id != deleteCommentId);

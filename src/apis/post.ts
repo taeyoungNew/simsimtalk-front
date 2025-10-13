@@ -8,6 +8,11 @@ interface ModifyPost {
   content: string;
 }
 
+interface GetUserPostsReq {
+  userId: string;
+  postLastId: null | number;
+}
+
 export const getPostAPI = async (postId: Number) => {
   return await axios
     .get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
@@ -83,4 +88,14 @@ export const deletePostAPI = async (postId: Number) => {
     .catch(function (error) {
       throw error;
     });
+};
+
+export const getUserPosts = async (param: GetUserPostsReq) => {
+  return await axios.get(`${import.meta.env.VITE_API_BASE}post/user_posts`, {
+    params: {
+      userId: param.userId,
+      postLastId: String(param.postLastId),
+    },
+    withCredentials: true,
+  });
 };

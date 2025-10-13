@@ -7,23 +7,20 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
 } from "@mui/material";
 import { ChatQuote } from "../assets/icons/ChatQuote";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../components/atoms/inputs/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";
 import React, { useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/hook";
+import { useAppDispatch } from "../store/hook";
 import { signupUserThunk } from "../store/user/userSignupThunk";
-import { resetInit } from "../store/user/userSignupSlice";
+import { resetInitSignup } from "../store/user/userSignupSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 import { SuccessNotification } from "../components/atoms/notifications/SuccessNotificationBar";
-import { relative } from "path";
 
 type SignupType = {
   email: string;
@@ -55,13 +52,16 @@ export const SignupPage = () => {
     if (isSignupSuccess) {
       const timer = setTimeout(() => {
         navigator("/login");
-        dispatch(resetInit());
+        dispatch(resetInitSignup());
       }, 1000);
       return () => clearTimeout(timer);
     }
   }, [isSignupSuccess, navigator, dispatch]);
 
-  const ages = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+  let ages: number[] = [];
+  for (let idx = 1; idx <= 100; idx++) {
+    ages.push(idx);
+  }
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
@@ -234,6 +234,12 @@ export const SignupPage = () => {
                     label="aboutMe"
                     multiline
                     rows={4}
+                    {...register("aboutMe", {
+                      pattern: {
+                        value: /[\s\S]{0,500}/,
+                        message: "자기소개는 500자까지입니다.",
+                      },
+                    })}
                   />
                 );
               }}
@@ -246,8 +252,7 @@ export const SignupPage = () => {
               render={({ field }) => {
                 return (
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-
+                    <InputLabel id="demo-simple-select-label">age</InputLabel>
                     <Select
                       {...field}
                       labelId="demo-simple-select-label"
@@ -256,9 +261,13 @@ export const SignupPage = () => {
                       label="Age"
                       onChange={handleChange}
                     >
-                      <MenuItem value={10}>10</MenuItem>
-                      <MenuItem value={20}>20</MenuItem>
-                      <MenuItem value={30}>30</MenuItem>
+                      {ages.map((el, idx) => {
+                        return (
+                          <MenuItem key={idx} value={el}>
+                            {el}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
                   </FormControl>
                 );
@@ -268,7 +277,6 @@ export const SignupPage = () => {
           <Grid2 sx={{ width: "100%" }} flexGrow={1}>
             <Button
               variant="contained"
-              // color={theme.palette.primary.contrastText}
               sx={{
                 backgroundColor: (theme) => theme.palette.primary.dark,
                 color: (theme) => theme.palette.primary.contrastText,

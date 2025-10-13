@@ -27,7 +27,6 @@ interface WritePost {
 }
 
 export const MainPage = () => {
-  const [open, setOpen] = useState(false);
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const getPostDatas = useSelector(
     (state: RootState) => state.GetAllPosts.posts,
@@ -83,19 +82,6 @@ export const MainPage = () => {
       observer.current?.disconnect();
     };
   }, [getPostDatas]);
-
-  const writePost = async (data: WritePost) => {
-    await dispatch(createPostThunk(data));
-    handleClose();
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <>

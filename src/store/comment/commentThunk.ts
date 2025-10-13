@@ -4,7 +4,8 @@ import {
   deleteCommentAPI,
   modifyCommentAPI,
 } from "../../apis/comment";
-import { updateCommentCnt } from "../post/allPostsSlice";
+import { updatePostCommentCnt } from "../post/allPostsSlice";
+import { updateUserPostCommentCnt } from "../post/userPostsSlice";
 
 interface CreateComment {
   postId: number;
@@ -36,7 +37,16 @@ export const createCommentThunk = createAsyncThunk(
   async (payload: CreateComment, { dispatch }) => {
     const result = await createCommentAPI(payload);
 
-    dispatch(updateCommentCnt({ postId: payload.postId, delta: 1 }));
+    dispatch(
+      updatePostCommentCnt({ postId: payload.postId, delta: 1, role: "add" }),
+    );
+    dispatch(
+      updateUserPostCommentCnt({
+        postId: payload.postId,
+        delta: 1,
+        role: "add",
+      }),
+    );
     return result as ReturnComment;
   },
 );
@@ -51,8 +61,22 @@ export const modifyCommentThunk = createAsyncThunk(
 
 export const deleteCommentThunk = createAsyncThunk(
   "comment/deleteComment",
-  async (payload: DeleteComment) => {
+  async (payload: DeleteComment, { dispatch }) => {
     await deleteCommentAPI(payload);
+    dispatch(
+      updatePostCommentCnt({
+        postId: payload.postId,
+        delta: 1,
+        role: "remove",
+      }),
+    );
+    dispatch(
+      updateUserPostCommentCnt({
+        postId: payload.postId,
+        delta: 1,
+        role: "remove",
+      }),
+    );
     return payload as DeleteComment;
   },
 );

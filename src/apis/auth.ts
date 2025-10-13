@@ -5,14 +5,6 @@ export interface LoginForm {
   password: string;
 }
 
-// interface LoginRes {
-//   data: {
-//     id: string;
-//     email: string;
-//     nickname: string;
-//   };
-// }
-
 export const loginAPI = async (props: LoginForm) => {
   return await axios.post(
     `${import.meta.env.VITE_API_BASE}auth/login`,
@@ -38,14 +30,9 @@ export const logoutAPI = async () => {
 };
 
 export const authMeAPI = async () => {
-  return await axios
-    .get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
-      withCredentials: true,
-    })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+  const res = await axios.get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
+    withCredentials: true,
+  });
+
+  return res;
 };
