@@ -78,7 +78,6 @@ export const PostDetailFooter = ({
                     sx={{ width: "100%" }}
                     id="outlined-basic"
                     variant="outlined"
-                    // value={commentInputValue}
                     onKeyDown={(e) => {
                       if (!e.shiftKey && e.key === "Enter") {
                         e.preventDefault();

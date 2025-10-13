@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 import { createCommentThunk } from "../comment/commentThunk";
+import { postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -115,6 +116,22 @@ export const getAllPostsSlice = createSlice({
       .addCase(deletePostThunk.fulfilled, (state, action) => {
         const postId = action.payload;
         state.posts = state.posts.filter((el) => el.id !== postId);
+        state.isLoading = false;
+      });
+
+    builder
+      .addCase(postLikeThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const postId = action.payload.postId;
+
+        for (let idx = 0; idx < state.posts.length; idx++) {
+          if (state.posts[idx].id === postId) state.posts[idx].likeCnt += 1;
+        }
+      })
+      .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

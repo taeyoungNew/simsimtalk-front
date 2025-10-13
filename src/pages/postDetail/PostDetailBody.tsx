@@ -4,8 +4,11 @@ import { theme } from "../../theme/theme";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { CustomTextArea } from "../../components/atoms/inputs/CustomTextArea";
+import { postLikeThunk } from "../../store/like/postLikeThunk";
+import { useAppDispatch } from "../../store/hook";
 
 interface PostDetailBodyProps {
+  postId: number;
   content: string;
   likeCnt: number;
   commentCnt: number;
@@ -16,11 +19,18 @@ interface PostEditingProps {
 }
 
 export const PostDetailBody = ({
+  postId,
   content,
   likeCnt,
   commentCnt,
   isEditing,
 }: PostDetailBodyProps & PostEditingProps) => {
+  const dispatch = useAppDispatch();
+
+  const postLike = async () => {
+    await dispatch(postLikeThunk(postId));
+  };
+
   return (
     <>
       <Typography
@@ -62,7 +72,7 @@ export const PostDetailBody = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button>
+          <Button onClick={() => postLike()}>
             <HeartIcon
               color={theme.palette.primary.contrastText}
               fillColor={theme.palette.primary.light}

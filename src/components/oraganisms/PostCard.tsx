@@ -35,7 +35,7 @@ export const PostCard = ({
   commentsCnt,
 }: CardProps) => {
   const to = location.pathname;
-  // console.log("postCard", to);
+
   return (
     <>
       <Box
@@ -91,12 +91,7 @@ export const PostCard = ({
                 justifyContent: "center",
               }}
             >
-              <Box
-                // padding="5px"
-                width="100%"
-                height="auto"
-                overflow={"hidden"}
-              >
+              <Box width="100%" height="auto" overflow={"hidden"}>
                 <Typography
                   sx={{
                     whiteSpace: "pre-wrap",

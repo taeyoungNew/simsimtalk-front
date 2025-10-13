@@ -9,6 +9,7 @@ import {
   deleteCommentThunk,
   modifyCommentThunk,
 } from "../comment/commentThunk";
+import { postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -89,6 +90,19 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(modifyPostThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+
+    // 게시물 좋아요
+    builder
+      .addCase(postLikeThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeThunk.fulfilled, (state, action) => {
+        // const postId = action.payload.postId;
+        state.likeCnt += 1;
+      })
+      .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
     // 댓글생성
