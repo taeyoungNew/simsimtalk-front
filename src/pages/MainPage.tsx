@@ -1,25 +1,11 @@
-import { Box, Button, Grid2, ListItem, Modal, TextField } from "@mui/material";
+import { Box, Grid2, ListItem } from "@mui/material";
 import { PostCard } from "../components/oraganisms/PostCard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../store/hook";
-import { createPostThunk, getPostsThunk } from "../store/post/allPostsThunk";
+import { getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { WritePost } from "../components/WritePost";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "40%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
 
 interface WritePost {
   title: string;
@@ -100,7 +86,6 @@ export const MainPage = () => {
           }}
         ></Box>
         {isLogin === true ? <WritePost></WritePost> : <Box></Box>}
-
         <Box height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
@@ -126,6 +111,7 @@ export const MainPage = () => {
                       contents={el.content}
                       userNickname={el.userNickname}
                       likeCnt={el.likeCnt}
+                      isLiked={el.isLiked}
                       commentsCnt={el.commentCnt}
                     ></PostCard>
                   </ListItem>

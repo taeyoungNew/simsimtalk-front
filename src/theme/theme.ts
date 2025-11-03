@@ -10,6 +10,7 @@ declare module "@mui/material/styles" {
       main: string;
       normal: string;
       icon: string;
+      isLike: string;
       assist: string;
       placeholder: string;
     };
@@ -21,6 +22,7 @@ declare module "@mui/material/styles" {
       main: string;
       normal: string;
       icon: string;
+      isLike: string;
       assist: string;
       placeholder: string;
     };
@@ -54,13 +56,13 @@ export const theme = createTheme({
       normal: "#334155", // text-slate-700 (일반 텍스트)
       icon: "#475569", // text-slate-600 (아이콘)
       assist: "#64748b", // text-slate-500 (보조 텍스트)
+      isLike: "#ef4444",
       placeholder: "#94a3b8", // text-slate-400 (플레이스홀더)
     },
     background: {
       default: "#f1f5f9",
       paper: "#ffffff",
     },
-
     buttonColor: {
       main: "#7F7373",
     },

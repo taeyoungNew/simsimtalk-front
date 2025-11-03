@@ -11,6 +11,7 @@ interface CardProps {
   contents: string;
   userNickname: string;
   likeCnt: number;
+  isLiked: boolean;
   commentsCnt: number;
 }
 const DetailPostLink = styled(NavLink)`
@@ -32,6 +33,7 @@ export const PostCard = ({
   userNickname,
   contents,
   likeCnt,
+  isLiked,
   commentsCnt,
 }: CardProps) => {
   const to = location.pathname;
@@ -112,8 +114,16 @@ export const PostCard = ({
                 <Grid2 container spacing={1} sx={{ display: "flex" }}>
                   <label htmlFor="">
                     <HeartIcon
-                      color={theme.palette.fontColor.main}
-                      fillColor={theme.palette.background.paper}
+                      color={
+                        isLiked
+                          ? theme.palette.background.paper
+                          : theme.palette.fontColor.assist
+                      }
+                      fillColor={
+                        isLiked
+                          ? theme.palette.fontColor.isLike
+                          : theme.palette.background.paper
+                      }
                       size={30}
                     ></HeartIcon>
                   </label>

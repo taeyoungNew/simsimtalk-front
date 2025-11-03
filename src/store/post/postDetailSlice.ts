@@ -32,6 +32,7 @@ interface Post {
   title: string;
   content: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -45,6 +46,7 @@ const postDetailInitialState: Post & IsLastIsLoading = {
   title: "",
   content: "",
   likeCnt: 0,
+  isLiked: false,
   commentCnt: 0,
   Comments: [],
 };
@@ -70,6 +72,7 @@ export const getPostDetailSlice = createSlice({
         state.userNickname = postDetail.userNickname;
         state.content = postDetail.content;
         state.likeCnt = postDetail.likeCnt;
+        state.isLiked = postDetail.isLiked;
         state.commentCnt = postDetail.Comments.length;
         state.Comments = postDetail.Comments;
         state.isLoading = false;

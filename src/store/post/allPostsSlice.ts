@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
-import { createCommentThunk } from "../comment/commentThunk";
+
 import { postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
@@ -22,6 +22,7 @@ interface Post {
   userNickname: string;
   content: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -47,19 +48,14 @@ export const getAllPostsSlice = createSlice({
         state.posts[idx] = posts[idx];
       }
     },
-
-    getPosts: (state, action) => {
-      state.posts;
+    resetLiked: (state) => {
+      state.posts.forEach((post) => {
+        post.isLiked = false;
+      });
     },
-
     addPostToAllPosts: (state, action) => {
       state.posts.unshift(action.payload);
     },
-
-    deleteMyPost: (state, action) => {
-      const deleteIdx = action.payload.idx;
-    },
-
     updatePostCommentCnt: (state, action) => {
       const { postId, delta, role } = action.payload;
 
@@ -79,20 +75,31 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(getPostsThunk.fulfilled, (state, action) => {
         if (!action.payload) return;
-        console.log(action.payload);
 
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,
             userId: action.payload.posts[idx].userId,
-
             content: action.payload.posts[idx].content,
             userNickname: action.payload.posts[idx].userNickname,
             likeCnt: action.payload.posts[idx].likeCnt,
+            isLiked: false,
             Comments: action.payload.posts[idx].Comments,
             commentCnt: action.payload.posts[idx].Comments.length,
           });
+          // state.posts.push(action.payload.posts[idx]);
         }
+        let likedSet: any;
+
+        if (action.payload.isLikedPostIds !== undefined) {
+          likedSet = new Set(
+            action.payload.isLikedPostIds.map((item) => String(item.postId)),
+          );
+          state.posts.forEach((post) => {
+            post.isLiked = likedSet.has(String(post.id));
+          });
+        }
+
         state.isLoading = false;
       });
 
@@ -137,4 +144,4 @@ export const getAllPostsSlice = createSlice({
   },
 });
 
-export const { updatePostCommentCnt } = getAllPostsSlice.actions;
+export const { updatePostCommentCnt, resetLiked } = getAllPostsSlice.actions;

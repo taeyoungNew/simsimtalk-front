@@ -20,6 +20,7 @@ interface Posts {
   content: string;
   userNickname: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }

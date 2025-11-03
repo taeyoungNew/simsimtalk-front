@@ -26,6 +26,7 @@ interface Post {
   userNickname: string;
   content: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -78,6 +79,7 @@ export const getUserPostsSlice = createSlice({
             content: action.payload.posts[idx].content,
             userNickname: action.payload.posts[idx].userNickname,
             likeCnt: action.payload.posts[idx].likeCnt,
+            isLiked: action.payload.posts[idx].isLiked,
             Comments: action.payload.posts[idx].Comments,
             commentCnt: action.payload.posts[idx].Comments.length,
           });

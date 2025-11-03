@@ -9,6 +9,7 @@ import { loginThunk } from "../store/auth/authThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
+import { resetLiked } from "../store/post/allPostsSlice";
 
 type LoginType = {
   email: string;
@@ -31,6 +32,7 @@ export const LoginPage = () => {
   });
 
   const login = async (data: LoginType) => {
+    dispatch(resetLiked());
     await dispatch(loginThunk(data));
   };
 
