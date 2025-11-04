@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 
-import { postLikeThunk } from "../like/postLikeThunk";
+import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -75,7 +75,6 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(getPostsThunk.fulfilled, (state, action) => {
         if (!action.payload) return;
-
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,
@@ -87,10 +86,9 @@ export const getAllPostsSlice = createSlice({
             Comments: action.payload.posts[idx].Comments,
             commentCnt: action.payload.posts[idx].Comments.length,
           });
-          // state.posts.push(action.payload.posts[idx]);
         }
         let likedSet: any;
-
+        
         if (action.payload.isLikedPostIds !== undefined) {
           likedSet = new Set(
             action.payload.isLikedPostIds.map((item) => String(item.postId)),
@@ -99,6 +97,7 @@ export const getAllPostsSlice = createSlice({
             post.isLiked = likedSet.has(String(post.id));
           });
         }
+        
 
         state.isLoading = false;
       });
@@ -122,7 +121,12 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(deletePostThunk.fulfilled, (state, action) => {
         const postId = action.payload;
+        console.log("postId = ", postId);
+        
         state.posts = state.posts.filter((el) => el.id !== postId);
+        state.isLoading = false;
+      })
+      .addCase(deletePostThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
 
@@ -135,12 +139,33 @@ export const getAllPostsSlice = createSlice({
         const postId = action.payload.postId;
 
         for (let idx = 0; idx < state.posts.length; idx++) {
-          if (state.posts[idx].id === postId) state.posts[idx].likeCnt += 1;
+          if (state.posts[idx].id === postId) {
+            state.posts[idx].likeCnt += 1
+            state.posts[idx].isLiked = true
+          };
         }
       })
       .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
-      });
+      })
+    builder
+      .addCase(postLikeCencelThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeCencelThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const postId = action.payload.postId;
+
+        for (let idx = 0; idx < state.posts.length; idx++) {
+          if (state.posts[idx].id === postId) {
+            state.posts[idx].likeCnt -= 1
+            state.posts[idx].isLiked = false
+          };
+        }
+      })
+      .addCase(postLikeCencelThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
   },
 });
 

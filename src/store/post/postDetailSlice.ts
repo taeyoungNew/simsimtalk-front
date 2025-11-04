@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  deletePostThunk,
   getPostDetailThunk,
   modifyPostThunk,
 } from "./postDetailThunk";
@@ -9,7 +8,7 @@ import {
   deleteCommentThunk,
   modifyCommentThunk,
 } from "../comment/commentThunk";
-import { postLikeThunk } from "../like/postLikeThunk";
+import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -65,7 +64,6 @@ export const getPostDetailSlice = createSlice({
         if (!action.payload) return;
         state.isLoading = false;
         const postDetail = action.payload;
-
         state.id = postDetail.id;
         state.userId = postDetail.userId;
         state.title = postDetail.title;
@@ -102,12 +100,24 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(postLikeThunk.fulfilled, (state, action) => {
-        // const postId = action.payload.postId;
         state.likeCnt += 1;
+        state.isLiked = true
       })
       .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
-      });
+      })
+    // 게시물 좋아요 취소
+    builder
+      .addCase(postLikeCencelThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeCencelThunk.fulfilled, (state, action) => {
+        state.likeCnt -= 1;
+        state.isLiked = false
+      })
+      .addCase(postLikeCencelThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
     // 댓글생성
     builder.addCase(createCommentThunk.fulfilled, (state, action) => {
       const newComment = action.payload;

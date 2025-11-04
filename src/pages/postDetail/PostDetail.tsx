@@ -9,7 +9,6 @@ import { useAppDispatch } from "../../store/hook";
 import { PostDetailBody } from "./PostDetailBody";
 import { PostDetailFooter } from "./PostDetailFooter";
 import { useLocation } from "react-router-dom";
-import { theme } from "../../theme/theme";
 
 // 게시물
 // 타이틀, 내용, 유저닉네임, 댓글, 좋아요수
@@ -21,14 +20,13 @@ export const PostDetail = () => {
     await dispatch(getPostDetailThunk(postId));
   };
   const from = useLocation().state.from;
-  // console.log("postDetail", from);
-
+    
   useEffect(() => {
     getPostDetail(Number(postId));
   }, []);
 
   const postDetailInfo = useSelector((state: RootState) => state.GetPostDetail);
-
+  
   return (
     <>
       <Box sx={{ padding: "0 1rem" }}>
@@ -51,6 +49,7 @@ export const PostDetail = () => {
             content={postDetailInfo.content}
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}
+            isLiked={postDetailInfo.isLiked}
             isEditing={true}
           ></PostDetailBody>
         </Box>

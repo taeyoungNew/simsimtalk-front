@@ -30,8 +30,8 @@ export const PostDetailBody = ({
   isEditing,
   isLiked,
 }: PostDetailBodyProps & PostEditingProps) => {
+  
   const dispatch = useAppDispatch();
-
   const postLike = async () => {
     await dispatch(postLikeThunk(postId));
   };
@@ -81,19 +81,19 @@ export const PostDetailBody = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {isLiked ? (
+          {!isLiked ? (
             <Button onClick={() => postLike()}>
               <HeartIcon
-                color={theme.palette.primary.contrastText}
-                fillColor={theme.palette.primary.light}
+                color={theme.palette.fontColor.icon}
+                fillColor={theme.palette.background.paper}
                 size={40}
               ></HeartIcon>
             </Button>
           ) : (
             <Button onClick={() => deleteLike()}>
               <HeartIcon
-                color={theme.palette.fontColor.icon}
-                fillColor={theme.palette.background.paper}
+                color={theme.palette.background.paper}
+                fillColor={theme.palette.fontColor.isLike}
                 size={40}
               ></HeartIcon>
             </Button>

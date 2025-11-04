@@ -95,8 +95,6 @@ export const userSlice = createSlice({
         state.initialized = true;
       })
       .addCase(authMeThunk.rejected, (state, action) => {
-        console.log("authMeThunk.rejected");
-
         state.error = action.payload as Error;
         state.isLoading = false;
         state.isLogin = false;
