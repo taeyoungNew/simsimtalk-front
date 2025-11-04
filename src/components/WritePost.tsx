@@ -6,7 +6,6 @@ import TagFacesIcon from "@mui/icons-material/TagFaces";
 import { useForm, Controller } from "react-hook-form";
 import { createPostThunk } from "../store/post/allPostsThunk";
 import { useAppDispatch } from "../store/hook";
-import { SimSimTextField } from "./atoms/inputs/SimsimTextField";
 
 interface WritePost {
   title: string;

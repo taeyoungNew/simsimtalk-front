@@ -22,8 +22,8 @@ export const MainPage = () => {
   const isLoading = useSelector(
     (state: RootState) => state.GetAllPosts.isLoading,
   );
-  let postLastId = getPostDatas[getPostDatas.length - 1]?.id;
-
+  let postLastId = getPostDatas[getPostDatas.length - 1]?.id ?? 0;
+  
   const lastPostRef = useRef(null);
 
   const getPosts = async (postLastId: number) => {
@@ -90,6 +90,7 @@ export const MainPage = () => {
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
               {getPostDatas.map((el, index) => {
+                
                 const isLast = index === getPostDatas.length - 1;
 
                 if (isLast) {

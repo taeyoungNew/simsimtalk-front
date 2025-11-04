@@ -37,7 +37,7 @@ export const PostCard = ({
   commentsCnt,
 }: CardProps) => {
   const to = location.pathname;
-
+  
   return (
     <>
       <Box
@@ -57,7 +57,7 @@ export const PostCard = ({
               ? "no-underline text-black font-bold"
               : "no-underline text-gray-500"
           }
-          state={{ from: to }}
+          state={{ from: to, isLiked: isLiked }}
         >
           <Grid2
             sx={{ display: "flex", justifyContent: "center" }}
