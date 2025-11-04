@@ -9,6 +9,7 @@ import {
   deleteCommentThunk,
   modifyCommentThunk,
 } from "../comment/commentThunk";
+import { postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -31,6 +32,7 @@ interface Post {
   title: string;
   content: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -44,6 +46,7 @@ const postDetailInitialState: Post & IsLastIsLoading = {
   title: "",
   content: "",
   likeCnt: 0,
+  isLiked: false,
   commentCnt: 0,
   Comments: [],
 };
@@ -69,6 +72,7 @@ export const getPostDetailSlice = createSlice({
         state.userNickname = postDetail.userNickname;
         state.content = postDetail.content;
         state.likeCnt = postDetail.likeCnt;
+        state.isLiked = postDetail.isLiked;
         state.commentCnt = postDetail.Comments.length;
         state.Comments = postDetail.Comments;
         state.isLoading = false;
@@ -89,6 +93,19 @@ export const getPostDetailSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(modifyPostThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+
+    // 게시물 좋아요
+    builder
+      .addCase(postLikeThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeThunk.fulfilled, (state, action) => {
+        // const postId = action.payload.postId;
+        state.likeCnt += 1;
+      })
+      .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
     // 댓글생성

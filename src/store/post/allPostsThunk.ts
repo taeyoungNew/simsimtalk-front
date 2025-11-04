@@ -22,8 +22,17 @@ interface Posts {
   content: string;
   userNickname: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
+}
+
+interface IsLikedPostIds {
+  isLikedPostIds: isLikedPostId[];
+}
+
+interface isLikedPostId {
+  postId: number;
 }
 
 interface GetPostsRes {
@@ -38,13 +47,14 @@ export const getPostsThunk = createAsyncThunk(
   "post/getAllPosts",
   async (lastPostId: number) => {
     const posts = await getPostsAPI(lastPostId);
-    return posts as GetPostsRes & IsLastIsLoading;
+    return posts as GetPostsRes & IsLastIsLoading & IsLikedPostIds;
   },
 );
 export const createPostThunk = createAsyncThunk(
   "post/createPost",
   async (createPostData: CreatePost, { dispatch }) => {
     const newPost = await createPostAPI(createPostData);
+
     dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
     dispatch(getUserPostsSlice.actions.addPostToUserPosts(newPost));
     return newPost as Posts;

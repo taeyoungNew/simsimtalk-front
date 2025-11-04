@@ -47,6 +47,7 @@ export const PostDetail = () => {
             userId={postDetailInfo.userId}
           ></PostDetailHeader>
           <PostDetailBody
+            postId={postDetailInfo.id}
             content={postDetailInfo.content}
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}

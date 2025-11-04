@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authMeThunk, loginThunk } from "./authThunk";
+import { useAppDispatch } from "../../store/hook";
+import { resetLiked } from "../post/allPostsSlice";
 
 interface Error {
   status: number;
@@ -75,6 +77,8 @@ export const userSlice = createSlice({
         state.nickname = action.payload?.data.nickname;
       })
       .addCase(loginThunk.rejected, (state, action) => {
+        const dispatch = useAppDispatch();
+        dispatch(resetLiked());
         state.isLoading = false;
         state.error = action.payload as Error;
       })

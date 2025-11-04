@@ -4,11 +4,18 @@ import { theme } from "../../theme/theme";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { CustomTextArea } from "../../components/atoms/inputs/CustomTextArea";
+import {
+  postLikeCencelThunk,
+  postLikeThunk,
+} from "../../store/like/postLikeThunk";
+import { useAppDispatch } from "../../store/hook";
 
 interface PostDetailBodyProps {
+  postId: number;
   content: string;
   likeCnt: number;
   commentCnt: number;
+  isLiked?: boolean;
 }
 
 interface PostEditingProps {
@@ -16,11 +23,23 @@ interface PostEditingProps {
 }
 
 export const PostDetailBody = ({
+  postId,
   content,
   likeCnt,
   commentCnt,
   isEditing,
+  isLiked,
 }: PostDetailBodyProps & PostEditingProps) => {
+  const dispatch = useAppDispatch();
+
+  const postLike = async () => {
+    await dispatch(postLikeThunk(postId));
+  };
+
+  const deleteLike = async () => {
+    await dispatch(postLikeCencelThunk(postId));
+  };
+
   return (
     <>
       <Typography
@@ -62,13 +81,23 @@ export const PostDetailBody = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button>
-            <HeartIcon
-              color={theme.palette.primary.contrastText}
-              fillColor={theme.palette.primary.light}
-              size={40}
-            ></HeartIcon>
-          </Button>
+          {isLiked ? (
+            <Button onClick={() => postLike()}>
+              <HeartIcon
+                color={theme.palette.primary.contrastText}
+                fillColor={theme.palette.primary.light}
+                size={40}
+              ></HeartIcon>
+            </Button>
+          ) : (
+            <Button onClick={() => deleteLike()}>
+              <HeartIcon
+                color={theme.palette.fontColor.icon}
+                fillColor={theme.palette.background.paper}
+                size={40}
+              ></HeartIcon>
+            </Button>
+          )}
           <Typography
             color={theme.palette.primary.dark}
             sx={{ fontSize: "1.2em" }}

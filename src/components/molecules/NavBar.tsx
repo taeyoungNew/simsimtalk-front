@@ -17,7 +17,7 @@ import { deleteAuth } from "../../store/auth/authSlice";
 import { logoutAPI } from "../../apis/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-
+import { resetLiked } from "../../store/post/allPostsSlice";
 import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 
@@ -34,6 +34,7 @@ export default function NavBar() {
   };
 
   const logout = async () => {
+    dispatch(resetLiked());
     dispatch(deleteAuth());
     await logoutAPI();
     alert("로그아웃되었습니다.");

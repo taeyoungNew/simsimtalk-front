@@ -1,7 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getUserPosts } from "../../apis/post";
-import { rejects } from "assert";
-import { useSelector } from "react-redux";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -22,6 +20,7 @@ interface Posts {
   content: string;
   userNickname: string;
   likeCnt: number;
+  isLiked: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
