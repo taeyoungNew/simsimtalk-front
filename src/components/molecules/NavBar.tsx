@@ -97,7 +97,7 @@ export default function NavBar() {
                   />
                 </Badge>
               </IconButton>
-              <NavLink to={`/userPage/${userId}`}>
+              <NavLink to={`/myPage`} state={{ myPage: true }}>
                 <IconButton
                   size="large"
                   edge="end"

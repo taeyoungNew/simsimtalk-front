@@ -4,6 +4,7 @@ import { UserPageHeader } from "./UserPageHeader";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useLocation } from "react-router-dom";
 
 export const UserPageDetail = () => {
   const [viewContent, setViewContent] = useState<
@@ -11,12 +12,14 @@ export const UserPageDetail = () => {
   >("userPosts");
   const [isEditProfile, setIsEditProfile] = useState(false);
   const path = location.pathname;
+
   const userId = path.toString().substring(10);
   const myId = useSelector((state: RootState) => state.User.id);
-  let isMyPage = false;
-  if (userId === myId) {
-    isMyPage = true;
-  }
+  let isMyPage = useLocation().state.myPage;
+
+  let paramUserId;
+
+  paramUserId = isMyPage ? myId : userId;
 
   return (
     <Box sx={{ display: "grid", gap: "0.5rem" }}>
@@ -24,7 +27,7 @@ export const UserPageDetail = () => {
         onViewContent={setViewContent}
         onEditClick={() => setIsEditProfile(true)}
         isMyPage={isMyPage}
-        userId={userId}
+        userId={paramUserId}
       ></UserPageHeader>
       <UserPageBody
         viewContent={viewContent}
@@ -32,6 +35,7 @@ export const UserPageDetail = () => {
         isMyPage={isMyPage}
         onEditClick={() => setIsEditProfile(false)}
         isEditProfile={isEditProfile}
+        userId={paramUserId}
       ></UserPageBody>
     </Box>
   );

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store/hook";
-import { myInfoThunk } from "../../store/user/userInfoThunk";
+import { myInfoThunk, userInfoThunk } from "../../store/user/userInfoThunk";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
@@ -18,12 +18,21 @@ interface HeaderProps {
   userId: string;
 }
 
-export const UserPageHeader = ({ isMyPage, onViewContent }: HeaderProps) => {
+export const UserPageHeader = ({
+  userId,
+  isMyPage,
+  onViewContent,
+}: HeaderProps) => {
   const userInfo = useSelector((state: RootState) => state.UserInfo);
   const postCnt = useSelector((state: RootState) => state.UserInfo.postCnt);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    dispatch(myInfoThunk());
+    if (isMyPage) {
+      dispatch(myInfoThunk(userId));
+    } else {
+      dispatch(userInfoThunk(userId));
+    }
   }, []);
 
   return (

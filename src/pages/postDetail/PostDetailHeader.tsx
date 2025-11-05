@@ -54,8 +54,13 @@ export const PostDetailHeader = ({
     },
   });
 
-  const myUserid = useSelector((state: RootState) => state.User.id);
-  const isMyPost = myUserid === userId;
+  const myId = useSelector((state: RootState) => state.User.id);
+  const detailPostLinkPath =
+    myId === userId ? `/myPage` : `/userPage/${userId}`;
+  const isMyPage = myId === userId ? true : false;
+
+  const isMyPost = myId === userId;
+
   const deletePostHandleOpen = () => {
     setOpenDeletePostModal(true);
   };
@@ -201,7 +206,7 @@ export const PostDetailHeader = ({
             }}
           >
             <Box>
-              <NavLink to={`/userPage/${userId}`}>
+              <NavLink to={detailPostLinkPath} state={{ myPage: isMyPage }}>
                 <Button>
                   <CustomAvatar></CustomAvatar>
                 </Button>

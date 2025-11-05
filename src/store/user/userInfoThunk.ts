@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { editMyInfo, myInfoAPI } from "../../apis/user";
+import { editMyInfo, myInfoAPI, userInfoAPI } from "../../apis/user";
 
 interface Error {
   status: number;
@@ -38,13 +38,32 @@ interface UserRes {
 
 export const myInfoThunk = createAsyncThunk<
   UserRes,
-  void,
+  string,
   { rejectValue: Error }
 >("user/myInfo", async (_, thunkAPI) => {
   try {
     const getMyInfo = await myInfoAPI();
 
     return getMyInfo.data.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
+
+export const userInfoThunk = createAsyncThunk<
+  UserRes,
+  string,
+  { rejectValue: Error }
+>("user/userInfo", async (userId, thunkAPI) => {
+  try {
+    const getUserInfo = await userInfoAPI(userId);
+    console.log("getUserInfo = ", getUserInfo);
+
+    return getUserInfo.data.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

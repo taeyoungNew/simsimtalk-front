@@ -58,13 +58,14 @@ function App() {
                 }
               />
               <Route
-                path="/userPage/:id"
+                path="/myPage"
                 element={
                   <AuthRoute>
                     <UserPageDetail />
                   </AuthRoute>
                 }
               />
+              <Route path="/userPage/:id" element={<UserPageDetail />} />
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}

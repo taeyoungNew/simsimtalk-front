@@ -20,13 +20,15 @@ export const PostDetail = () => {
     await dispatch(getPostDetailThunk(postId));
   };
   const from = useLocation().state.from;
-    
+  // const userId = useLocation().state.userId;
+  // console.log("userId = ", userId);
+
   useEffect(() => {
     getPostDetail(Number(postId));
   }, []);
 
   const postDetailInfo = useSelector((state: RootState) => state.GetPostDetail);
-  
+
   return (
     <>
       <Box sx={{ padding: "0 1rem" }}>
