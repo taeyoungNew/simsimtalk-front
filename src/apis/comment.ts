@@ -44,8 +44,6 @@ export const deleteCommentAPI = async (payload: DeleteComment) => {
       },
     )
     .then(function (response) {
-      console.log(response.data);
-
       return response.data;
     })
     .catch(function (error) {

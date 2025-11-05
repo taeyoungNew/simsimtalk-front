@@ -88,7 +88,7 @@ export const getAllPostsSlice = createSlice({
           });
         }
         let likedSet: any;
-        
+
         if (action.payload.isLikedPostIds !== undefined) {
           likedSet = new Set(
             action.payload.isLikedPostIds.map((item) => String(item.postId)),
@@ -97,7 +97,6 @@ export const getAllPostsSlice = createSlice({
             post.isLiked = likedSet.has(String(post.id));
           });
         }
-        
 
         state.isLoading = false;
       });
@@ -121,8 +120,7 @@ export const getAllPostsSlice = createSlice({
       })
       .addCase(deletePostThunk.fulfilled, (state, action) => {
         const postId = action.payload;
-        console.log("postId = ", postId);
-        
+
         state.posts = state.posts.filter((el) => el.id !== postId);
         state.isLoading = false;
       })
@@ -137,17 +135,16 @@ export const getAllPostsSlice = createSlice({
       .addCase(postLikeThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         const postId = action.payload.postId;
-
         for (let idx = 0; idx < state.posts.length; idx++) {
           if (state.posts[idx].id === postId) {
-            state.posts[idx].likeCnt += 1
-            state.posts[idx].isLiked = true
-          };
+            state.posts[idx].likeCnt += 1;
+            state.posts[idx].isLiked = true;
+          }
         }
       })
       .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
-      })
+      });
     builder
       .addCase(postLikeCencelThunk.pending, (state, action) => {
         state.isLoading = true;
@@ -155,17 +152,16 @@ export const getAllPostsSlice = createSlice({
       .addCase(postLikeCencelThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         const postId = action.payload.postId;
-
         for (let idx = 0; idx < state.posts.length; idx++) {
           if (state.posts[idx].id === postId) {
-            state.posts[idx].likeCnt -= 1
-            state.posts[idx].isLiked = false
-          };
+            state.posts[idx].likeCnt -= 1;
+            state.posts[idx].isLiked = false;
+          }
         }
       })
       .addCase(postLikeCencelThunk.rejected, (state, action) => {
         state.isLoading = false;
-      })
+      });
   },
 });
 

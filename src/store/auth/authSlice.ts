@@ -81,7 +81,8 @@ export const userSlice = createSlice({
         dispatch(resetLiked());
         state.isLoading = false;
         state.error = action.payload as Error;
-      })
+      });
+    builder
       .addCase(authMeThunk.pending, (state, action) => {
         state.isLoading = true;
       })

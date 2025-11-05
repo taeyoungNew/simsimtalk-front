@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  getPostDetailThunk,
-  modifyPostThunk,
-} from "./postDetailThunk";
+import { getPostDetailThunk, modifyPostThunk } from "./postDetailThunk";
 import {
   createCommentThunk,
   deleteCommentThunk,
@@ -96,16 +93,17 @@ export const getPostDetailSlice = createSlice({
 
     // 게시물 좋아요
     builder
+
       .addCase(postLikeThunk.pending, (state, action) => {
         state.isLoading = true;
       })
       .addCase(postLikeThunk.fulfilled, (state, action) => {
         state.likeCnt += 1;
-        state.isLiked = true
+        state.isLiked = true;
       })
       .addCase(postLikeThunk.rejected, (state, action) => {
         state.isLoading = false;
-      })
+      });
     // 게시물 좋아요 취소
     builder
       .addCase(postLikeCencelThunk.pending, (state, action) => {
@@ -113,11 +111,11 @@ export const getPostDetailSlice = createSlice({
       })
       .addCase(postLikeCencelThunk.fulfilled, (state, action) => {
         state.likeCnt -= 1;
-        state.isLiked = false
+        state.isLiked = false;
       })
       .addCase(postLikeCencelThunk.rejected, (state, action) => {
         state.isLoading = false;
-      })
+      });
     // 댓글생성
     builder.addCase(createCommentThunk.fulfilled, (state, action) => {
       const newComment = action.payload;
@@ -158,7 +156,6 @@ export const getPostDetailSlice = createSlice({
       .addCase(deleteCommentThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.error.message;
-        console.log(action.error);
       });
   },
 });

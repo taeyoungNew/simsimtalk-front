@@ -1,15 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import EditButton from "../../components/atoms/buttons/EditButton";
-import { theme } from "../../theme/theme";
 import { ShareButton } from "../../components/atoms/buttons/ShareButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store/hook";
 import { myInfoThunk } from "../../store/user/userInfoThunk";
-import { emit } from "process";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<

@@ -201,9 +201,11 @@ export const PostDetailHeader = ({
             }}
           >
             <Box>
-              <Button>
-                <CustomAvatar></CustomAvatar>
-              </Button>
+              <NavLink to={`/userPage/${userId}`}>
+                <Button>
+                  <CustomAvatar></CustomAvatar>
+                </Button>
+              </NavLink>
             </Box>
             <Box
               sx={{

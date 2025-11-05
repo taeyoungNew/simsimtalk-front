@@ -77,8 +77,6 @@ export const userInfoSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(editMyInfoThunk.fulfilled, (state, action) => {
-        console.log(action.payload);
-
         state.isLoading = false;
         state.success = true;
         state.successMessage = action.payload.message;

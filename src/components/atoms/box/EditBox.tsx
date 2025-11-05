@@ -51,7 +51,6 @@ const EditBox = forwardRef<HTMLInputElement, EditBoxProps>(
         onChange(e);
       }
     };
-    console.log("placeholder = ", placeholder);
 
     return (
       <Box sx={{ width: width }}>
