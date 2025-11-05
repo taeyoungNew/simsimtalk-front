@@ -72,7 +72,6 @@ export const CommentCard = ({
   };
 
   const deleteComment = async ({ postId, id }: DeleteComment) => {
-    console.log(commentId);
     const payload = {
       id,
       postId,

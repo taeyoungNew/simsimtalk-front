@@ -30,9 +30,7 @@ export const logoutAPI = async () => {
 };
 
 export const authMeAPI = async () => {
-  const res = await axios.get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
+  return await axios.get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
     withCredentials: true,
   });
-
-  return res;
 };

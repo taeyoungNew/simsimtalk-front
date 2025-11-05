@@ -14,8 +14,7 @@ export const postLikeThunk = createAsyncThunk<
 >("like/post", async (postId, thunkAPI) => {
   try {
     await postLike(postId);
-
-    return { postId: postId };   
+    return { postId: postId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
@@ -25,19 +24,19 @@ export const postLikeThunk = createAsyncThunk<
   }
 });
 
-export const postLikeCencelThunk = createAsyncThunk< 
+export const postLikeCencelThunk = createAsyncThunk<
   { postId: number },
   number,
   { rejectValue: Error }
-  >("likecencel/post", async(postId, thunkAPI) =>{
-    try {
-      await postLikeCencel(postId);
-      return {postId: postId}
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue({
-        errorCode: error.response.data.errorCode,
-        status: error.response.status,
-        message: error.response.data.message,
-      });
-    }
-  });
+>("likecencel/post", async (postId, thunkAPI) => {
+  try {
+    await postLikeCencel(postId);
+    return { postId: postId };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
