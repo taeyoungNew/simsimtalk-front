@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getUserPostsThunk } from "./userPostsThunk";
-import { modifyCommentThunk } from "../comment/commentThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
+import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -55,6 +55,12 @@ export const getUserPostsSlice = createSlice({
     addPostToUserPosts: (state, action) => {
       state.posts.unshift(action.payload);
     },
+    resetIsLast: (state) => {
+      state.isLast = false;
+    },
+    resetUserPosts: (state) => {
+      state.posts = [];
+    },
     updateUserPostCommentCnt: (state, action) => {
       const { postId, delta, role } = action.payload;
       if (role === "add") {
@@ -67,6 +73,40 @@ export const getUserPostsSlice = createSlice({
     },
   },
   extraReducers: async (builder) => {
+    builder
+      .addCase(postLikeThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const postId = action.payload.postId;
+        for (let idx = 0; idx < state.posts.length; idx++) {
+          if (state.posts[idx].id === postId) {
+            state.posts[idx].likeCnt += 1;
+            state.posts[idx].isLiked = true;
+          }
+        }
+      })
+      .addCase(postLikeThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+    builder
+      .addCase(postLikeCencelThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(postLikeCencelThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const postId = action.payload.postId;
+        for (let idx = 0; idx < state.posts.length; idx++) {
+          if (state.posts[idx].id === postId) {
+            state.posts[idx].likeCnt -= 1;
+            state.posts[idx].isLiked = false;
+          }
+        }
+      })
+      .addCase(postLikeCencelThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
     builder
       .addCase(getUserPostsThunk.pending, (state) => {
         state.isLoading = true;
@@ -82,6 +122,16 @@ export const getUserPostsSlice = createSlice({
             isLiked: action.payload.posts[idx].isLiked,
             Comments: action.payload.posts[idx].Comments,
             commentCnt: action.payload.posts[idx].Comments.length,
+          });
+        }
+        let likedSet: any;
+
+        if (action.payload.isLikedPostIds !== undefined) {
+          likedSet = new Set(
+            action.payload.isLikedPostIds.map((item) => String(item.postId)),
+          );
+          state.posts.forEach((post) => {
+            post.isLiked = likedSet.has(String(post.id));
           });
         }
 
@@ -124,4 +174,5 @@ export const getUserPostsSlice = createSlice({
   },
 });
 
-export const { updateUserPostCommentCnt } = getUserPostsSlice.actions;
+export const { updateUserPostCommentCnt, resetUserPosts, resetIsLast } =
+  getUserPostsSlice.actions;

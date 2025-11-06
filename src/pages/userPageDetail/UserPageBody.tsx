@@ -23,6 +23,7 @@ interface GetUserPostsReq {
 
 interface UserPageBodyProps {
   isMyPage: boolean;
+  userId: string;
   viewContent: "userPosts" | "userInfo" | "editUserInfo";
   onViewContent: React.Dispatch<
     React.SetStateAction<"userPosts" | "userInfo" | "editUserInfo">
@@ -41,6 +42,7 @@ export const UserPageBody = ({
   onViewContent,
   onEditClick,
   viewContent,
+  userId,
 }: UserPageBodyProps) => {
   const userCrrInfo = useSelector((state: RootState) => state.UserInfo);
   const isEditMyInfoSuccess = useSelector(
@@ -52,8 +54,7 @@ export const UserPageBody = ({
   const getUserPostDatas = useSelector(
     (state: RootState) => state.GetUserPosts.posts,
   );
-  const path = location.pathname;
-  const userId = path.toString().substring(10);
+
   const dispatch = useAppDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.GetUserPosts.isLoading,
@@ -69,6 +70,7 @@ export const UserPageBody = ({
       userId,
       postLastId,
     };
+
     await dispatch(getUserPostsThunk(params));
   };
 
@@ -188,6 +190,7 @@ export const UserPageBody = ({
                         userNickname={el.userNickname}
                         likeCnt={el.likeCnt}
                         commentsCnt={el.commentCnt}
+                        isLiked={el.isLiked}
                       ></PostCard>
                     </Box>
                   </ListItem>
@@ -362,6 +365,7 @@ export const UserPageBody = ({
                         userNickname={el.userNickname}
                         likeCnt={el.likeCnt}
                         commentsCnt={el.commentCnt}
+                        isLiked={el.isLiked}
                       ></PostCard>
                     </Box>
                   </ListItem>

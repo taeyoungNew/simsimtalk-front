@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { editMyInfoThunk, myInfoThunk } from "./userInfoThunk";
+import { editMyInfoThunk, myInfoThunk, userInfoThunk } from "./userInfoThunk";
 
 interface Error {
   status: number;
@@ -63,15 +63,32 @@ export const userInfoSlice = createSlice({
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
         state.age = action.payload?.UserInfo.age;
-        state.followerCnt = action.payload.followerCnt;
-        state.followingCnt = action.payload.followingCnt;
+        state.followerCnt = action.payload?.followerCnt;
+        state.followingCnt = action.payload?.followingCnt;
         state.postCnt = action.payload?.postCnt;
       })
       .addCase(myInfoThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as Error;
       });
-
+    builder
+      .addCase(userInfoThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(userInfoThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.nickname = action.payload?.UserInfo.nickname;
+        state.username = action.payload?.UserInfo.username;
+        state.aboutMe = action.payload?.UserInfo.aboutMe;
+        state.age = action.payload?.UserInfo.age;
+        state.followerCnt = action.payload.followerCnt;
+        state.followingCnt = action.payload.followingCnt;
+        state.postCnt = action.payload?.postCnt;
+      })
+      .addCase(userInfoThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as Error;
+      });
     builder
       .addCase(editMyInfoThunk.pending, (state, action) => {
         state.isLoading = true;

@@ -24,7 +24,7 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
-
+  const prevPathName = location.pathname;
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -97,7 +97,7 @@ export default function NavBar() {
                   />
                 </Badge>
               </IconButton>
-              <NavLink to={`/userPage/${userId}`}>
+              <NavLink to={`/myPage`} state={{ myPage: true, prevPathName }}>
                 <IconButton
                   size="large"
                   edge="end"

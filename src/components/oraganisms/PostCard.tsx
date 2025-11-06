@@ -2,7 +2,7 @@ import { Avatar, Box, Grid2, Typography } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { theme } from "../../theme/theme";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 interface CardProps {
@@ -37,7 +37,7 @@ export const PostCard = ({
   commentsCnt,
 }: CardProps) => {
   const to = location.pathname;
-  
+  const prevPathName = location.pathname;
   return (
     <>
       <Box
@@ -57,7 +57,7 @@ export const PostCard = ({
               ? "no-underline text-black font-bold"
               : "no-underline text-gray-500"
           }
-          state={{ from: to, isLiked: isLiked }}
+          state={{ from: to, isLiked, userId, prevPathName }}
         >
           <Grid2
             sx={{ display: "flex", justifyContent: "center" }}

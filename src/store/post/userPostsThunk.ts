@@ -1,9 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserPosts } from "../../apis/post";
+import { getUserPostsAPI } from "../../apis/post";
 
 interface IsLastIsLoading {
   isLoading: boolean;
   isLast: boolean;
+}
+
+interface IsLikedPostIds {
+  isLikedPostIds: isLikedPostId[];
+}
+
+interface isLikedPostId {
+  postId: number;
 }
 
 interface Comment {
@@ -40,15 +48,15 @@ interface GetUserPostsRes {
   posts: Posts[];
 }
 export const getUserPostsThunk = createAsyncThunk<
-  GetUserPostsRes,
+  GetUserPostsRes & IsLikedPostIds,
   GetUserPostsReq,
   { rejectValue: Error }
 >("post/userGetPosts", async (param, thunkAPI) => {
   try {
-    const userPosts = await getUserPosts(param);
-
+    const userPosts = await getUserPostsAPI(param);
     return {
       posts: userPosts.data.userPosts,
+      isLikedPostIds: userPosts.data.isLikedPostIds,
     };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

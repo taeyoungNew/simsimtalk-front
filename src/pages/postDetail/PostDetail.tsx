@@ -20,13 +20,14 @@ export const PostDetail = () => {
     await dispatch(getPostDetailThunk(postId));
   };
   const from = useLocation().state.from;
-    
+  const isMyPage = useLocation().state.isMyPage;
+
   useEffect(() => {
     getPostDetail(Number(postId));
   }, []);
 
   const postDetailInfo = useSelector((state: RootState) => state.GetPostDetail);
-  
+
   return (
     <>
       <Box sx={{ padding: "0 1rem" }}>
@@ -39,6 +40,7 @@ export const PostDetail = () => {
           }}
         >
           <PostDetailHeader
+            isMyPage={isMyPage}
             from={from}
             postId={postDetailInfo.id}
             userNickname={postDetailInfo.userNickname}

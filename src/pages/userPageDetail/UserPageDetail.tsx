@@ -1,30 +1,43 @@
 import { Box } from "@mui/material";
 import { UserPageBody } from "./UserPageBody";
 import { UserPageHeader } from "./UserPageHeader";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
 import { RootState } from "../../store";
+import { useLocation } from "react-router-dom";
+import { resetIsLast, resetUserPosts } from "../../store/post/userPostsSlice";
+import { useAppDispatch } from "../../store/hook";
+import { useSelector } from "react-redux";
 
 export const UserPageDetail = () => {
   const [viewContent, setViewContent] = useState<
     "userPosts" | "userInfo" | "editUserInfo"
   >("userPosts");
   const [isEditProfile, setIsEditProfile] = useState(false);
+  let isMyPage = useLocation().state?.myPage;
   const path = location.pathname;
-  const userId = path.toString().substring(10);
+  const prevPathName = useLocation().state?.prevPathName || "";
   const myId = useSelector((state: RootState) => state.User.id);
-  let isMyPage = false;
-  if (userId === myId) {
-    isMyPage = true;
-  }
+  const userId = path.toString().substring(10);
+  const dispatch = useAppDispatch();
 
+  let paramUserId;
+
+  paramUserId = isMyPage ? myId : userId;
+  useEffect(() => {
+    if (path !== prevPathName) {
+      return () => {
+        dispatch(resetIsLast());
+        dispatch(resetUserPosts());
+      };
+    }
+  }, [location.pathname]);
   return (
     <Box sx={{ display: "grid", gap: "0.5rem" }}>
       <UserPageHeader
         onViewContent={setViewContent}
         onEditClick={() => setIsEditProfile(true)}
         isMyPage={isMyPage}
-        userId={userId}
+        userId={paramUserId}
       ></UserPageHeader>
       <UserPageBody
         viewContent={viewContent}
@@ -32,6 +45,7 @@ export const UserPageDetail = () => {
         isMyPage={isMyPage}
         onEditClick={() => setIsEditProfile(false)}
         isEditProfile={isEditProfile}
+        userId={paramUserId}
       ></UserPageBody>
     </Box>
   );
