@@ -26,6 +26,7 @@ const style = {
   pb: 3,
 };
 interface PostDetailHeaderProps {
+  isMyPage: boolean;
   from: string;
   postId: number;
   userNickname: String;
@@ -57,8 +58,8 @@ export const PostDetailHeader = ({
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
     myId === userId ? `/myPage` : `/userPage/${userId}`;
-  const isMyPage = myId === userId ? true : false;
-
+  const myPage = myId === userId ? true : false;
+  const prevPathName = location.pathname;
   const isMyPost = myId === userId;
 
   const deletePostHandleOpen = () => {
@@ -102,7 +103,7 @@ export const PostDetailHeader = ({
             justifyContent: "space-between",
           }}
         >
-          <NavLink to={`${from}`}>
+          <NavLink to={`${from}`} state={{ myPage }}>
             <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
               Back
             </Button>
@@ -206,7 +207,7 @@ export const PostDetailHeader = ({
             }}
           >
             <Box>
-              <NavLink to={detailPostLinkPath} state={{ myPage: isMyPage }}>
+              <NavLink to={detailPostLinkPath} state={{ myPage, prevPathName }}>
                 <Button>
                   <CustomAvatar></CustomAvatar>
                 </Button>

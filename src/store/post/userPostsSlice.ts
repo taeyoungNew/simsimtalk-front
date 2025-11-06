@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getUserPostsThunk } from "./userPostsThunk";
-import { modifyCommentThunk } from "../comment/commentThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
 
@@ -56,8 +55,11 @@ export const getUserPostsSlice = createSlice({
     addPostToUserPosts: (state, action) => {
       state.posts.unshift(action.payload);
     },
+    resetIsLast: (state) => {
+      state.isLast = false;
+    },
     resetUserPosts: (state) => {
-      state.posts = state.posts.slice(0);
+      state.posts = [];
     },
     updateUserPostCommentCnt: (state, action) => {
       const { postId, delta, role } = action.payload;
@@ -122,6 +124,16 @@ export const getUserPostsSlice = createSlice({
             commentCnt: action.payload.posts[idx].Comments.length,
           });
         }
+        let likedSet: any;
+
+        if (action.payload.isLikedPostIds !== undefined) {
+          likedSet = new Set(
+            action.payload.isLikedPostIds.map((item) => String(item.postId)),
+          );
+          state.posts.forEach((post) => {
+            post.isLiked = likedSet.has(String(post.id));
+          });
+        }
 
         state.isLoading = false;
       })
@@ -162,5 +174,5 @@ export const getUserPostsSlice = createSlice({
   },
 });
 
-export const { updateUserPostCommentCnt, resetUserPosts } =
+export const { updateUserPostCommentCnt, resetUserPosts, resetIsLast } =
   getUserPostsSlice.actions;

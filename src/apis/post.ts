@@ -90,7 +90,7 @@ export const deletePostAPI = async (postId: Number) => {
     });
 };
 
-export const getUserPosts = async (param: GetUserPostsReq) => {
+export const getUserPostsAPI = async (param: GetUserPostsReq) => {
   return await axios.get(`${import.meta.env.VITE_API_BASE}post/user-posts`, {
     params: {
       userId: param.userId,

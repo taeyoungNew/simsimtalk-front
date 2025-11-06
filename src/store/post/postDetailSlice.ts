@@ -93,7 +93,6 @@ export const getPostDetailSlice = createSlice({
 
     // 게시물 좋아요
     builder
-
       .addCase(postLikeThunk.pending, (state, action) => {
         state.isLoading = true;
       })

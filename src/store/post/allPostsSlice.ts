@@ -97,7 +97,6 @@ export const getAllPostsSlice = createSlice({
             post.isLiked = likedSet.has(String(post.id));
           });
         }
-
         state.isLoading = false;
       });
 
@@ -112,6 +111,9 @@ export const getAllPostsSlice = createSlice({
             state.posts[idx] = updatedPost;
           }
         }
+      })
+      .addCase(modifyPostThunk.rejected, (state, action) => {
+        state.isLoading = false;
       });
 
     builder

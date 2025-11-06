@@ -63,8 +63,8 @@ export const userInfoSlice = createSlice({
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
         state.age = action.payload?.UserInfo.age;
-        state.followerCnt = action.payload.followerCnt;
-        state.followingCnt = action.payload.followingCnt;
+        state.followerCnt = action.payload?.followerCnt;
+        state.followingCnt = action.payload?.followingCnt;
         state.postCnt = action.payload?.postCnt;
       })
       .addCase(myInfoThunk.rejected, (state, action) => {

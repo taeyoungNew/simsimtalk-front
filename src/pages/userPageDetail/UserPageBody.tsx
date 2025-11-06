@@ -15,7 +15,6 @@ import SubTitle from "../../components/common/SubTitle";
 import ModeIcon from "@mui/icons-material/Mode";
 import EditBox from "../../components/atoms/box/EditBox";
 import InfoBox from "../../components/atoms/box/InfoBox";
-import { resetUserPosts } from "../../store/post/userPostsSlice";
 
 interface GetUserPostsReq {
   userId: string;
@@ -55,8 +54,7 @@ export const UserPageBody = ({
   const getUserPostDatas = useSelector(
     (state: RootState) => state.GetUserPosts.posts,
   );
-  // const path = location.pathname;
-  // const userId = path.toString().substring(10);
+
   const dispatch = useAppDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.GetUserPosts.isLoading,
@@ -72,6 +70,7 @@ export const UserPageBody = ({
       userId,
       postLastId,
     };
+
     await dispatch(getUserPostsThunk(params));
   };
 

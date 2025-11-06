@@ -61,9 +61,8 @@ export const userInfoThunk = createAsyncThunk<
 >("user/userInfo", async (userId, thunkAPI) => {
   try {
     const getUserInfo = await userInfoAPI(userId);
-    console.log("getUserInfo = ", getUserInfo);
 
-    return getUserInfo.data.data;
+    return getUserInfo.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

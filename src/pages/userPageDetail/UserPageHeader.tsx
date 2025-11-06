@@ -8,6 +8,7 @@ import { RootState } from "../../store";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store/hook";
 import { myInfoThunk, userInfoThunk } from "../../store/user/userInfoThunk";
+import { resetUserPosts } from "../../store/post/userPostsSlice";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
