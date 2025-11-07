@@ -7,6 +7,12 @@ import {
 import { updatePostCommentCnt } from "../post/allPostsSlice";
 import { updateUserPostCommentCnt } from "../post/userPostsSlice";
 
+interface Error {
+  status: number;
+  errorCode: string;
+  message: string;
+}
+
 interface CreateComment {
   postId: number;
   comment: string;
@@ -32,51 +38,84 @@ interface DeleteComment {
   postId: number;
 }
 
-export const createCommentThunk = createAsyncThunk(
-  "comment/createComment",
-  async (payload: CreateComment, { dispatch }) => {
-    const result = await createCommentAPI(payload);
+export const createCommentThunk = createAsyncThunk<
+  ReturnComment,
+  CreateComment,
+  {
+    rejectValue: Error;
+  }
+>("comment/createComment", async (payload, thunkAPI) => {
+  try {
+    const result = (await createCommentAPI(payload)).data.plainComment;
 
-    dispatch(
+    thunkAPI.dispatch(
       updatePostCommentCnt({ postId: payload.postId, delta: 1, role: "add" }),
     );
-    dispatch(
+    thunkAPI.dispatch(
       updateUserPostCommentCnt({
         postId: payload.postId,
         delta: 1,
         role: "add",
       }),
     );
-    return result as ReturnComment;
-  },
-);
+    return result;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
-export const modifyCommentThunk = createAsyncThunk(
-  "comment/modifyComment",
-  async (data: ModifyComment) => {
-    const result = await modifyCommentAPI(data);
-    return result as ReturnComment;
-  },
-);
+export const modifyCommentThunk = createAsyncThunk<
+  ReturnComment,
+  ModifyComment,
+  {
+    rejectValue: Error;
+  }
+>("comment/modifyComment", async (data, thunkAPI) => {
+  try {
+    const result = (await modifyCommentAPI(data)).data.data.comment;
+    console.log(result);
 
-export const deleteCommentThunk = createAsyncThunk(
-  "comment/deleteComment",
-  async (payload: DeleteComment, { dispatch }) => {
+    return result;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});
+
+export const deleteCommentThunk = createAsyncThunk<
+  DeleteComment,
+  DeleteComment,
+  { rejectValue: Error }
+>("comment/deleteComment", async (payload, thunkAPI) => {
+  try {
     await deleteCommentAPI(payload);
-    dispatch(
+    thunkAPI.dispatch(
       updatePostCommentCnt({
         postId: payload.postId,
         delta: 1,
         role: "remove",
       }),
     );
-    dispatch(
+    thunkAPI.dispatch(
       updateUserPostCommentCnt({
         postId: payload.postId,
         delta: 1,
         role: "remove",
       }),
     );
-    return payload as DeleteComment;
-  },
-);
+    return payload;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});

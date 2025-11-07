@@ -14,80 +14,50 @@ interface GetUserPostsReq {
 }
 
 export const getPostAPI = async (postId: Number) => {
-  return await axios
-    .get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
-      withCredentials: true,
-    })
-    .then(function (response) {
-      return response.data.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
+  return await axios.get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
+    withCredentials: true,
+  });
 };
 
 export const getPostsAPI = async (lastPostId: number) => {
-  return await axios
-    .get(`${import.meta.env.VITE_API_BASE}post?postLastId=${lastPostId}`, {
+  return await axios.get(
+    `${import.meta.env.VITE_API_BASE}post?postLastId=${lastPostId}`,
+    {
       withCredentials: true,
-    })
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
+    },
+  );
 };
 
-export const createPostAPI = async (data: CreatePost) => {
-  return await axios
-    .post(
-      `${import.meta.env.VITE_API_BASE}post/`,
-      {
-        content: data.content,
-      },
-      {
-        withCredentials: true,
-      },
-    )
-    .then(function (response) {
-      return response.data.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
+export const createPostAPI = async (content: string) => {
+  console.log("content = ", content);
+
+  return await axios.post(
+    `${import.meta.env.VITE_API_BASE}post/`,
+    {
+      content,
+    },
+    {
+      withCredentials: true,
+    },
+  );
 };
 
 export const modifyPostAPI = async (payload: ModifyPost) => {
-  return await axios
-    .put(
-      `${import.meta.env.VITE_API_BASE}post/${payload.id}`,
-      {
-        content: payload.content,
-      },
-      {
-        withCredentials: true,
-      },
-    )
-    .then(function (response) {
-      return response.data.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
+  return await axios.put(
+    `${import.meta.env.VITE_API_BASE}post/${payload.id}`,
+    {
+      content: payload.content,
+    },
+    {
+      withCredentials: true,
+    },
+  );
 };
 
 export const deletePostAPI = async (postId: Number) => {
-  return await axios
-    .delete(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
-      withCredentials: true,
-    })
-    .then(function (response) {
-      return response.data.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
+  return await axios.delete(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
+    withCredentials: true,
+  });
 };
 
 export const getUserPostsAPI = async (param: GetUserPostsReq) => {

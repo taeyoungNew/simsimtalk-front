@@ -1,6 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { deletePostAPI, getPostAPI, modifyPostAPI } from "../../apis/post";
 
+interface Error {
+  status: number;
+  errorCode: string;
+  message: string;
+}
+
 interface Comment {
   id: number;
   postId: number;
@@ -28,27 +34,59 @@ interface ModifyPost {
   content: string;
 }
 
-export const getPostDetailThunk = createAsyncThunk(
-  "post/getPostDetail",
-  async (postId: number) => {
-    const postDetail = await getPostAPI(postId);
+export const getPostDetailThunk = createAsyncThunk<
+  Post,
+  number,
+  {
+    rejectValue: Error;
+  }
+>("post/getPostDetail", async (postId, thunkAPI) => {
+  try {
+    const postDetail = (await getPostAPI(postId)).data.data;
+    return postDetail;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
-    return postDetail as Post;
-  },
-);
+export const modifyPostThunk = createAsyncThunk<
+  Post,
+  ModifyPost,
+  {
+    rejectValue: Error;
+  }
+>("post/modifyPost", async (payload, thunkAPI) => {
+  try {
+    const post = (await modifyPostAPI(payload)).data.data;
+    return post;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
-export const modifyPostThunk = createAsyncThunk(
-  "post/modifyPost",
-  async (payload: ModifyPost) => {
-    const post = await modifyPostAPI(payload);
-    return post as Post;
-  },
-);
-
-export const deletePostThunk = createAsyncThunk(
-  "post/deletePost",
-  async (postId: number) => {
+export const deletePostThunk = createAsyncThunk<
+  number,
+  number,
+  {
+    rejectValue: Error;
+  }
+>("post/deletePost", async (postId, thunkAPI) => {
+  try {
     await deletePostAPI(postId);
-    return postId as number;
-  },
-);
+    return postId;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});

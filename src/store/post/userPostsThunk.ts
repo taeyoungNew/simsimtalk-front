@@ -1,11 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getUserPostsAPI } from "../../apis/post";
 
-interface IsLastIsLoading {
-  isLoading: boolean;
-  isLast: boolean;
-}
-
 interface IsLikedPostIds {
   isLikedPostIds: isLikedPostId[];
 }

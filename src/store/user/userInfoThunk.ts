@@ -43,7 +43,6 @@ export const myInfoThunk = createAsyncThunk<
 >("user/myInfo", async (_, thunkAPI) => {
   try {
     const getMyInfo = await myInfoAPI();
-
     return getMyInfo.data.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
