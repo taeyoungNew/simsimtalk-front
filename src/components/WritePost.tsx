@@ -8,7 +8,6 @@ import { createPostThunk } from "../store/post/allPostsThunk";
 import { useAppDispatch } from "../store/hook";
 
 interface WritePost {
-  title: string;
   content: string;
 }
 
@@ -16,12 +15,11 @@ export const WritePost = () => {
   const dispatch = useAppDispatch();
   const { control, handleSubmit } = useForm<WritePost>({
     defaultValues: {
-      title: "",
       content: "",
     },
   });
   const writePost = async (data: WritePost) => {
-    await dispatch(createPostThunk(data));
+    await dispatch(createPostThunk(data.content));
   };
 
   const imoge = () => {

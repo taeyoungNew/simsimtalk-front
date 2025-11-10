@@ -36,6 +36,8 @@ export const loginThunk = createAsyncThunk<
   }
 >("auth/login", async ({ email, password }, thunkAPI) => {
   try {
+    console.log("로그인시도");
+
     const loginResult = await loginAPI({
       email,
       password,

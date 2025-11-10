@@ -3,6 +3,12 @@ import { createPostAPI, getPostsAPI } from "../../apis/post";
 import { getAllPostsSlice } from "./allPostsSlice";
 import { getUserPostsSlice } from "./userPostsSlice";
 
+interface Error {
+  status: number;
+  errorCode: string;
+  message: string;
+}
+
 interface IsLastIsLoading {
   isLoading: boolean;
   isLast: boolean;
@@ -32,32 +38,50 @@ interface IsLikedPostIds {
 }
 
 interface isLikedPostId {
-  postId: number;
+  lastPostId: number;
 }
 
 interface GetPostsRes {
   posts: Posts[];
 }
 
-interface CreatePost {
-  content: string;
-}
-
-export const getPostsThunk = createAsyncThunk(
-  "post/getAllPosts",
-  async (lastPostId: number) => {
+export const getPostsThunk = createAsyncThunk<
+  GetPostsRes & IsLastIsLoading & IsLikedPostIds,
+  number,
+  {
+    rejectValue: Error;
+  }
+>("post/getAllPosts", async (lastPostId, thunkAPI) => {
+  try {
     const posts = await getPostsAPI(lastPostId);
-    return posts as GetPostsRes & IsLastIsLoading & IsLikedPostIds;
-  },
-);
-export const createPostThunk = createAsyncThunk(
-  "post/createPost",
-  async (createPostData: CreatePost, { dispatch }) => {
-    const newPost = await createPostAPI(createPostData);
+    return posts.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
-    
-    dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
-    dispatch(getUserPostsSlice.actions.addPostToUserPosts(newPost));
-    return newPost as Posts;
-  },
-);
+export const createPostThunk = createAsyncThunk<
+  Posts,
+  string,
+  {
+    rejectValue: Error;
+  }
+>("post/createPost", async (content, thunkAPI) => {
+  try {
+    const newPost = (await createPostAPI(content)).data.data;
+
+    thunkAPI.dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
+    thunkAPI.dispatch(getUserPostsSlice.actions.addPostToUserPosts(newPost));
+    return newPost;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
