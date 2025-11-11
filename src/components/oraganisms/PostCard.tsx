@@ -84,7 +84,9 @@ export const PostCard = ({
                 sx={{
                   color: (theme) => theme.palette.fontColor.main,
                 }}
-              ></Typography>
+              >
+                {userNickname}
+              </Typography>
             </Grid2>
             <Grid2
               sx={{

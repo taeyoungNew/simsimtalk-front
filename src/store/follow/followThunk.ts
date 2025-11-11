@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postLikeAPI, postLikeCencelAPI } from "../../apis/like";
+import { followingAPI, followingCencelAPI } from "../../apis/follow";
 
 interface Error {
   status: number;
@@ -7,14 +7,14 @@ interface Error {
   message: string;
 }
 
-export const postLikeThunk = createAsyncThunk<
-  { postId: number },
-  number,
+export const followingThunk = createAsyncThunk<
+  { followingId: string },
+  string,
   { rejectValue: Error }
->("like/post", async (postId, thunkAPI) => {
+>("follow/following", async (followingId, thunkAPI) => {
   try {
-    await postLikeAPI(postId);
-    return { postId: postId };
+    await followingAPI(followingId);
+    return { followingId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
@@ -24,14 +24,14 @@ export const postLikeThunk = createAsyncThunk<
   }
 });
 
-export const postLikeCencelThunk = createAsyncThunk<
-  { postId: number },
-  number,
+export const followingCencelThunk = createAsyncThunk<
+  { followingCencelId: string },
+  string,
   { rejectValue: Error }
->("likecencel/post", async (postId, thunkAPI) => {
+>("follow/followingCencel", async (followingCencelId, thunkAPI) => {
   try {
-    await postLikeCencelAPI(postId);
-    return { postId: postId };
+    await followingCencelAPI(followingCencelId);
+    return { followingCencelId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

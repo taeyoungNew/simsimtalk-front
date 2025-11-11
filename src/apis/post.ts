@@ -3,6 +3,11 @@ interface CreatePost {
   content: string;
 }
 
+interface GetPostDetail {
+  postId: number;
+  postUserId: string;
+}
+
 interface ModifyPost {
   id: number;
   content: string;
@@ -13,8 +18,12 @@ interface GetUserPostsReq {
   postLastId: null | number;
 }
 
-export const getPostAPI = async (postId: Number) => {
-  return await axios.get(`${import.meta.env.VITE_API_BASE}post/${postId}`, {
+export const getPostAPI = async (params: GetPostDetail) => {
+  return await axios.get(`${import.meta.env.VITE_API_BASE}post/detail`, {
+    params: {
+      postId: params.postId,
+      postUserId: params.postUserId,
+    },
     withCredentials: true,
   });
 };
@@ -29,8 +38,6 @@ export const getPostsAPI = async (lastPostId: number) => {
 };
 
 export const createPostAPI = async (content: string) => {
-  console.log("content = ", content);
-
   return await axios.post(
     `${import.meta.env.VITE_API_BASE}post/`,
     {

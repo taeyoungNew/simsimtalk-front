@@ -16,17 +16,17 @@ export const PostDetail = () => {
   const dispatch = useAppDispatch();
   // 어떻게 게시물의 내용을 가져올까
   const { postId } = useParams();
-  const getPostDetail = async (postId: number) => {
-    await dispatch(getPostDetailThunk(postId));
-  };
   const from = useLocation().state.from;
   const isMyPage = useLocation().state.isMyPage;
+  const postUserId = useLocation().state.userId;
+  const postDetailInfo = useSelector((state: RootState) => state.GetPostDetail);
+  const getPostDetail = async (postId: number) => {
+    await dispatch(getPostDetailThunk({ postId, postUserId }));
+  };
 
   useEffect(() => {
     getPostDetail(Number(postId));
   }, []);
-
-  const postDetailInfo = useSelector((state: RootState) => state.GetPostDetail);
 
   return (
     <>
@@ -45,6 +45,7 @@ export const PostDetail = () => {
             postId={postDetailInfo.id}
             userNickname={postDetailInfo.userNickname}
             userId={postDetailInfo.userId}
+            isFollowinged={postDetailInfo.isFollowinged}
           ></PostDetailHeader>
           <PostDetailBody
             postId={postDetailInfo.id}

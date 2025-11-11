@@ -7,6 +7,11 @@ interface Error {
   message: string;
 }
 
+interface GetPostDetail {
+  postId: number;
+  postUserId: string;
+}
+
 interface Comment {
   id: number;
   postId: number;
@@ -24,6 +29,7 @@ interface Post {
   userNickname: string;
   likeCnt: number;
   isLiked: boolean;
+  isFollowinged: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -36,13 +42,13 @@ interface ModifyPost {
 
 export const getPostDetailThunk = createAsyncThunk<
   Post,
-  number,
+  GetPostDetail,
   {
     rejectValue: Error;
   }
->("post/getPostDetail", async (postId, thunkAPI) => {
+>("post/getPostDetail", async ({ postId, postUserId }, thunkAPI) => {
   try {
-    const postDetail = (await getPostAPI(postId)).data.data;
+    const postDetail = (await getPostAPI({ postId, postUserId })).data.data;
     return postDetail;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

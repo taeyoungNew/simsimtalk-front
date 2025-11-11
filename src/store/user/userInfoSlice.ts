@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { editMyInfoThunk, myInfoThunk, userInfoThunk } from "./userInfoThunk";
+import { followingCencelThunk, followingThunk } from "../follow/followThunk";
 
 interface Error {
   status: number;
@@ -16,6 +17,7 @@ interface UserInfoInitialState {
   age: number;
   followerCnt: number;
   followingCnt: number;
+  isFollowinged?: boolean;
   postCnt: number;
   error: null | Error;
 }
@@ -30,6 +32,7 @@ const userInfoInitialState: UserInfoInitialState = {
   age: 0,
   followerCnt: 0,
   followingCnt: 0,
+  isFollowinged: false,
   postCnt: 0,
   error: {
     status: 0,
@@ -71,8 +74,34 @@ export const userInfoSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as Error;
       });
+    // 팔로잉
     builder
-      .addCase(userInfoThunk.pending, (state, action) => {
+      .addCase(followingThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(followingThunk.fulfilled, (state) => {
+        state.isFollowinged = true;
+        state.isLoading = false;
+        state.followerCnt += 1;
+      })
+      .addCase(followingThunk.rejected, (state) => {
+        state.isLoading = false;
+      });
+    // 팔로잉 취소
+    builder
+      .addCase(followingCencelThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(followingCencelThunk.fulfilled, (state) => {
+        state.isFollowinged = false;
+        state.isLoading = false;
+        state.followerCnt -= 1;
+      })
+      .addCase(followingCencelThunk.rejected, (state) => {
+        state.isLoading = false;
+      });
+    builder
+      .addCase(userInfoThunk.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(userInfoThunk.fulfilled, (state, action) => {
@@ -81,6 +110,7 @@ export const userInfoSlice = createSlice({
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
         state.age = action.payload?.UserInfo.age;
+        state.isFollowinged = action.payload?.isFollowinged;
         state.followerCnt = action.payload.followerCnt;
         state.followingCnt = action.payload.followingCnt;
         state.postCnt = action.payload?.postCnt;

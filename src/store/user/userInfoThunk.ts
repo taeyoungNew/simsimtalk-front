@@ -30,6 +30,7 @@ interface editMyInfoRes {
 
 interface UserRes {
   email: string;
+  isFollowinged: boolean;
   followerCnt: number;
   followingCnt: number;
   postCnt: number;

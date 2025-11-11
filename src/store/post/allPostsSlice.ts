@@ -97,6 +97,7 @@ export const getAllPostsSlice = createSlice({
             post.isLiked = likedSet.has(String(post.id));
           });
         }
+
         state.isLoading = false;
       });
 

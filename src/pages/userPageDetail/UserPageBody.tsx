@@ -24,7 +24,12 @@ interface GetUserPostsReq {
 interface UserPageBodyProps {
   isMyPage: boolean;
   userId: string;
-  viewContent: "userPosts" | "userInfo" | "editUserInfo";
+  viewContent:
+    | "userPosts"
+    | "userInfo"
+    | "editUserInfo"
+    | "followings"
+    | "followers";
   onViewContent: React.Dispatch<
     React.SetStateAction<"userPosts" | "userInfo" | "editUserInfo">
   >;
@@ -337,6 +342,10 @@ export const UserPageBody = ({
             <Button type="submit">완료</Button>
           </Box>
         );
+      case "followings":
+        return <Box>followings</Box>;
+      case "followers":
+        return <Box>followers</Box>;
       default:
         return (
           <Box

@@ -6,6 +6,7 @@ import {
   modifyCommentThunk,
 } from "../comment/commentThunk";
 import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
+import { followingCencelThunk, followingThunk } from "../follow/followThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -29,6 +30,7 @@ interface Post {
   content: string;
   likeCnt: number;
   isLiked: boolean;
+  isFollowinged: boolean;
   commentCnt: number;
   Comments: Comment[];
 }
@@ -43,6 +45,7 @@ const postDetailInitialState: Post & IsLastIsLoading = {
   content: "",
   likeCnt: 0,
   isLiked: false,
+  isFollowinged: false,
   commentCnt: 0,
   Comments: [],
 };
@@ -68,6 +71,7 @@ export const getPostDetailSlice = createSlice({
         state.content = postDetail.content;
         state.likeCnt = postDetail.likeCnt;
         state.isLiked = postDetail.isLiked;
+        state.isFollowinged = postDetail.isFollowinged;
         state.commentCnt = postDetail.Comments.length;
         state.Comments = postDetail.Comments;
         state.isLoading = false;
@@ -113,6 +117,30 @@ export const getPostDetailSlice = createSlice({
         state.isLiked = false;
       })
       .addCase(postLikeCencelThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+    // 팔로잉
+    builder
+      .addCase(followingThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(followingThunk.fulfilled, (state, action) => {
+        state.isFollowinged = true;
+        state.isLoading = false;
+      })
+      .addCase(followingThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+    // 팔로잉 취소
+    builder
+      .addCase(followingCencelThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(followingCencelThunk.fulfilled, (state, action) => {
+        state.isFollowinged = false;
+        state.isLoading = false;
+      })
+      .addCase(followingCencelThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
     // 댓글생성
