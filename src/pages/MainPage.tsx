@@ -1,5 +1,5 @@
 import { Box, Grid2, ListItem } from "@mui/material";
-import { PostCard } from "../components/oraganisms/PostCard";
+import { PostCard } from "../components/molecules/PostCard";
 import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../store/hook";
 import { getPostsThunk } from "../store/post/allPostsThunk";
@@ -23,7 +23,7 @@ export const MainPage = () => {
     (state: RootState) => state.GetAllPosts.isLoading,
   );
   let postLastId = getPostDatas[getPostDatas.length - 1]?.id ?? 0;
-  
+
   const lastPostRef = useRef(null);
 
   const getPosts = async (postLastId: number) => {
@@ -90,7 +90,6 @@ export const MainPage = () => {
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>
               {getPostDatas.map((el, index) => {
-                
                 const isLast = index === getPostDatas.length - 1;
 
                 if (isLast) {

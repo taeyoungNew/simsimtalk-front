@@ -61,6 +61,8 @@ export const userInfoSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(myInfoThunk.fulfilled, (state, action) => {
+        console.log("myInfoThunk = ", action.payload);
+
         state.isLoading = false;
         state.nickname = action.payload?.UserInfo.nickname;
         state.username = action.payload?.UserInfo.username;

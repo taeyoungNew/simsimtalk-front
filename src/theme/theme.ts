@@ -15,6 +15,10 @@ declare module "@mui/material/styles" {
       placeholder: string;
     };
     buttonColor: PaletteColor;
+    borderLineColor: {
+      normal: string;
+      light: string;
+    };
   }
 
   interface PaletteOptions {
@@ -27,6 +31,10 @@ declare module "@mui/material/styles" {
       placeholder: string;
     };
     buttonColor: PaletteColorOptions;
+    borderLineColor: {
+      normal: string;
+      light: string;
+    };
   }
 }
 export const theme = createTheme({
@@ -65,6 +73,10 @@ export const theme = createTheme({
     },
     buttonColor: {
       main: "#7F7373",
+    },
+    borderLineColor: {
+      normal: "#e2e8f0",
+      light: "#93c5fd",
     },
   },
 
