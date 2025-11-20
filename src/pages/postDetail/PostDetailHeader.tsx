@@ -65,7 +65,7 @@ export const PostDetailHeader = ({
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
     myId === userId ? `/myPage` : `/userPage/${userId}`;
-  const myPage = myId === userId ? true : false;
+  const isMyPage = myId === userId ? true : false;
   const prevPathName = location.pathname;
   const isMyPost = myId === userId;
 
@@ -97,15 +97,15 @@ export const PostDetailHeader = ({
   const deletePost = async () => {
     await dispatch(deletePostThunk(postId));
     deletePostHandleClose();
-    navigate(from, { state: { myPage } });
+    navigate(from, { state: { myPage: isMyPage } });
   };
 
   const following = async () => {
-    await dispatch(followingThunk(userId));
+    await dispatch(followingThunk({ followId: userId, isMyPage }));
   };
 
   const followingCencel = async () => {
-    await dispatch(followingCencelThunk(userId));
+    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
   };
 
   return (
@@ -118,7 +118,7 @@ export const PostDetailHeader = ({
             justifyContent: "space-between",
           }}
         >
-          <NavLink to={`${from}`} state={{ myPage }}>
+          <NavLink to={`${from}`} state={{ myPage: isMyPage }}>
             <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
               Back
             </Button>
@@ -222,7 +222,10 @@ export const PostDetailHeader = ({
             }}
           >
             <Box>
-              <NavLink to={detailPostLinkPath} state={{ myPage, prevPathName }}>
+              <NavLink
+                to={detailPostLinkPath}
+                state={{ myPage: isMyPage, prevPathName }}
+              >
                 <Button>
                   <CustomAvatar></CustomAvatar>
                 </Button>

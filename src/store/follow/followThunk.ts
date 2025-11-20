@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { followingAPI, followingCencelAPI } from "../../apis/follow";
+import { RootState } from "..";
 
 interface Error {
   status: number;
@@ -7,14 +8,36 @@ interface Error {
   message: string;
 }
 
+interface FollowingUserInfo {
+  myId: string;
+  followId: string;
+  isMyPage: boolean;
+  nickname: string;
+  username: string;
+}
+
+interface FollowType {
+  followId: string;
+  isMyPage: boolean;
+}
+
 export const followingThunk = createAsyncThunk<
-  { followingId: string },
-  string,
+  FollowingUserInfo,
+  FollowType,
   { rejectValue: Error }
->("follow/following", async (followingId, thunkAPI) => {
+>("follow/following", async ({ followId, isMyPage }, thunkAPI) => {
   try {
-    await followingAPI(followingId);
-    return { followingId };
+    const followingUserInfo = (await followingAPI({ followId, isMyPage })).data
+      .data;
+    const state: RootState = thunkAPI.getState() as RootState;
+    const myId = state.User.id;
+    return {
+      myId,
+      followId,
+      isMyPage,
+      nickname: followingUserInfo.nickname,
+      username: followingUserInfo.username,
+    };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
@@ -25,13 +48,22 @@ export const followingThunk = createAsyncThunk<
 });
 
 export const followingCencelThunk = createAsyncThunk<
-  { followingCencelId: string },
-  string,
+  FollowingUserInfo,
+  FollowType,
   { rejectValue: Error }
->("follow/followingCencel", async (followingCencelId, thunkAPI) => {
+>("follow/followingCencel", async ({ followId, isMyPage }, thunkAPI) => {
   try {
-    await followingCencelAPI(followingCencelId);
-    return { followingCencelId };
+    const followingUserInfo = (await followingCencelAPI({ followId, isMyPage }))
+      .data.data;
+    const state: RootState = thunkAPI.getState() as RootState;
+    const myId = state.User.id;
+    return {
+      myId,
+      followId,
+      isMyPage,
+      nickname: followingUserInfo.nickname,
+      username: followingUserInfo.username,
+    };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

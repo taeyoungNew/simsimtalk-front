@@ -16,7 +16,6 @@ import ModeIcon from "@mui/icons-material/Mode";
 import EditBox from "../../components/atoms/box/EditBox";
 import InfoBox from "../../components/atoms/box/InfoBox";
 import { DynamicCustomButton } from "../../components/atoms/buttons/DynamicCustomButton";
-import { CustomAvatar } from "../../assets/icons/Avatar";
 import { FollowUserCard } from "../../components/molecules/FollowUserCard";
 
 interface GetUserPostsReq {
@@ -53,6 +52,7 @@ export const UserPageBody = ({
   onEditClick,
   viewContent,
   userId,
+  isMyPage,
 }: UserPageBodyProps) => {
   const dispatch = useAppDispatch();
   const userCrrInfo = useSelector((state: RootState) => state.UserInfo);
@@ -68,6 +68,7 @@ export const UserPageBody = ({
   const isLoading = useSelector(
     (state: RootState) => state.GetUserPosts.isLoading,
   );
+  const myId = useSelector((state: RootState) => state.User.id);
 
   let postLastId =
     getUserPostDatas[getUserPostDatas.length - 1]?.id !== undefined
@@ -331,7 +332,7 @@ export const UserPageBody = ({
                       <EditBox
                         {...field}
                         width={"100%"}
-                        label="about me"
+                        label="aboutMe"
                         placeholder={userCrrInfo.aboutMe}
                         multiline={true}
                         minRows={7}
@@ -344,14 +345,43 @@ export const UserPageBody = ({
             <Button type="submit">완료</Button>
           </Box>
         );
-      case "followings":
+      case "followings": {
         return (
           <Box>
-            <FollowUserCard />
+            {userCrrInfo.followings.map((el) => {
+              return (
+                <FollowUserCard
+                  key={el.id}
+                  id={el.id}
+                  nickname={el.nickname}
+                  username={el.username}
+                  isFollowing={el.isFollowing}
+                  myId={myId}
+                  isMyPage={isMyPage}
+                />
+              );
+            })}
           </Box>
         );
+      }
       case "followers":
-        return <Box>followers</Box>;
+        return (
+          <Box>
+            {userCrrInfo.followers.map((el) => {
+              return (
+                <FollowUserCard
+                  key={el.id}
+                  id={el.id}
+                  nickname={el.nickname}
+                  username={el.username}
+                  isFollowing={el.isFollowing}
+                  myId={myId}
+                  isMyPage={isMyPage}
+                />
+              );
+            })}
+          </Box>
+        );
       default:
         return (
           <Box

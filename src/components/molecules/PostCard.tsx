@@ -114,30 +114,27 @@ export const PostCard = ({
             <Grid2 sx={{ padding: "5px", bgcolor: "none" }}>
               <Box>
                 <Grid2 container spacing={1} sx={{ display: "flex" }}>
-                  <label htmlFor="">
-                    <HeartIcon
-                      color={
-                        isLiked
-                          ? theme.palette.background.paper
-                          : theme.palette.fontColor.assist
-                      }
-                      fillColor={
-                        isLiked
-                          ? theme.palette.fontColor.isLike
-                          : theme.palette.background.paper
-                      }
-                      size={30}
-                    ></HeartIcon>
-                  </label>
+                  <HeartIcon
+                    color={
+                      isLiked
+                        ? theme.palette.background.paper
+                        : theme.palette.fontColor.assist
+                    }
+                    fillColor={
+                      isLiked
+                        ? theme.palette.fontColor.isLike
+                        : theme.palette.background.paper
+                    }
+                    size={30}
+                  ></HeartIcon>
+
                   {likeCnt}
 
-                  <label htmlFor="">
-                    <ChatDuotone
-                      color={theme.palette.fontColor.main}
-                      fillColor={theme.palette.background.paper}
-                      size={30}
-                    ></ChatDuotone>
-                  </label>
+                  <ChatDuotone
+                    color={theme.palette.fontColor.main}
+                    fillColor={theme.palette.background.paper}
+                    size={30}
+                  ></ChatDuotone>
                   {commentsCnt}
                 </Grid2>
               </Box>

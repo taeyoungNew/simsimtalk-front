@@ -2,14 +2,39 @@ import { Box, Typography } from "@mui/material";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { DynamicCustomButton } from "../atoms/buttons/DynamicCustomButton";
 import { theme } from "../../theme/theme";
+import {
+  followingCencelThunk,
+  followingThunk,
+} from "../../store/follow/followThunk";
+import { useAppDispatch } from "../../store/hook";
+import { useEffect } from "react";
 
 interface FollowUserCardProps {
+  id: string;
+  isMyPage: boolean;
   nickname: string;
-  userId: string;
-  isFollow: boolean;
+  username?: string;
+  isFollowing?: boolean;
+  myId?: string;
 }
 
-export const FollowUserCard = ({}) => {
+export const FollowUserCard = ({
+  id,
+  nickname,
+  username,
+  isFollowing,
+  isMyPage,
+  myId,
+}: FollowUserCardProps) => {
+  const dispatch = useAppDispatch();
+
+  const following = async () => {
+    await dispatch(followingThunk({ followId: id, isMyPage }));
+  };
+
+  const followingCencel = async () => {
+    await dispatch(followingCencelThunk({ followId: id, isMyPage }));
+  };
   return (
     <Box
       sx={{
@@ -18,6 +43,7 @@ export const FollowUserCard = ({}) => {
         paddingY: "1.2rem",
         borderRadius: "5px",
         border: `1px solid #e2e8f0`,
+        marginBottom: "0.5rem",
       }}
     >
       <Box
@@ -31,12 +57,12 @@ export const FollowUserCard = ({}) => {
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Typography sx={{ fontSize: "0.8rem", fontWeight: "bold" }}>
-          nickname
+          {nickname}
         </Typography>
         <Typography
           sx={{ color: theme.palette.fontColor.assist, fontSize: "0.7rem" }}
         >
-          username
+          {username}
         </Typography>
       </Box>
       <Box
@@ -45,11 +71,28 @@ export const FollowUserCard = ({}) => {
           alignItems: "center",
         }}
       >
-        <DynamicCustomButton
-          color={theme.palette.primary.main}
-          title={"팔로잉버튼"}
-        />
+        {id === myId ? (
+          <Box />
+        ) : isFollowing ? (
+          <DynamicCustomButton
+            backgroundColor={`${theme.palette.background.default}`}
+            color={theme.palette.fontColor.icon}
+            title={"팔로잉중"}
+            onClick={() => followingCencel()}
+          />
+        ) : (
+          <DynamicCustomButton
+            backgroundColor={`${theme.palette.primary.main}`}
+            color={theme.palette.background.paper}
+            title={"팔로잉"}
+            onClick={() => following()}
+          />
+        )}
       </Box>
+      {/* {isMyPage ? (
+      ) : (
+        <Box />
+      )} */}
     </Box>
   );
 };

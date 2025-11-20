@@ -87,6 +87,7 @@ export const getAllPostsSlice = createSlice({
             commentCnt: action.payload.posts[idx].Comments.length,
           });
         }
+
         let likedSet: any;
 
         if (action.payload.isLikedPostIds !== undefined) {

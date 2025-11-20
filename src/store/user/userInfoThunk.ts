@@ -14,6 +14,21 @@ interface UserInfo {
   nickname: string;
 }
 
+interface FollowInfo {
+  nickname: string;
+  username: string;
+}
+
+interface Followers {
+  id: string;
+  UserInfo: FollowInfo;
+}
+
+interface Followings {
+  id: string;
+  UserInfo: FollowInfo;
+}
+
 interface editMyInfoReq {
   aboutMe: string;
   age: number;
@@ -29,12 +44,16 @@ interface editMyInfoRes {
 }
 
 interface UserRes {
+  id: string;
   email: string;
   isFollowinged: boolean;
   followerCnt: number;
   followingCnt: number;
   postCnt: number;
   UserInfo: UserInfo;
+  Followers: Followers[];
+  Followings: Followings[];
+  isFollowingedIds: string[];
 }
 
 export const myInfoThunk = createAsyncThunk<
@@ -61,9 +80,22 @@ export const userInfoThunk = createAsyncThunk<
   { rejectValue: Error }
 >("user/userInfo", async (userId, thunkAPI) => {
   try {
-    const getUserInfo = await userInfoAPI(userId);
+    const getUserInfoResult = await userInfoAPI(userId);
+    const getUserInfo = getUserInfoResult.data.data;
 
-    return getUserInfo.data;
+    const payload: UserRes = {
+      id: getUserInfo.id,
+      email: getUserInfo.email,
+      isFollowinged: getUserInfo.isFollowinged,
+      followerCnt: getUserInfo.followerCnt,
+      followingCnt: getUserInfo.followingCnt,
+      postCnt: getUserInfo.postCnt,
+      UserInfo: getUserInfo.UserInfo,
+      Followers: getUserInfo.Followers,
+      Followings: getUserInfo.Followings,
+      isFollowingedIds: getUserInfoResult.data.isFollowingedIds,
+    };
+    return payload;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

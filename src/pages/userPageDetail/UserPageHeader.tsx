@@ -15,7 +15,9 @@ import {
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
-    React.SetStateAction<"userPosts" | "userInfo" | "editUserInfo">
+    React.SetStateAction<
+      "userPosts" | "userInfo" | "editUserInfo" | "followers" | "followings"
+    >
   >;
   onEditClick: () => void;
   isMyPage: boolean;
@@ -32,11 +34,11 @@ export const UserPageHeader = ({
   const dispatch = useAppDispatch();
 
   const following = async () => {
-    await dispatch(followingThunk(userId));
+    await dispatch(followingThunk({ followId: userId, isMyPage }));
   };
 
   const followingCencel = async () => {
-    await dispatch(followingCencelThunk(userId));
+    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
   };
 
   useEffect(() => {
