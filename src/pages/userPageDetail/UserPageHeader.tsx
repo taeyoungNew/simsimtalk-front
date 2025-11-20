@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import EditButton from "../../components/atoms/buttons/EditButton";
@@ -8,11 +8,16 @@ import { RootState } from "../../store";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store/hook";
 import { myInfoThunk, userInfoThunk } from "../../store/user/userInfoThunk";
-import { resetUserPosts } from "../../store/post/userPostsSlice";
+import {
+  followingCencelThunk,
+  followingThunk,
+} from "../../store/follow/followThunk";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
-    React.SetStateAction<"userPosts" | "userInfo" | "editUserInfo">
+    React.SetStateAction<
+      "userPosts" | "userInfo" | "editUserInfo" | "followers" | "followings"
+    >
   >;
   onEditClick: () => void;
   isMyPage: boolean;
@@ -27,6 +32,14 @@ export const UserPageHeader = ({
   const userInfo = useSelector((state: RootState) => state.UserInfo);
   const postCnt = useSelector((state: RootState) => state.UserInfo.postCnt);
   const dispatch = useAppDispatch();
+
+  const following = async () => {
+    await dispatch(followingThunk({ followId: userId, isMyPage }));
+  };
+
+  const followingCencel = async () => {
+    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
+  };
 
   useEffect(() => {
     if (isMyPage) {
@@ -130,8 +143,30 @@ export const UserPageHeader = ({
                     }}
                   ></EditButton>
                 </Box>
+              ) : userInfo.isFollowinged ? (
+                <Box>
+                  <Button
+                    sx={{
+                      background: (theme) => theme.palette.background.default,
+                      color: (theme) => theme.palette.fontColor.icon,
+                    }}
+                    onClick={() => followingCencel()}
+                  >
+                    팔로잉중
+                  </Button>
+                </Box>
               ) : (
-                <Box></Box>
+                <Box>
+                  <Button
+                    sx={{
+                      background: (theme) => theme.palette.primary.main,
+                      color: (theme) => theme.palette.background.paper,
+                    }}
+                    onClick={() => following()}
+                  >
+                    팔로잉
+                  </Button>
+                </Box>
               )}
 
               <Box>

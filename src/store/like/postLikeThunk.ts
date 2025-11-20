@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postLike, postLikeCencel } from "../../apis/like";
+import { postLikeAPI, postLikeCencelAPI } from "../../apis/like";
 
 interface Error {
   status: number;
@@ -13,7 +13,7 @@ export const postLikeThunk = createAsyncThunk<
   { rejectValue: Error }
 >("like/post", async (postId, thunkAPI) => {
   try {
-    await postLike(postId);
+    await postLikeAPI(postId);
     return { postId: postId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
@@ -30,7 +30,7 @@ export const postLikeCencelThunk = createAsyncThunk<
   { rejectValue: Error }
 >("likecencel/post", async (postId, thunkAPI) => {
   try {
-    await postLikeCencel(postId);
+    await postLikeCencelAPI(postId);
     return { postId: postId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

@@ -77,8 +77,6 @@ export const modifyCommentThunk = createAsyncThunk<
 >("comment/modifyComment", async (data, thunkAPI) => {
   try {
     const result = (await modifyCommentAPI(data)).data.data.comment;
-    console.log(result);
-
     return result;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

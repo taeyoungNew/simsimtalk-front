@@ -1,21 +1,48 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { editMyInfoThunk, myInfoThunk, userInfoThunk } from "./userInfoThunk";
+import { followingCencelThunk, followingThunk } from "../follow/followThunk";
+import { useSelector } from "react-redux";
+import { RootState } from "..";
 
 interface Error {
   status: number;
   errorCode: string;
   message: string;
 }
+
+interface Followers {
+  id: string;
+  nickname: string;
+  username: string;
+  isFollowing: boolean;
+}
+
+interface Followings {
+  id: string;
+  nickname: string;
+  username: string;
+  isFollowing: boolean;
+}
+
+interface IsFollowingedId {
+  isFollowingedId: string;
+}
+
 interface UserInfoInitialState {
   isLoading: boolean;
   success: boolean;
   successMessage: string;
+  id?: string;
   nickname: string;
   username: string;
   aboutMe: string;
   age: number;
   followerCnt: number;
   followingCnt: number;
+  followers: Followers[];
+  followings: Followings[];
+  isFollowinged?: boolean;
+  isFollowingedIds: string[];
   postCnt: number;
   error: null | Error;
 }
@@ -24,18 +51,23 @@ const userInfoInitialState: UserInfoInitialState = {
   isLoading: false,
   success: false,
   successMessage: "",
+  id: "",
   nickname: "",
   username: "",
   aboutMe: "",
   age: 0,
   followerCnt: 0,
   followingCnt: 0,
+  isFollowinged: false,
   postCnt: 0,
   error: {
     status: 0,
     errorCode: "",
     message: "",
   },
+  followers: [],
+  followings: [],
+  isFollowingedIds: [],
 };
 
 export const userInfoSlice = createSlice({
@@ -50,6 +82,12 @@ export const userInfoSlice = createSlice({
       state.successMessage = "";
       state.error = null;
     },
+    resetFollowings: (state) => {
+      state.followings = [];
+    },
+    resetFollowers: (state) => {
+      state.followers = [];
+    },
   },
 
   extraReducers: async (builder) => {
@@ -58,7 +96,6 @@ export const userInfoSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(myInfoThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.nickname = action.payload?.UserInfo.nickname;
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
@@ -66,24 +103,215 @@ export const userInfoSlice = createSlice({
         state.followerCnt = action.payload?.followerCnt;
         state.followingCnt = action.payload?.followingCnt;
         state.postCnt = action.payload?.postCnt;
+        state.isLoading = false;
+
+        for (let idx = 0; idx < action.payload?.Followers.length; idx++) {
+          state.followers.push({
+            id: action.payload.Followers[idx].id,
+            nickname: action.payload.Followers[idx].UserInfo.nickname,
+            username: action.payload.Followers[idx].UserInfo.username,
+            isFollowing: false,
+          });
+        }
+        let isFollowingSet: any;
+        if (action.payload.Followings.length !== 0) {
+          for (let idx = 0; idx < action.payload.Followings.length; idx++) {
+            state.isFollowingedIds.push(action.payload.Followings[idx].id);
+          }
+
+          isFollowingSet = new Set(
+            state.isFollowingedIds.map((item) => String(item)),
+          );
+
+          state.followers.forEach((el) => {
+            if (isFollowingSet.has(el.id)) el.isFollowing = true;
+          });
+        }
+        for (let idx = 0; idx < action.payload?.Followings.length; idx++) {
+          state.followings.push({
+            id: action.payload.Followings[idx].id,
+            nickname: action.payload.Followings[idx].UserInfo.nickname,
+            username: action.payload.Followings[idx].UserInfo.username,
+            isFollowing: true,
+          });
+        }
       })
       .addCase(myInfoThunk.rejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload as Error;
+        state.isLoading = false;
+      });
+    // 팔로잉
+    builder
+      .addCase(followingThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(followingThunk.fulfilled, (state, action) => {
+        const userId = action.payload.followId;
+        const followingsList = state.followings;
+        const followerList = state.followers;
+        // 나의 페이지에 접속할경우 팔로잉 팔로워리스트를 추가
+        if (action.payload.isMyPage) {
+          state.followingCnt += 1;
+          // 만약 내가 팔로잉한사람이 팔로워리스트에있다면 버튼을 바꿔줘야함
+          state.followers.forEach((el, index) => {
+            if (el.id === userId) {
+              state.followers[index].isFollowing = true;
+            }
+          });
+          // 팔로잉대상이 아직 store에 남아있다면
+          // 해당 유저의 isFollowing만 true로 변경
+          state.followings.forEach((el, index) => {
+            if (el.id === userId) {
+              state.followings[index].isFollowing = true;
+            }
+          });
+          // 팔로잉대상이 store에 존재하지않는다면
+          // 새롭게 store에 추가
+          if (!followingsList.some((el) => el.id === action.payload.followId)) {
+            state.followings.push({
+              id: action.payload.followId,
+              nickname: action.payload.nickname,
+              username: action.payload.username,
+              isFollowing: true,
+            });
+          }
+        } else {
+          if (state.id === action.payload.followId) {
+            state.isFollowinged = true;
+            // 타유저페이지에서 해당페이지유저를 팔로잉 했을때만 카운트와 팔로워리스트에 '나'를 추가한다.
+            state.followerCnt += 1;
+
+            if (!followerList.some((el) => el.id === action.payload.myId)) {
+              state.followers.push({
+                id: action.payload.myId,
+                nickname: action.payload.nickname,
+                username: action.payload.username,
+                isFollowing: false,
+              });
+            }
+          } else {
+            // 타유저페이지에서 타유저의 팔로워나 팔로잉을 팔로잉 팔로잉취소를 했을경우
+            // 버튼만 변경한다.
+            state.isFollowingedIds.push(action.payload.followId);
+
+            const isFollowingedIdsSet = new Set(
+              state.isFollowingedIds.map((el) => el),
+            );
+
+            state.followers.forEach((el) => {
+              if (isFollowingedIdsSet.has(el.id)) el.isFollowing = true;
+            });
+            state.followings.forEach((el) => {
+              if (isFollowingedIdsSet.has(el.id)) el.isFollowing = true;
+            });
+          }
+        }
+        state.isLoading = false;
+      })
+      .addCase(followingThunk.rejected, (state) => {
+        state.isLoading = false;
+      });
+    // 팔로잉 취소
+    builder
+      .addCase(followingCencelThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(followingCencelThunk.fulfilled, (state, action) => {
+        const userId = action.payload.followId;
+        const myId = action.payload.myId;
+
+        if (action.payload.isMyPage) {
+          state.followingCnt -= 1;
+          state.followers.forEach((el, index) => {
+            if (el.id === userId) {
+              state.followers[index].isFollowing = false;
+            }
+          });
+          state.followings.forEach((el, index) => {
+            if (el.id === userId) {
+              state.followings[index].isFollowing = false;
+            }
+          });
+        } else {
+          // 타유저페이지에서 해당페이지유저를 팔로잉취소 했을때만 카운트와 팔로워리스트에 '나'를 지운다.
+          if (state.id === action.payload.followId) {
+            state.followerCnt -= 1;
+            state.followers = state.followers.filter((el) => el.id !== myId);
+            state.isFollowinged = false;
+          } else {
+            // 타유저페이지에서 타유저의 팔로워나 팔로잉을 팔로잉 팔로잉취소를 했을경우
+            // 버튼만 변경한다.
+            state.isFollowingedIds = state.isFollowingedIds.filter(
+              (el) => el !== action.payload.followId,
+            );
+            state.followers.forEach((el) => {
+              if (el.id === action.payload.followId) el.isFollowing = false;
+            });
+            state.followings.forEach((el) => {
+              if (el.id === action.payload.followId) el.isFollowing = false;
+            });
+          }
+        }
+        state.isLoading = false;
+      })
+      .addCase(followingCencelThunk.rejected, (state) => {
+        state.isLoading = false;
       });
     builder
-      .addCase(userInfoThunk.pending, (state, action) => {
+      .addCase(userInfoThunk.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(userInfoThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.id = action.payload.id;
         state.nickname = action.payload?.UserInfo.nickname;
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
         state.age = action.payload?.UserInfo.age;
+        state.isFollowinged = action.payload?.isFollowinged;
         state.followerCnt = action.payload.followerCnt;
         state.followingCnt = action.payload.followingCnt;
         state.postCnt = action.payload?.postCnt;
+        console.log(
+          "action.payload.isFollowingedIds = ",
+          action.payload.isFollowingedIds,
+        );
+
+        for (let idx = 0; idx < action.payload?.Followers.length; idx++) {
+          state.followers.push({
+            id: action.payload.Followers[idx].id,
+            nickname: action.payload.Followers[idx].UserInfo.nickname,
+            username: action.payload.Followers[idx].UserInfo.username,
+            isFollowing: false,
+          });
+        }
+
+        for (let idx = 0; idx < action.payload?.Followings.length; idx++) {
+          state.followings.push({
+            id: action.payload.Followings[idx].id,
+            nickname: action.payload.Followings[idx].UserInfo.nickname,
+            username: action.payload.Followings[idx].UserInfo.username,
+            isFollowing: false,
+          });
+        }
+        if (action.payload.isFollowingedIds?.length > 0) {
+          const isFollowingedIdsSet = new Set(
+            action.payload.isFollowingedIds.map((el) => String(el)),
+          );
+          state.isFollowingedIds = action.payload.isFollowingedIds.map((el) =>
+            String(el),
+          );
+          state.followers.forEach((el) => {
+            if (isFollowingedIdsSet.has(el.id)) {
+              el.isFollowing = true;
+            }
+          });
+          state.followings.forEach((el) => {
+            if (isFollowingedIdsSet.has(el.id)) {
+              el.isFollowing = true;
+            }
+          });
+        }
+        state.isLoading = false;
       })
       .addCase(userInfoThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -108,5 +336,10 @@ export const userInfoSlice = createSlice({
   },
 });
 
-export const { resetEditMyInfoError, resetInitMyInfo } = userInfoSlice.actions;
+export const {
+  resetEditMyInfoError,
+  resetInitMyInfo,
+  resetFollowings,
+  resetFollowers,
+} = userInfoSlice.actions;
 export default userInfoSlice.reducer;

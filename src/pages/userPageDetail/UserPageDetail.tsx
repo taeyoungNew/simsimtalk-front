@@ -5,16 +5,20 @@ import { useEffect, useRef, useState } from "react";
 import { RootState } from "../../store";
 import { useLocation } from "react-router-dom";
 import { resetIsLast, resetUserPosts } from "../../store/post/userPostsSlice";
+import {
+  resetFollowings,
+  resetFollowers,
+} from "../../store/user/userInfoSlice";
 import { useAppDispatch } from "../../store/hook";
 import { useSelector } from "react-redux";
 
 export const UserPageDetail = () => {
   const [viewContent, setViewContent] = useState<
-    "userPosts" | "userInfo" | "editUserInfo"
+    "userPosts" | "userInfo" | "editUserInfo" | "followers" | "followings"
   >("userPosts");
   const [isEditProfile, setIsEditProfile] = useState(false);
-  let isMyPage = useLocation().state?.myPage;
   const path = location.pathname;
+  let isMyPage = useLocation().state?.myPage;
   const prevPathName = useLocation().state?.prevPathName || "";
   const myId = useSelector((state: RootState) => state.User.id);
   const userId = path.toString().substring(10);
@@ -23,11 +27,14 @@ export const UserPageDetail = () => {
   let paramUserId;
 
   paramUserId = isMyPage ? myId : userId;
+
   useEffect(() => {
     if (path !== prevPathName) {
       return () => {
         dispatch(resetIsLast());
         dispatch(resetUserPosts());
+        dispatch(resetFollowings());
+        dispatch(resetFollowers());
       };
     }
   }, [location.pathname]);

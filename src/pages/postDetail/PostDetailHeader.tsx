@@ -1,5 +1,5 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -11,6 +11,10 @@ import {
   modifyPostThunk,
 } from "../../store/post/postDetailThunk";
 import { Controller, useForm } from "react-hook-form";
+import {
+  followingCencelThunk,
+  followingThunk,
+} from "../../store/follow/followThunk";
 
 const style = {
   position: "absolute",
@@ -29,8 +33,9 @@ interface PostDetailHeaderProps {
   isMyPage: boolean;
   from: string;
   postId: number;
-  userNickname: String;
-  userId: String;
+  userNickname: string;
+  userId: string;
+  isFollowinged: boolean;
 }
 
 interface ModifyPost {
@@ -44,7 +49,9 @@ export const PostDetailHeader = ({
   postId,
   userNickname,
   userId,
+  isFollowinged,
 }: PostDetailHeaderProps) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openDeletePostModal, setOpenDeletePostModal] = useState(false);
   const [openModifyPostModal, setOpenModifyPostModal] = useState(false);
@@ -58,7 +65,7 @@ export const PostDetailHeader = ({
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
     myId === userId ? `/myPage` : `/userPage/${userId}`;
-  const myPage = myId === userId ? true : false;
+  const isMyPage = myId === userId ? true : false;
   const prevPathName = location.pathname;
   const isMyPost = myId === userId;
 
@@ -90,7 +97,15 @@ export const PostDetailHeader = ({
   const deletePost = async () => {
     await dispatch(deletePostThunk(postId));
     deletePostHandleClose();
-    window.location.href = `${from}`;
+    navigate(from, { state: { myPage: isMyPage } });
+  };
+
+  const following = async () => {
+    await dispatch(followingThunk({ followId: userId, isMyPage }));
+  };
+
+  const followingCencel = async () => {
+    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
   };
 
   return (
@@ -103,7 +118,7 @@ export const PostDetailHeader = ({
             justifyContent: "space-between",
           }}
         >
-          <NavLink to={`${from}`} state={{ myPage }}>
+          <NavLink to={`${from}`} state={{ myPage: isMyPage }}>
             <Button sx={{ color: (theme) => theme.palette.fontColor.main }}>
               Back
             </Button>
@@ -207,7 +222,10 @@ export const PostDetailHeader = ({
             }}
           >
             <Box>
-              <NavLink to={detailPostLinkPath} state={{ myPage, prevPathName }}>
+              <NavLink
+                to={detailPostLinkPath}
+                state={{ myPage: isMyPage, prevPathName }}
+              >
                 <Button>
                   <CustomAvatar></CustomAvatar>
                 </Button>
@@ -238,16 +256,33 @@ export const PostDetailHeader = ({
               </Typography>
             </Box>
           </Box>
-          <Box>
-            <Button
-              sx={{
-                background: (theme) => theme.palette.primary.main,
-                color: (theme) => theme.palette.background.paper,
-              }}
-            >
-              팔로잉
-            </Button>
-          </Box>
+          {isMyPost ? (
+            <Box />
+          ) : isFollowinged ? (
+            <Box>
+              <Button
+                sx={{
+                  background: (theme) => theme.palette.background.default,
+                  color: (theme) => theme.palette.fontColor.icon,
+                }}
+                onClick={() => followingCencel()}
+              >
+                팔로잉중
+              </Button>
+            </Box>
+          ) : (
+            <Box>
+              <Button
+                sx={{
+                  background: (theme) => theme.palette.primary.main,
+                  color: (theme) => theme.palette.background.paper,
+                }}
+                onClick={() => following()}
+              >
+                팔로잉
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
     </>

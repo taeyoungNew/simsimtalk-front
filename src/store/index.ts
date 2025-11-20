@@ -15,6 +15,7 @@ const store = configureStore({
     GetPostDetail: getPostDetailSlice.reducer,
     UserInfo: userInfoSlice.reducer,
   },
+  devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

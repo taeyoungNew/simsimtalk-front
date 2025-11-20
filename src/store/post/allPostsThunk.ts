@@ -38,7 +38,7 @@ interface IsLikedPostIds {
 }
 
 interface isLikedPostId {
-  lastPostId: number;
+  postId: number;
 }
 
 interface GetPostsRes {

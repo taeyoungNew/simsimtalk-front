@@ -87,6 +87,7 @@ export const getAllPostsSlice = createSlice({
             commentCnt: action.payload.posts[idx].Comments.length,
           });
         }
+
         let likedSet: any;
 
         if (action.payload.isLikedPostIds !== undefined) {
@@ -97,6 +98,7 @@ export const getAllPostsSlice = createSlice({
             post.isLiked = likedSet.has(String(post.id));
           });
         }
+
         state.isLoading = false;
       });
 

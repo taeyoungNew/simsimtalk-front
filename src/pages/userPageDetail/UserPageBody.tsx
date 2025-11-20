@@ -1,6 +1,6 @@
-import { Box, Button, Grid2, ListItem } from "@mui/material";
+import { Box, Button, Grid2, ListItem, Typography } from "@mui/material";
 import { PostButton } from "../../components/atoms/buttons/PostButton";
-import { PostCard } from "../../components/oraganisms/PostCard";
+import { PostCard } from "../../components/molecules/PostCard";
 import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../../store/hook";
 import { getUserPostsThunk } from "../../store/post/userPostsThunk";
@@ -15,6 +15,8 @@ import SubTitle from "../../components/common/SubTitle";
 import ModeIcon from "@mui/icons-material/Mode";
 import EditBox from "../../components/atoms/box/EditBox";
 import InfoBox from "../../components/atoms/box/InfoBox";
+import { DynamicCustomButton } from "../../components/atoms/buttons/DynamicCustomButton";
+import { FollowUserCard } from "../../components/molecules/FollowUserCard";
 
 interface GetUserPostsReq {
   userId: string;
@@ -24,9 +26,16 @@ interface GetUserPostsReq {
 interface UserPageBodyProps {
   isMyPage: boolean;
   userId: string;
-  viewContent: "userPosts" | "userInfo" | "editUserInfo";
+  viewContent:
+    | "userPosts"
+    | "userInfo"
+    | "editUserInfo"
+    | "followings"
+    | "followers";
   onViewContent: React.Dispatch<
-    React.SetStateAction<"userPosts" | "userInfo" | "editUserInfo">
+    React.SetStateAction<
+      "userPosts" | "userInfo" | "editUserInfo" | "followings" | "followers"
+    >
   >;
   onEditClick: () => void;
   isEditProfile: boolean;
@@ -43,7 +52,9 @@ export const UserPageBody = ({
   onEditClick,
   viewContent,
   userId,
+  isMyPage,
 }: UserPageBodyProps) => {
+  const dispatch = useAppDispatch();
   const userCrrInfo = useSelector((state: RootState) => state.UserInfo);
   const isEditMyInfoSuccess = useSelector(
     (state: RootState) => state.UserInfo.success,
@@ -54,11 +65,10 @@ export const UserPageBody = ({
   const getUserPostDatas = useSelector(
     (state: RootState) => state.GetUserPosts.posts,
   );
-
-  const dispatch = useAppDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.GetUserPosts.isLoading,
   );
+  const myId = useSelector((state: RootState) => state.User.id);
 
   let postLastId =
     getUserPostDatas[getUserPostDatas.length - 1]?.id !== undefined
@@ -166,7 +176,6 @@ export const UserPageBody = ({
         return (
           <Box
             sx={{
-              marginTop: "2rem",
               height: '"inherit',
             }}
           >
@@ -206,7 +215,6 @@ export const UserPageBody = ({
               width: "inherit",
               display: "flex",
               flexDirection: "column",
-              padding: "1rem",
               gap: "4rem",
             }}
           >
@@ -324,7 +332,7 @@ export const UserPageBody = ({
                       <EditBox
                         {...field}
                         width={"100%"}
-                        label="about me"
+                        label="aboutMe"
                         placeholder={userCrrInfo.aboutMe}
                         multiline={true}
                         minRows={7}
@@ -337,12 +345,48 @@ export const UserPageBody = ({
             <Button type="submit">완료</Button>
           </Box>
         );
+      case "followings": {
+        return (
+          <Box>
+            {userCrrInfo.followings.map((el) => {
+              return (
+                <FollowUserCard
+                  key={el.id}
+                  id={el.id}
+                  nickname={el.nickname}
+                  username={el.username}
+                  isFollowing={el.isFollowing}
+                  myId={myId}
+                  isMyPage={isMyPage}
+                />
+              );
+            })}
+          </Box>
+        );
+      }
+      case "followers":
+        return (
+          <Box>
+            {userCrrInfo.followers.map((el) => {
+              return (
+                <FollowUserCard
+                  key={el.id}
+                  id={el.id}
+                  nickname={el.nickname}
+                  username={el.username}
+                  isFollowing={el.isFollowing}
+                  myId={myId}
+                  isMyPage={isMyPage}
+                />
+              );
+            })}
+          </Box>
+        );
       default:
         return (
           <Box
             sx={{
-              marginTop: "2rem",
-              height: '"inherit',
+              height: "inherit",
             }}
           >
             <Grid2 size={12}>
@@ -385,7 +429,14 @@ export const UserPageBody = ({
         backgroundColor: (theme) => theme.palette.background.paper,
       }}
     >
-      <Box sx={{ display: "flex", gap: 1, borderBottom: "0.5px solid grey" }}>
+      <Box
+        sx={{
+          marginBottom: "1rem",
+          display: "flex",
+          gap: 1,
+          borderBottom: "0.5px solid grey",
+        }}
+      >
         <PostButton
           onClick={() => onViewContent("userPosts")}
           sx={{ fontSize: "1rem" }}
@@ -394,6 +445,16 @@ export const UserPageBody = ({
           onClick={() => onViewContent("userInfo")}
           sx={{ fontSize: "1rem" }}
         ></UserInfoButton>
+        <DynamicCustomButton
+          onClick={() => onViewContent("followings")}
+          fontSize="1rem"
+          title={"팔로잉"}
+        />
+        <DynamicCustomButton
+          onClick={() => onViewContent("followers")}
+          fontSize="1rem"
+          title={"팔로워"}
+        />
       </Box>
       {renderContent()}
     </Box>
