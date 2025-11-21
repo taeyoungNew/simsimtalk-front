@@ -18,6 +18,7 @@ import { PostDetail } from "./pages/postDetail/PostDetail";
 import AuthRoute from "./route/AuthRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import { initSocket } from "./sockets";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -28,6 +29,13 @@ function App() {
     };
     checkAuth();
   }, [dispatch]);
+
+  useEffect(() => {
+    const socket = initSocket();
+    socket.on("connect", () => {
+      console.log("Socket connected!", socket.id);
+    });
+  }, []);
 
   if (!initialized) {
     return <div>로딩중</div>;
