@@ -7,19 +7,19 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { NavLink } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/ChatQuote";
-
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
-import { deleteAuth } from "../../store/auth/authSlice";
-import { logoutAPI } from "../../apis/auth";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { resetLiked } from "../../store/post/allPostsSlice";
+
 import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";
+
+import { logoutThunk } from "../../store/auth/authThunk";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -34,10 +34,8 @@ export default function NavBar() {
   };
 
   const logout = async () => {
-    dispatch(resetLiked());
-    dispatch(deleteAuth());
-    await logoutAPI();
-    alert("로그아웃되었습니다.");
+    const keepUserId = userId;
+    await dispatch(logoutThunk({ userId: keepUserId }));
   };
 
   return (

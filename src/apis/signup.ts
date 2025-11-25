@@ -1,5 +1,4 @@
-import axios from "axios";
-
+import axios from "./axios";
 interface SignupData {
   email: string;
   password: string;

@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { authMeAPI, loginAPI } from "../../apis/auth";
+import { authMeAPI, loginAPI, logoutAPI } from "../../apis/auth";
+import { loginSocket, logoutSocket } from "../../sockets/authSocket";
+import { resetSignupError } from "../user/userSignupSlice";
+import { resetEditMyInfoError } from "../user/userInfoSlice";
+import { deleteAuth, resetUserError } from "./authSlice";
+import { resetLiked } from "../post/allPostsSlice";
 
 interface LoginReq {
   email: string;
@@ -40,8 +45,30 @@ export const loginThunk = createAsyncThunk<
       email,
       password,
     });
-
+    thunkAPI.dispatch(resetLiked());
+    loginSocket(loginResult.data.data.id);
     return { message: loginResult.data.message, data: loginResult.data.data };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});
+
+export const logoutThunk = createAsyncThunk<
+  void,
+  { userId: string },
+  { rejectValue: Error }
+>("auth/logout", async ({ userId }, thunkAPI) => {
+  try {
+    const res = await logoutAPI();
+
+    thunkAPI.dispatch(resetLiked());
+    thunkAPI.dispatch(deleteAuth());
+    logoutSocket(userId);
+    alert(res.data.message);
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
@@ -58,6 +85,7 @@ export const authMeThunk = createAsyncThunk<
 >("auth/auth-me", async (_, thunkAPI) => {
   try {
     const res = await authMeAPI();
+
     return {
       isLogin: res.data.isLogin,
       user: {
