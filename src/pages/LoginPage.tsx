@@ -74,6 +74,7 @@ export const LoginPage = () => {
                   <SimSimTextField
                     helperText={error?.message}
                     {...field}
+                    autoComplete="username"
                     id="outlined-basic"
                     label="email"
                     variant="outlined"
@@ -103,7 +104,7 @@ export const LoginPage = () => {
               render={({ field, fieldState: { error } }) => {
                 return (
                   <SimSimTextField
-                    autoComplete="new-password"
+                    autoComplete="current-password"
                     helperText={error?.message}
                     {...field}
                     id="outlined-password-input"

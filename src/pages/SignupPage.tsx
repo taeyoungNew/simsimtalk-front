@@ -124,6 +124,7 @@ export const SignupPage = () => {
                   <SimSimTextField
                     helperText={error?.message}
                     {...field}
+                    autoComplete="email"
                     id="outlined-basic"
                     label="email"
                     variant="outlined"
@@ -216,6 +217,7 @@ export const SignupPage = () => {
                     label="username"
                     variant="outlined"
                     size="small"
+                    autoComplete="username"
                   />
                 );
               }}

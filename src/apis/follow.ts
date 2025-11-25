@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from "./axios";
+
 interface FollowReqType {
   followId: string;
   isMyPage: boolean;

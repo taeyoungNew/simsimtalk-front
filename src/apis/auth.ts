@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios";
 
 export interface LoginForm {
   email: string;
@@ -17,16 +17,15 @@ export const loginAPI = async (props: LoginForm) => {
 };
 
 export const logoutAPI = async () => {
-  await axios
-    .delete(`${import.meta.env.VITE_API_BASE}auth/logout`, {
-      withCredentials: true,
-    })
-    .then((res) => {
-      alert(res.data.message);
-    })
-    .catch(function (error) {
-      throw error;
-    });
+  return await axios.delete(`${import.meta.env.VITE_API_BASE}auth/logout`, {
+    withCredentials: true,
+  });
+  // .then((res) => {
+  //   alert(res.data.message);
+  // })
+  // .catch(function (error) {
+  //   throw error;
+  // });
 };
 
 export const authMeAPI = async () => {
