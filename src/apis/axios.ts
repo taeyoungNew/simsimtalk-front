@@ -16,7 +16,6 @@ const logout = async () => {
   const keepUserId = userId;
   const dispatch = useAppDispatch();
   await dispatch(logoutThunk({ userId: keepUserId }));
-  // logoutSocket(keepUserId);
 };
 
 instance.interceptors.response.use(

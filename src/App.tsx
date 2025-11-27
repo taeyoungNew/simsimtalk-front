@@ -22,20 +22,28 @@ import { initSocket } from "./sockets";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { initialized } = useSelector((state: RootState) => state.User);
+  const { id, initialized } = useSelector((state: RootState) => state.User);
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuthAndInitSocket = async () => {
       await dispatch(authMeThunk());
+      console.log("id = ", id);
+
+      initSocket(dispatch, id || null);
     };
-    checkAuth();
+
+    // const checkAuth = async () => {
+    //   await dispatch(authMeThunk());
+    // };
+    // checkAuth();
+    checkAuthAndInitSocket();
   }, [dispatch]);
 
-  useEffect(() => {
-    const socket = initSocket();
-    socket.on("connect", () => {
-      console.log("Socket connected!", socket.id);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const socket = initSocket(dispatch);
+  //   socket.on("connect", () => {
+  //     console.log("Socket connected!", socket.id);
+  //   });
+  // }, []);
 
   if (!initialized) {
     return <div>로딩중</div>;

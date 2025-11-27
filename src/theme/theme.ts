@@ -19,6 +19,9 @@ declare module "@mui/material/styles" {
       normal: string;
       light: string;
     };
+    User: {
+      online: string;
+    };
   }
 
   interface PaletteOptions {
@@ -34,6 +37,9 @@ declare module "@mui/material/styles" {
     borderLineColor: {
       normal: string;
       light: string;
+    };
+    User: {
+      online: string;
     };
   }
 }
@@ -77,6 +83,9 @@ export const theme = createTheme({
     borderLineColor: {
       normal: "#e2e8f0",
       light: "#93c5fd",
+    },
+    User: {
+      online: " #10b981",
     },
   },
 

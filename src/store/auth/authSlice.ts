@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authMeThunk, loginThunk, logoutThunk } from "./authThunk";
-import { useAppDispatch } from "../../store/hook";
-import { resetLiked } from "../post/allPostsSlice";
-import { resetSignupError } from "../user/userSignupSlice";
-import { resetEditMyInfoError } from "../user/userInfoSlice";
 
 interface Error {
   status: number;
