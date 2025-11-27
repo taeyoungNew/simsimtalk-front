@@ -1,5 +1,4 @@
 import axios from "axios";
-import { logoutSocket } from "../sockets/authSocket";
 import { useAppDispatch } from "../store/hook";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";

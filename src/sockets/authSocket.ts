@@ -1,5 +1,13 @@
 import { getSocket } from ".";
 
+export const registerOnline = (userId: string) => {
+  const socket = getSocket();
+  if (!socket?.connected) {
+    socket?.connect();
+  }
+  socket?.emit("registerOnline", { userId });
+};
+
 export const loginSocket = (userId: string) => {
   const socket = getSocket();
   if (!socket?.connected) {

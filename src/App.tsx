@@ -18,32 +18,37 @@ import { PostDetail } from "./pages/postDetail/PostDetail";
 import AuthRoute from "./route/AuthRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
-import { initSocket } from "./sockets";
+import { getSocket, initSocket } from "./sockets";
 
 function App() {
   const dispatch = useAppDispatch();
   const { id, initialized } = useSelector((state: RootState) => state.User);
   useEffect(() => {
-    const checkAuthAndInitSocket = async () => {
+    const checkAuth = async () => {
       await dispatch(authMeThunk());
-      console.log("id = ", id);
-
-      initSocket(dispatch, id || null);
     };
-
-    // const checkAuth = async () => {
-    //   await dispatch(authMeThunk());
-    // };
-    // checkAuth();
-    checkAuthAndInitSocket();
+    checkAuth();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const socket = initSocket(dispatch);
-  //   socket.on("connect", () => {
-  //     console.log("Socket connected!", socket.id);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // 소켓연결은 사이트에 접속했을때
+    // 새로고침을 했을때만
+    initSocket(dispatch);
+  }, []);
+
+  useEffect(() => {
+    const socket = getSocket();
+    if (id && socket) {
+      // 새 소켓 연결 시 온라인 등록
+      socket.emit("registerOnline", { userId: id });
+
+      const interval = setInterval(() => {
+        socket?.emit("heartbeat", { userId: id });
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [id]);
 
   if (!initialized) {
     return <div>로딩중</div>;

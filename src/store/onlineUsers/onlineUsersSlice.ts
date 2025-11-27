@@ -13,6 +13,8 @@ export const onlineUsersSlice = createSlice({
   initialState: onlineUsersSliceState,
   reducers: {
     setOnlineUsers: (state, action) => {
+      console.log("action.payload = ", action.payload);
+
       state.ids = action.payload;
     },
   },

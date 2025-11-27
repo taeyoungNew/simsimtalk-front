@@ -16,9 +16,9 @@ export const Applayout = () => {
   const location = useLocation();
 
   useEffect(() => {
+    dispatch(resetUserError());
     dispatch(resetSignupError());
     dispatch(resetEditMyInfoError());
-    dispatch(resetUserError());
   }, [location]);
 
   return (
@@ -42,6 +42,7 @@ export const Applayout = () => {
         {isLogin == true ? <MyFollowings></MyFollowings> : <Box></Box>}
 
         <Outlet />
+
         {isLogin == true ? <Box>test3</Box> : <Box></Box>}
       </Box>
     </>
