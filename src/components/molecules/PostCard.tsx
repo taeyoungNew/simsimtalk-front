@@ -1,9 +1,14 @@
-import { Avatar, Box, Grid2, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 import { HeartIcon } from "../../assets/icons/Heart";
 import { ChatDuotone } from "../../assets/icons/ChatDuotone";
 import { theme } from "../../theme/theme";
 import { NavLink } from "react-router-dom";
+import { CustomAvatar } from "../../assets/icons/Avatar";
 import styled from "styled-components";
+import { checkOnline } from "../../utils/checktOnline";
+import { AvatarMenu } from "./AvatarMenu";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface CardProps {
   id: number;
@@ -13,6 +18,7 @@ interface CardProps {
   likeCnt: number;
   isLiked: boolean;
   commentsCnt: number;
+  onlineUsers: string[];
 }
 const DetailPostLink = styled(NavLink)`
   text-decoration: none;
@@ -35,9 +41,13 @@ export const PostCard = ({
   likeCnt,
   isLiked,
   commentsCnt,
+  onlineUsers,
 }: CardProps) => {
   const to = location.pathname;
   const prevPathName = location.pathname;
+  const isOnline = checkOnline(userId, onlineUsers);
+  const myId = useSelector((state: RootState) => state.User.id);
+  const isMy = myId === userId ? true : false;
   return (
     <>
       <Box
@@ -46,11 +56,10 @@ export const PostCard = ({
           width: "inherit",
           padding: "10px",
           bgcolor: (theme) => theme.palette.background.paper,
-          cursor: "pointer",
         }}
         color={theme.palette.fontColor.main}
       >
-        <DetailPostLink
+        {/* <DetailPostLink
           to={`/postDetail/${id}`}
           className={({ isActive }) =>
             isActive
@@ -58,89 +67,104 @@ export const PostCard = ({
               : "no-underline text-gray-500"
           }
           state={{ from: to, isLiked, userId, prevPathName }}
+        > */}
+        <Grid2
+          sx={{ display: "flex", justifyContent: "center" }}
+          container
+          direction="column"
+          rowSpacing={2}
         >
           <Grid2
-            sx={{ display: "flex", justifyContent: "center" }}
+            alignItems={"center"}
             container
-            direction="column"
-            rowSpacing={2}
+            direction="row"
+            display={"flex"}
+            spacing={1}
           >
-            <Grid2
-              alignItems={"center"}
-              container
-              direction="row"
-              display={"flex"}
-              spacing={1}
-            >
-              <Avatar
-                sx={{
-                  width: "50px",
-                  height: "50px",
-                  bgcolor: (theme) => theme.palette.fontColor.placeholder,
-                  color: (theme) => theme.palette.background.paper,
-                }}
-              ></Avatar>
-              <Typography
-                sx={{
-                  color: (theme) => theme.palette.fontColor.main,
-                }}
-              >
-                {userNickname}
-              </Typography>
-            </Grid2>
-            <Grid2
+            <AvatarMenu
+              sx={{ width: "2rem" }}
+              isOnline={isOnline}
+              isMy={isMy}
+              id={id}
+              isLiked={isLiked}
+              to={to}
+              userId={userId}
+              key={id}
+            />
+
+            <Typography
               sx={{
-                bgcolor: "white",
-                display: "flex",
-                justifyContent: "center",
+                color: (theme) => theme.palette.fontColor.main,
               }}
             >
-              <Box width="100%" height="auto" overflow={"hidden"}>
-                <Typography
-                  sx={{
-                    whiteSpace: "pre-wrap",
-                    textOverflow: "ellipsis",
-                    maxHeight: "100px",
-                    WebkitLineClamp: 5,
-                    WebkitBoxOrient: "vertical",
-                    padding: "0 0.5em",
-                    color: (theme) => theme.palette.fontColor.main,
-                  }}
-                >
-                  {contents}
-                </Typography>
-              </Box>
-            </Grid2>
-            <Grid2 sx={{ padding: "5px", bgcolor: "none" }}>
-              <Box>
-                <Grid2 container spacing={1} sx={{ display: "flex" }}>
-                  <HeartIcon
-                    color={
-                      isLiked
-                        ? theme.palette.background.paper
-                        : theme.palette.fontColor.assist
-                    }
-                    fillColor={
-                      isLiked
-                        ? theme.palette.fontColor.isLike
-                        : theme.palette.background.paper
-                    }
-                    size={30}
-                  ></HeartIcon>
-
-                  {likeCnt}
-
-                  <ChatDuotone
-                    color={theme.palette.fontColor.main}
-                    fillColor={theme.palette.background.paper}
-                    size={30}
-                  ></ChatDuotone>
-                  {commentsCnt}
-                </Grid2>
-              </Box>
-            </Grid2>
+              {userNickname}
+            </Typography>
           </Grid2>
-        </DetailPostLink>
+          <DetailPostLink
+            to={`/postDetail/${id}`}
+            className={({ isActive }) =>
+              isActive
+                ? "no-underline text-black font-bold"
+                : "no-underline text-gray-500"
+            }
+            state={{ from: to, isLiked, userId, prevPathName }}
+          >
+            <Box sx={{ cursor: "pointer" }}>
+              <Grid2
+                sx={{
+                  bgcolor: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Box width="100%" height="auto" overflow={"hidden"}>
+                  <Typography
+                    sx={{
+                      whiteSpace: "pre-wrap",
+                      textOverflow: "ellipsis",
+                      maxHeight: "100px",
+                      WebkitLineClamp: 5,
+                      WebkitBoxOrient: "vertical",
+                      padding: "0 0.5em",
+                      color: (theme) => theme.palette.fontColor.main,
+                    }}
+                  >
+                    {contents}
+                  </Typography>
+                </Box>
+              </Grid2>
+              <Grid2 sx={{ padding: "5px", bgcolor: "none" }}>
+                <Box>
+                  <Grid2 container spacing={1} sx={{ display: "flex" }}>
+                    <HeartIcon
+                      color={
+                        isLiked
+                          ? theme.palette.background.paper
+                          : theme.palette.fontColor.assist
+                      }
+                      fillColor={
+                        isLiked
+                          ? theme.palette.fontColor.isLike
+                          : theme.palette.background.paper
+                      }
+                      size={30}
+                    ></HeartIcon>
+
+                    {likeCnt}
+
+                    <ChatDuotone
+                      color={theme.palette.fontColor.main}
+                      fillColor={theme.palette.background.paper}
+                      size={30}
+                    ></ChatDuotone>
+                    {commentsCnt}
+                  </Grid2>
+                </Box>
+              </Grid2>
+            </Box>
+          </DetailPostLink>
+        </Grid2>
+        {/* </DetailPostLink> */}
       </Box>
     </>
   );

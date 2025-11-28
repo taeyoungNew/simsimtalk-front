@@ -14,6 +14,9 @@ interface WritePost {
 
 export const MainPage = () => {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
+  const onlineUsers = useSelector(
+    (state: RootState) => state.OnlineUsersSlice.ids,
+  );
   const getPostDatas = useSelector(
     (state: RootState) => state.GetAllPosts.posts,
   );
@@ -113,6 +116,7 @@ export const MainPage = () => {
                       likeCnt={el.likeCnt}
                       isLiked={el.isLiked}
                       commentsCnt={el.commentCnt}
+                      onlineUsers={onlineUsers}
                     ></PostCard>
                   </ListItem>
                 );

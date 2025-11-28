@@ -1,5 +1,4 @@
 import axios from "axios";
-import { logoutSocket } from "../sockets/authSocket";
 import { useAppDispatch } from "../store/hook";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -16,7 +15,6 @@ const logout = async () => {
   const keepUserId = userId;
   const dispatch = useAppDispatch();
   await dispatch(logoutThunk({ userId: keepUserId }));
-  // logoutSocket(keepUserId);
 };
 
 instance.interceptors.response.use(

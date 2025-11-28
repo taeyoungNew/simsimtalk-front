@@ -20,15 +20,11 @@ export const logoutAPI = async () => {
   return await axios.delete(`${import.meta.env.VITE_API_BASE}auth/logout`, {
     withCredentials: true,
   });
-  // .then((res) => {
-  //   alert(res.data.message);
-  // })
-  // .catch(function (error) {
-  //   throw error;
-  // });
 };
 
 export const authMeAPI = async () => {
+  console.log(`${import.meta.env.VITE_API_BASE}auth/auth-me`);
+
   return await axios.get(`${import.meta.env.VITE_API_BASE}auth/auth-me`, {
     withCredentials: true,
   });

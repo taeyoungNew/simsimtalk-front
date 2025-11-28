@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { resetUserError } from "../store/auth/authSlice";
 import { resetSignupError } from "../store/user/userSignupSlice";
 import { resetEditMyInfoError } from "../store/user/userInfoSlice";
+import { ChatWindow } from "../components/molecules/ChatWindow";
 
 export const Applayout = () => {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -16,9 +17,9 @@ export const Applayout = () => {
   const location = useLocation();
 
   useEffect(() => {
+    dispatch(resetUserError());
     dispatch(resetSignupError());
     dispatch(resetEditMyInfoError());
-    dispatch(resetUserError());
   }, [location]);
 
   return (
@@ -42,7 +43,9 @@ export const Applayout = () => {
         {isLogin == true ? <MyFollowings></MyFollowings> : <Box></Box>}
 
         <Outlet />
+
         {isLogin == true ? <Box>test3</Box> : <Box></Box>}
+        <ChatWindow />
       </Box>
     </>
   );

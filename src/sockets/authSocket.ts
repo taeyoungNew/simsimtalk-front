@@ -1,20 +1,27 @@
-import { initSocket } from ".";
-("./index");
+import { getSocket } from ".";
+
+export const registerOnline = (userId: string) => {
+  const socket = getSocket();
+  if (!socket?.connected) {
+    socket?.connect();
+  }
+  socket?.emit("registerOnline", { userId });
+};
 
 export const loginSocket = (userId: string) => {
-  const socket = initSocket();
-  if (!socket.connected) {
-    socket.connect();
+  const socket = getSocket();
+  if (!socket?.connected) {
+    socket?.connect();
   }
 
-  socket.emit("loginJoinOnlineRoom", { userId });
+  socket?.emit("loginJoinOnlineRoom", { userId });
 };
 
 export const logoutSocket = (userId: string) => {
-  const socket = initSocket();
-  if (!socket.connected) {
-    socket.connect();
+  const socket = getSocket();
+  if (!socket?.connected) {
+    socket?.connect();
   }
 
-  socket.emit("loginLeaveOnlineRoom", { userId });
+  socket?.emit("loginLeaveOnlineRoom", { userId });
 };
