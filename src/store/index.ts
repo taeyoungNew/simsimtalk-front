@@ -6,6 +6,7 @@ import { signupSlice } from "./user/userSignupSlice";
 import { getUserPostsSlice } from "./post/userPostsSlice";
 import { userInfoSlice } from "./user/userInfoSlice";
 import { onlineUsersSlice } from "./onlineUsers/onlineUsersSlice";
+import { chatSlice } from "./chat/chatSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     GetPostDetail: getPostDetailSlice.reducer,
     UserInfo: userInfoSlice.reducer,
     OnlineUsersSlice: onlineUsersSlice.reducer,
+    ChatRoomSlice: chatSlice.reducer,
   },
   devTools: true,
 });

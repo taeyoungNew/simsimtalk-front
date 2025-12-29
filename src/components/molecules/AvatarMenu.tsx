@@ -1,15 +1,18 @@
 import { Box, Button, Menu, MenuItem, SxProps } from "@mui/material";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DynamicCustomButton } from "../atoms/buttons/DynamicCustomButton";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { theme } from "../../theme/theme";
+import { useAppDispatch } from "../../store/hook";
+import { chatThunk } from "../../store/chat/chatThunk";
 
 interface AvatarMenuProps {
   id: number;
   userId: string;
+  userNickname: string;
   isLiked: boolean;
   sx?: SxProps;
   isOnline?: boolean;
@@ -17,7 +20,14 @@ interface AvatarMenuProps {
   to: string;
 }
 
-export const AvatarMenu = ({ sx, isOnline, isMy, userId }: AvatarMenuProps) => {
+export const AvatarMenu = ({
+  sx,
+  isOnline,
+  isMy,
+  userId,
+  userNickname,
+}: AvatarMenuProps) => {
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const prevPathName = location.pathname;
@@ -32,8 +42,23 @@ export const AvatarMenu = ({ sx, isOnline, isMy, userId }: AvatarMenuProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!isMenuBlock) setAnchorEl(event.currentTarget);
   };
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const handleClose = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setAnchorEl(null);
+    buttonRef.current?.focus();
+  };
+
+  const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
+    setAnchorEl(null);
+
+    setTimeout(() => {
+      dispatch(
+        chatThunk({ targetUserId: userId, targetUserNickname: userNickname }),
+      );
+    }, 0);
   };
   return (
     <Box>
@@ -46,13 +71,26 @@ export const AvatarMenu = ({ sx, isOnline, isMy, userId }: AvatarMenuProps) => {
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
+        // open={Boolean(anchorEl)}
+        // onClose={() => setAnchorEl(null)}
         open={open}
         onClose={handleClose}
         slotProps={{
+          // transition: {
+          //   onExited: () => {
+          //     dispatch(
+          //       chatThunk({
+          //         targetUserId: userId,
+          //         targetUserNickname: userNickname,
+          //       }),
+          //     );
+          //   },
+          // },
           list: {
             "aria-labelledby": "basic-button",
           },
         }}
+        disableRestoreFocus
       >
         <MenuItem onClick={handleClose}>
           <NavLink
@@ -72,7 +110,7 @@ export const AvatarMenu = ({ sx, isOnline, isMy, userId }: AvatarMenuProps) => {
         {isMy ? (
           <Box></Box>
         ) : (
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={openChatWindow}>
             <DynamicCustomButton
               icon={<ChatBubbleOutlineIcon />}
               color={theme.palette.fontColor.main}

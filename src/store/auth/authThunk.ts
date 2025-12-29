@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authMeAPI, loginAPI, logoutAPI } from "../../apis/auth";
 import { loginSocket, logoutSocket } from "../../sockets/authSocket";
-import { resetSignupError } from "../user/userSignupSlice";
-import { resetEditMyInfoError } from "../user/userInfoSlice";
-import { deleteAuth, resetUserError } from "./authSlice";
+import { deleteAuth } from "./authSlice";
 import { resetLiked } from "../post/allPostsSlice";
 
 interface LoginReq {

@@ -13,40 +13,79 @@ import { ChatBox } from "../atoms/box/ChatBox";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
+import MaximizeIcon from "@mui/icons-material/Maximize";
 import { useRef, useState } from "react";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { sendMessageEvemt } from "../../sockets/chatSocket";
 
-export const ChatWindow = () => {
+type SendMessagePayload = {
+  chatRoomId: string;
+  content: string;
+  contentType: "TEXT" | "FILE" | "SYSTEM" | "IMAGE";
+};
+
+interface ChatWindowProps {
+  chatRoomId: string;
+  targetUserNickname: string;
+  targetUserProfile: string;
+  isActive: boolean;
+}
+
+export const ChatWindow = ({
+  chatRoomId,
+  targetUserNickname,
+  targetUserProfile,
+  isActive,
+}: ChatWindowProps) => {
   const [message, setMessage] = useState("");
   const [openEmoji, setOpenEmoji] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleEmojiSelect = (emoji: any) => {
     setMessage((prev) => prev + emoji.native); // 이모지 추가
   };
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const handleOpenFile = () => {
-    console.log("handleOpenFile");
-
     fileInputRef.current?.click();
+  };
+
+  const minimizeChatWindow = () => {
+    setIsMinimized((prev) => !prev);
+    console.log("채팅창최소화");
+  };
+
+  const closeChatWindow = () => {
+    console.log("채팅창닫기");
+  };
+
+  const sendMessage = () => {
+    if (!message.trim()) return;
+    console.log("메세지보내기", message);
+
+    const payment: SendMessagePayload = {
+      chatRoomId,
+      content: message,
+      contentType: "TEXT",
+    };
+    sendMessageEvemt(payment);
+    setMessage("");
   };
 
   return (
     <Box
       sx={{
         borderRadius: "10px 10px 0 0",
-        position: "fixed",
+        position: "static",
         display: "flex",
         flexDirection: "column",
         right: "5%",
-        bottom: 1,
+        bottom: 0,
         width: "18rem",
-        height: "20rem",
         boxShadow: "0 0 10px rgba(0,0,0,0.2)",
       }}
     >
+      {/* header */}
       <Box
         sx={{
           borderRadius: "10px 10px 0 0",
@@ -66,116 +105,153 @@ export const ChatWindow = () => {
               color: theme.palette.background.paper,
             }}
           >
-            아이디
+            {targetUserNickname}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <MinimizeIcon
-            sx={{
-              fontSize: "1.3rem",
-              marginRight: "0.4rem",
-              cursor: "pointer",
-              color: theme.palette.background.paper,
-            }}
-          />
-          <CloseIcon
-            sx={{
-              fontSize: "1.3rem",
-              cursor: "pointer",
-              color: theme.palette.background.paper,
-            }}
-          />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          padding: "0.5rem",
-          backgroundColor: theme.palette.background.paper,
-          flexGrow: 4,
-        }}
-      >
-        <Box
-          sx={{
-            marginTop: "0.5rem",
-            left: 1,
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
-          <ChatBox content={"하이요"} isMyChat={false} />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            marginTop: "0.5rem",
-            right: 1,
-            justifyContent: "flex-end",
-          }}
-        >
-          <ChatBox content={"하이요"} isMyChat={true} />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "row",
-          flexGrow: 0.5,
-          padding: "0.5rem",
-          backgroundColor: theme.palette.background.paper,
-        }}
-      >
-        <Box sx={{ display: "flex" }}>
-          <IconButton
-            sx={{ width: "2rem", height: "2rem" }}
-            onClick={() => handleOpenFile()}
+          <Box
+            sx={{ display: "flex", alignItems: "center" }}
+            component="div"
+            onClick={minimizeChatWindow}
           >
-            <AttachFileIcon
+            {!isMinimized ? (
+              <MinimizeIcon
+                sx={{
+                  fontSize: "1.3rem",
+                  marginRight: "0.4rem",
+                  cursor: "pointer",
+                  color: theme.palette.background.paper,
+                }}
+              />
+            ) : (
+              <MaximizeIcon
+                sx={{
+                  fontSize: "1.3rem",
+                  marginRight: "0.4rem",
+                  cursor: "pointer",
+                  color: theme.palette.background.paper,
+                }}
+              ></MaximizeIcon>
+            )}
+          </Box>
+          <Box
+            sx={{ display: "flex", alignItems: "center" }}
+            component={"div"}
+            onClick={closeChatWindow}
+          >
+            <CloseIcon
               sx={{
-                color: theme.palette.fontColor.icon,
+                fontSize: "1.3rem",
+                cursor: "pointer",
+                color: theme.palette.background.paper,
               }}
             />
-          </IconButton>
+          </Box>
         </Box>
-        <Box sx={{ flexGrow: 1 }}>
-          <Input
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-            startAdornment={
-              <InputAdornment position="end">
-                <IconButton onClick={() => setOpenEmoji((prev) => !prev)}>
-                  <TagFacesIcon sx={{ cursor: "pointer" }} />
-                </IconButton>
-              </InputAdornment>
-            }
-            disableUnderline
+      </Box>
+
+      <Box
+        sx={{
+          display: isMinimized ? "none" : "block",
+        }}
+      >
+        <Box
+          sx={{
+            padding: "0.5rem",
+            backgroundColor: theme.palette.background.paper,
+            flexGrow: 4,
+            height: "15rem",
+          }}
+        >
+          <Box
             sx={{
-              width: "100%",
-              border: "1px solid black",
-              borderRadius: "40px",
+              marginTop: "0.5rem",
+              left: 1,
+              display: "flex",
+              justifyContent: "flex-start",
             }}
-            inputProps={{
-              style: {
-                fontSize: "0.8rem",
-                padding: "0.5rem",
-              },
+          >
+            <ChatBox content={"하이요"} isMyChat={false} />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              marginTop: "0.5rem",
+              right: 1,
+              justifyContent: "flex-end",
             }}
-          />
+          >
+            <ChatBox content={"하이요"} isMyChat={true} />
+          </Box>
         </Box>
         <Box
           sx={{
             display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            flexGrow: 0.5,
+            padding: "0.5rem",
+            backgroundColor: theme.palette.background.paper,
           }}
         >
-          <IconButton sx={{ width: "2rem", height: "2rem" }}>
-            <TelegramIcon
+          <Box sx={{ display: "flex" }}>
+            <IconButton
+              sx={{ width: "2rem", height: "2rem" }}
+              onClick={() => handleOpenFile()}
+            >
+              <AttachFileIcon
+                sx={{
+                  color: theme.palette.fontColor.icon,
+                }}
+              />
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Input
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") sendMessage();
+              }}
+              startAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setOpenEmoji((prev) => !prev)}>
+                    <TagFacesIcon sx={{ cursor: "pointer" }} />
+                  </IconButton>
+                </InputAdornment>
+              }
+              disableUnderline
               sx={{
-                cursor: "pointer",
-                fontSize: "1.5rem",
-                color: theme.palette.fontColor.icon,
+                width: "100%",
+                border: "1px solid black",
+                borderRadius: "40px",
+              }}
+              inputProps={{
+                style: {
+                  fontSize: "0.8rem",
+                  padding: "0.5rem",
+                },
               }}
             />
-          </IconButton>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <IconButton
+              onClick={sendMessage}
+              sx={{ width: "2rem", height: "2rem" }}
+            >
+              <TelegramIcon
+                sx={{
+                  cursor: "pointer",
+                  fontSize: "1.5rem",
+                  color: theme.palette.fontColor.icon,
+                }}
+              />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
 

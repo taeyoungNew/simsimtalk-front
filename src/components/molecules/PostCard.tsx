@@ -59,15 +59,6 @@ export const PostCard = ({
         }}
         color={theme.palette.fontColor.main}
       >
-        {/* <DetailPostLink
-          to={`/postDetail/${id}`}
-          className={({ isActive }) =>
-            isActive
-              ? "no-underline text-black font-bold"
-              : "no-underline text-gray-500"
-          }
-          state={{ from: to, isLiked, userId, prevPathName }}
-        > */}
         <Grid2
           sx={{ display: "flex", justifyContent: "center" }}
           container
@@ -89,6 +80,7 @@ export const PostCard = ({
               isLiked={isLiked}
               to={to}
               userId={userId}
+              userNickname={userNickname}
               key={id}
             />
 
