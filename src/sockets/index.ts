@@ -1,6 +1,9 @@
 import { io, Socket } from "socket.io-client";
 import { setOnlineUsers } from "../store/onlineUsers/onlineUsersSlice";
 import { AppDispath } from "../store";
+import { receiveMessage } from "./chatSocket";
+import { messageThunk } from "../store/message/messageThunk";
+import { addMessage } from "../store/message/messageSlice";
 
 let socket: Socket | null = null;
 
@@ -23,5 +26,8 @@ export const initSocket = (dispatch: AppDispath) => {
     dispatch(setOnlineUsers(params));
   });
 
+  socket.on("receiveMessage", async (params) => {
+    dispatch(addMessage(params));
+  });
   return socket;
 };

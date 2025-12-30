@@ -18,6 +18,10 @@ import { useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { sendMessageEvemt } from "../../sockets/chatSocket";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useAppDispatch } from "../store/hook";
+import { selectMessagesByRoom } from "../../store/message/messageSlice";
 
 type SendMessagePayload = {
   chatRoomId: string;
@@ -38,8 +42,11 @@ export const ChatWindow = ({
   targetUserProfile,
   isActive,
 }: ChatWindowProps) => {
+  const dispatch = useAppDispatch();
   const [message, setMessage] = useState("");
   const [openEmoji, setOpenEmoji] = useState(false);
+  const myId = useSelector((state: RootState) => state.User.id);
+  const messages = dispatch(selectMessagesByRoom(chatRoomId));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleEmojiSelect = (emoji: any) => {
     setMessage((prev) => prev + emoji.native); // 이모지 추가
@@ -52,7 +59,6 @@ export const ChatWindow = ({
 
   const minimizeChatWindow = () => {
     setIsMinimized((prev) => !prev);
-    console.log("채팅창최소화");
   };
 
   const closeChatWindow = () => {
@@ -61,7 +67,6 @@ export const ChatWindow = ({
 
   const sendMessage = () => {
     if (!message.trim()) return;
-    console.log("메세지보내기", message);
 
     const payment: SendMessagePayload = {
       chatRoomId,

@@ -1,10 +1,24 @@
 import { getSocket } from ".";
+import { chatThunk } from "../store/chat/chatThunk";
+import { useAppDispatch } from "../store/hook";
+import { messageThunk } from "../store/message/messageThunk";
 
 interface SendMessage {
   chatRoomId: string;
   content: string;
   contentType: "TEXT" | "FILE" | "SYSTEM" | "IMAGE";
 }
+interface ReceiveMessage {
+  chatRoomId: string;
+  content: string;
+  contentType: "TEXT" | "FILE" | "SYSTEM" | "IMAGE";
+  senderId: string;
+}
+
+export const receiveMessage = async (params: ReceiveMessage) => {
+  const dispatch = useAppDispatch();
+  await dispatch(messageThunk(params));
+};
 
 export const joinChatRoom = (chatRoomId: string) => {
   const socket = getSocket();
@@ -20,7 +34,6 @@ export const sendMessageEvemt = (props: SendMessage) => {
   const chatRoomId = props.chatRoomId;
   const content = props.content;
   const contentType = props.contentType;
-  // const receiverId = props.receiverId;
   if (!socket?.connected) {
     socket?.connect();
   }
@@ -29,17 +42,5 @@ export const sendMessageEvemt = (props: SendMessage) => {
     chatRoomId,
     content,
     contentType,
-    // receiverId,
-  });
-};
-
-export const receiveMessage = () => {
-  const socket = getSocket();
-  if (!socket?.connected) {
-    socket?.connect();
-  }
-
-  socket?.on("receiveMessage", (param) => {
-    console.log("메세지도착", param);
   });
 };
