@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import { theme } from "../../../theme/theme";
 
-interface ChatBoxProps {
+interface TextBubblProps {
   content: string;
   isMyChat: boolean;
 }
 
-export const ChatBox = ({ content, isMyChat }: ChatBoxProps) => {
+export const TextBubble = ({ content, isMyChat }: TextBubblProps) => {
   return (
     <Box
       sx={{
@@ -18,6 +18,10 @@ export const ChatBox = ({ content, isMyChat }: ChatBoxProps) => {
         minHeight: "3rem",
         width: "5rem",
         backgroundColor: theme.palette.background.paper,
+        // 🔥 핵심
+        wordBreak: "break-word",
+        overflowWrap: "anywhere",
+        whiteSpace: "pre-wrap",
       }}
     >
       {content}

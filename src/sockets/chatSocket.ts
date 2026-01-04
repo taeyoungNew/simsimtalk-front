@@ -1,5 +1,4 @@
 import { getSocket } from ".";
-import { chatThunk } from "../store/chat/chatThunk";
 import { useAppDispatch } from "../store/hook";
 import { messageThunk } from "../store/message/messageThunk";
 
@@ -29,7 +28,7 @@ export const joinChatRoom = (chatRoomId: string) => {
   socket?.emit("joinChatRoom", { chatRoomId });
 };
 
-export const sendMessageEvemt = (props: SendMessage) => {
+export const sendMessageEvent = (props: SendMessage) => {
   const socket = getSocket();
   const chatRoomId = props.chatRoomId;
   const content = props.content;

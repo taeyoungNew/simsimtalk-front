@@ -9,19 +9,25 @@ import { theme } from "../../theme/theme";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import CloseIcon from "@mui/icons-material/Close";
 import MinimizeIcon from "@mui/icons-material/Minimize";
-import { ChatBox } from "../atoms/box/ChatBox";
+import { TextBubble } from "../atoms/chatBubbles/TextBubble";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import MaximizeIcon from "@mui/icons-material/Maximize";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { sendMessageEvemt } from "../../sockets/chatSocket";
+import { sendMessageEvent } from "../../sockets/chatSocket";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useAppDispatch } from "../store/hook";
-import { selectMessagesByRoom } from "../../store/message/messageSlice";
+import { selectMessagesByRoom } from "../../store/message/messageSelector";
+import { getSocket, initSocket } from "../../sockets";
+import { ImageBubble } from "../atoms/chatBubbles/ImageBubble";
+import { FileBubble } from "../atoms/chatBubbles/FileBubble";
+import { getMessageTypeFormFile } from "../../utils/getMessageType";
+import { imgageUploadThunk } from "../../store/message/messageThunk";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../store/hook";
 
 type SendMessagePayload = {
   chatRoomId: string;
@@ -42,19 +48,46 @@ export const ChatWindow = ({
   targetUserProfile,
   isActive,
 }: ChatWindowProps) => {
-  const dispatch = useAppDispatch();
   const [message, setMessage] = useState("");
   const [openEmoji, setOpenEmoji] = useState(false);
   const myId = useSelector((state: RootState) => state.User.id);
-  const messages = dispatch(selectMessagesByRoom(chatRoomId));
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const socket = getSocket();
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const messages = useSelector(selectMessagesByRoom(chatRoomId));
+  const dispath = useAppDispatch();
+
+  useEffect(() => {
+    socket?.emit("getChatHistory", { chatRoomId });
+  }, [chatRoomId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   const handleEmojiSelect = (emoji: any) => {
     setMessage((prev) => prev + emoji.native); // 이모지 추가
   };
-  const [isMinimized, setIsMinimized] = useState(false);
 
   const handleOpenFile = () => {
     fileInputRef.current?.click();
+  };
+
+  const getFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const type = getMessageTypeFormFile(file);
+
+    const payment = {
+      file,
+      chatRoomId,
+    };
+
+    if (type === "IMAGE") {
+      dispath(imgageUploadThunk(payment));
+    } else {
+    }
   };
 
   const minimizeChatWindow = () => {
@@ -73,7 +106,7 @@ export const ChatWindow = ({
       content: message,
       contentType: "TEXT",
     };
-    sendMessageEvemt(payment);
+    sendMessageEvent(payment);
     setMessage("");
   };
 
@@ -167,27 +200,55 @@ export const ChatWindow = ({
             flexGrow: 4,
             height: "15rem",
           }}
+          overflow={"scroll"}
         >
           <Box
-            sx={{
-              marginTop: "0.5rem",
-              left: 1,
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            <ChatBox content={"하이요"} isMyChat={false} />
-          </Box>
-          <Box
+            key={1}
             sx={{
               display: "flex",
               marginTop: "0.5rem",
               right: 1,
-              justifyContent: "flex-end",
+              justifyContent: true ? "flex-end" : "flex-start",
             }}
           >
-            <ChatBox content={"하이요"} isMyChat={true} />
+            <FileBubble fileUrl="wdwdwd" key={12} isMyChat={true}></FileBubble>
           </Box>
+          <Box sx={{ justifyContent: true ? "flex-end" : "flex-start" }}>
+            <ImageBubble imageUrl="wdasdw" key={11} isMyChat={true} />
+          </Box>
+          {Array.isArray(messages) &&
+            messages.map((el, index) => {
+              console.log(messages);
+
+              const isMyMsg = el.senderId === myId;
+
+              return (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    marginTop: "0.5rem",
+                    right: 1,
+                    justifyContent: isMyMsg ? "flex-end" : "flex-start",
+                  }}
+                >
+                  {el.contentType === "TEXT" ? (
+                    <TextBubble content={`${el.content}`} isMyChat={isMyMsg} />
+                  ) : el.contentType === "IMAGE" ? (
+                    <ImageBubble
+                      imageUrl={`${el.content}`}
+                      isMyChat={isMyMsg}
+                    />
+                  ) : el.contentType === "FILE" ? (
+                    <FileBubble fileUrl={`${el.content}`} isMyChat={isMyMsg} />
+                  ) : (
+                    <Box></Box>
+                  )}
+                </Box>
+              );
+            })}
+          {/* 👇 이게 핵심 */}
+          <div ref={bottomRef} />
         </Box>
         <Box
           sx={{
@@ -265,7 +326,7 @@ export const ChatWindow = ({
         type="file"
         ref={fileInputRef}
         style={{ display: "none" }}
-        onChange={(e) => console.log("FILE:", e.target.files?.[0])}
+        onChange={getFile}
       />
 
       {/* 이모지 피커 팝업 */}
