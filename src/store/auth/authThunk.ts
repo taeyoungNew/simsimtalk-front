@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authMeAPI, loginAPI, logoutAPI } from "../../apis/auth";
-import { loginSocket, logoutSocket } from "../../sockets/authSocket";
+import {
+  authenticatSeocket,
+  loginSocket,
+  logoutSocket,
+} from "../../sockets/authSocket";
 import { deleteAuth } from "./authSlice";
 import { resetLiked } from "../post/allPostsSlice";
 
@@ -45,6 +49,7 @@ export const loginThunk = createAsyncThunk<
     });
     thunkAPI.dispatch(resetLiked());
     loginSocket(loginResult.data.data.id);
+    authenticatSeocket();
     return { message: loginResult.data.message, data: loginResult.data.data };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

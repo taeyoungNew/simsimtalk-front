@@ -3,7 +3,7 @@ import { setOnlineUsers } from "../store/onlineUsers/onlineUsersSlice";
 import { AppDispath } from "../store";
 import { receiveMessage } from "./chatSocket";
 import { messageThunk } from "../store/message/messageThunk";
-import { addMessage } from "../store/message/messageSlice";
+import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
 
 let socket: Socket | null = null;
 
@@ -28,6 +28,9 @@ export const initSocket = (dispatch: AppDispath) => {
 
   socket.on("receiveMessage", async (params) => {
     dispatch(addMessage(params));
+  });
+  socket.on("chatHistory", async (params) => {
+    dispatch(setMessagesByRoom(params));
   });
   return socket;
 };

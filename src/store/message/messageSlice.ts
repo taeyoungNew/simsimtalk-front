@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { messageThunk } from "./messageThunk";
 
 interface Error {
@@ -10,18 +10,16 @@ interface Error {
 export interface ChatMessage {
   id: number; // DB messageId (auto increment)
   chatRoomId: string;
-  senderId: number;
+  senderId: string;
   content: string;
-  messageType: "TEXT" | "IMAGE" | "FILE" | "EMOJI" | "SYSTEM";
+  contentType: "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
   createdAt: string; // ISO string
 }
 
 export interface ChatMessageState {
   isLoading: boolean;
   success: boolean;
-  messagesByRoom: {
-    [chatRoomId: string]: ChatMessage[];
-  };
+  messagesByRoom: Record<string, ChatMessage[]>;
   error: null | Error;
 }
 
@@ -40,10 +38,22 @@ export const messageSlice = createSlice({
   name: "message",
   initialState: messageInittialState,
   reducers: {
-    selectMessagesByRoom: (state, action) => {
-      const { chatRoomId } = action.payload;
-      console.log(chatRoomId);
+    getChatMessageByRoom(state, action) {
+      console.log(state.messagesByRoom);
     },
+    setMessagesByRoom(
+      state,
+      action: PayloadAction<{
+        chatRoomId: string;
+        messages: ChatMessage[];
+      }>,
+    ) {
+      state.messagesByRoom[action.payload.chatRoomId] = action.payload.messages;
+      // for(let idx = 0; action.payload.messages.length > idx; idx++) {
+      //   state.me
+      // }
+    },
+
     addMessage: (state, action) => {
       const { chatRoomId, id } = action.payload;
       if (!state.messagesByRoom[chatRoomId]) {
@@ -52,6 +62,9 @@ export const messageSlice = createSlice({
 
       state.messagesByRoom[chatRoomId].push(action.payload);
     },
+    clearMessageByRoom(state, action: PayloadAction<{ chatRoomId: string }>) {
+      delete state.messagesByRoom[action.payload.chatRoomId];
+    },
   },
   extraReducers: async (builder) => {
     builder
@@ -59,8 +72,6 @@ export const messageSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(messageThunk.fulfilled, (state, action) => {
-        console.log("messageThunk = ", action.payload);
-
         state.isLoading = false;
       })
       .addCase(messageThunk.rejected, (state, action) => {
@@ -69,5 +80,6 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { addMessage, selectMessagesByRoom } = messageSlice.actions;
+export const { addMessage, setMessagesByRoom, clearMessageByRoom } =
+  messageSlice.actions;
 export default messageSlice.reducer;
