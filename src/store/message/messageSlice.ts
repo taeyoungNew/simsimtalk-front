@@ -11,6 +11,7 @@ export interface ChatMessage {
   id: number; // DB messageId (auto increment)
   chatRoomId: string;
   senderId: string;
+  originalName: string;
   content: string;
   contentType: "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
   createdAt: string; // ISO string
@@ -49,9 +50,6 @@ export const messageSlice = createSlice({
       }>,
     ) {
       state.messagesByRoom[action.payload.chatRoomId] = action.payload.messages;
-      // for(let idx = 0; action.payload.messages.length > idx; idx++) {
-      //   state.me
-      // }
     },
 
     addMessage: (state, action) => {
@@ -62,7 +60,7 @@ export const messageSlice = createSlice({
 
       state.messagesByRoom[chatRoomId].push(action.payload);
     },
-    clearMessageByRoom(state, action: PayloadAction<{ chatRoomId: string }>) {
+    clearMessageByRoom(state, action) {
       delete state.messagesByRoom[action.payload.chatRoomId];
     },
   },
@@ -71,10 +69,10 @@ export const messageSlice = createSlice({
       .addCase(messageThunk.pending, (state, _) => {
         state.isLoading = true;
       })
-      .addCase(messageThunk.fulfilled, (state, action) => {
+      .addCase(messageThunk.fulfilled, (state, _) => {
         state.isLoading = false;
       })
-      .addCase(messageThunk.rejected, (state, action) => {
+      .addCase(messageThunk.rejected, (state, _) => {
         state.isLoading = false;
       });
   },

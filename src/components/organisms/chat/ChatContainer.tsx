@@ -41,6 +41,7 @@ export const ChatContainer = (
             key={index}
             chatRoomId={el.chatRoomId}
             targetUserNickname={el.targetUserNickname}
+            targetUserId={el.targetUserId}
             targetUserProfile={""}
             isActive={isActive}
           />

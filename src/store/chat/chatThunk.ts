@@ -14,6 +14,7 @@ interface CreateChatReq {
 }
 interface CreateChatRes {
   chatRoomId: string;
+  targetUserId: string;
   targetUserNickname: string;
   isNew: boolean;
 }
@@ -30,6 +31,7 @@ export const chatThunk = createAsyncThunk<
       joinChatRoom(chatRoomResult.chatRoomId);
       return {
         targetUserNickname,
+        targetUserId,
         chatRoomId: chatRoomResult.chatRoomId,
         isNew: chatRoomResult.isNew,
       };
