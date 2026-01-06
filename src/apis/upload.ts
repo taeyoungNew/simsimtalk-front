@@ -1,13 +1,9 @@
 import axios from "axios";
 
-interface uploadPayment {
-  chatRoomId: string;
-}
-
-export const uploadFile = async () => {
+export const uploadFile = async (formData: FormData) => {
   return await axios.post(
-    `${import.meta.env.VITE_API_BASE}message/upload-file`,
-    {},
+    `${import.meta.env.VITE_API_BASE}upload/file`,
+    formData,
     { withCredentials: true },
   );
 };

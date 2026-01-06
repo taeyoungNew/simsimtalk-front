@@ -8,6 +8,7 @@ interface IsLastIsLoading {
 interface ChatRoomInfo {
   chatRoomId: string;
   targetUserNickname: string;
+  targetUserId: string;
 }
 
 interface ChatInittialState {
@@ -25,11 +26,23 @@ const chatInittialState: IsLastIsLoading & ChatInittialState = {
 export const chatSlice = createSlice({
   name: "chat/chatRooms",
   initialState: chatInittialState,
-  reducers: {},
+  reducers: {
+    deleteChatRoom(state, action) {
+      console.log(action.payload);
+      const roomId = action.payload;
+      state.openedChatRooms = state.openedChatRooms.filter(
+        (el) => el.chatRoomId !== roomId,
+      );
+
+      if (state.activeChatRoomId === roomId) {
+        state.activeChatRoomId = null;
+      }
+    },
+  },
 
   extraReducers: async (builder) => {
     builder
-      .addCase(chatThunk.pending, (state, action) => {
+      .addCase(chatThunk.pending, (state, _) => {
         state.isLoading = true;
       })
       .addCase(chatThunk.fulfilled, (state, action) => {
@@ -43,6 +56,7 @@ export const chatSlice = createSlice({
           state.openedChatRooms.push({
             targetUserNickname: getChatRoomInfo.targetUserNickname,
             chatRoomId: getChatRoomInfo.chatRoomId,
+            targetUserId: getChatRoomInfo.targetUserId,
           });
         }
         state.activeChatRoomId = getChatRoomInfo.chatRoomId;
@@ -54,3 +68,6 @@ export const chatSlice = createSlice({
       });
   },
 });
+
+export const { deleteChatRoom } = chatSlice.actions;
+export default chatSlice.reducer;

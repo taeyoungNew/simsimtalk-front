@@ -2,11 +2,16 @@ import { Box } from "@mui/material";
 
 interface ImageBubbleProps {
   fileUrl: string;
+  fileName: string;
   isMyChat: boolean;
 }
 
-export const FileBubble = ({ fileUrl, isMyChat }: ImageBubbleProps) => {
-  const fileName = decodeURIComponent(fileUrl.split("/").pop() ?? "");
+export const FileBubble = ({
+  fileUrl,
+  fileName,
+  isMyChat,
+}: ImageBubbleProps) => {
+  // const fileName = decodeURIComponent(fileUrl.split("/").pop() ?? "");
   return (
     <Box
       sx={{
@@ -41,7 +46,7 @@ export const FileBubble = ({ fileUrl, isMyChat }: ImageBubbleProps) => {
           rel="noopener noreferrer"
           style={{ fontSize: "0.7rem" }}
         >
-          다운로드
+          download
         </a>
       </Box>
     </Box>

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { uploadImage } from "../../apis/upload";
+import { uploadFile, uploadImage } from "../../apis/upload";
 import { sendMessageEvent } from "../../sockets/chatSocket";
 interface Error {
   status: number;
@@ -21,7 +21,7 @@ interface MessageRes {
   contentType: "TEXT" | "FILE" | "SYSTEM" | "IMAGE";
 }
 
-interface ImageUploadReq {
+interface ImagOrFileUploadReq {
   file: File;
   chatRoomId: string;
 }
@@ -42,9 +42,23 @@ export const messageThunk = createAsyncThunk<
   }
 });
 
+export const fileUploadThunk = createAsyncThunk<
+  void,
+  ImagOrFileUploadReq,
+  { rejectValue: Error }
+>("message/file-upload", async ({ file, chatRoomId }) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("chatRoomId", chatRoomId);
+
+  const result = await uploadFile(formData);
+
+  sendMessageEvent(result.data);
+});
+
 export const imgageUploadThunk = createAsyncThunk<
   void,
-  ImageUploadReq,
+  ImagOrFileUploadReq,
   { rejectValue: Error }
 >("message/image-upload", async ({ file, chatRoomId }) => {
   const formData = new FormData();

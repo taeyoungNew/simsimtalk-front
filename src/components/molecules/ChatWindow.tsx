@@ -17,20 +17,24 @@ import MaximizeIcon from "@mui/icons-material/Maximize";
 import { useEffect, useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { sendMessageEvent } from "../../sockets/chatSocket";
+import { leaveChatRoom, sendMessageEvent } from "../../sockets/chatSocket";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { selectMessagesByRoom } from "../../store/message/messageSelector";
-import { getSocket, initSocket } from "../../sockets";
+import { getSocket } from "../../sockets";
 import { ImageBubble } from "../atoms/chatBubbles/ImageBubble";
 import { FileBubble } from "../atoms/chatBubbles/FileBubble";
 import { getMessageTypeFormFile } from "../../utils/getMessageType";
-import { imgageUploadThunk } from "../../store/message/messageThunk";
-import { useDispatch } from "react-redux";
+import {
+  fileUploadThunk,
+  imgageUploadThunk,
+} from "../../store/message/messageThunk";
 import { useAppDispatch } from "../../store/hook";
 
 type SendMessagePayload = {
   chatRoomId: string;
+  originalName: string;
+  targetUserId: string;
   content: string;
   contentType: "TEXT" | "FILE" | "SYSTEM" | "IMAGE";
 };
@@ -38,6 +42,7 @@ type SendMessagePayload = {
 interface ChatWindowProps {
   chatRoomId: string;
   targetUserNickname: string;
+  targetUserId: string;
   targetUserProfile: string;
   isActive: boolean;
 }
@@ -45,6 +50,7 @@ interface ChatWindowProps {
 export const ChatWindow = ({
   chatRoomId,
   targetUserNickname,
+  targetUserId,
   targetUserProfile,
   isActive,
 }: ChatWindowProps) => {
@@ -87,6 +93,7 @@ export const ChatWindow = ({
     if (type === "IMAGE") {
       dispath(imgageUploadThunk(payment));
     } else {
+      dispath(fileUploadThunk(payment));
     }
   };
 
@@ -95,7 +102,7 @@ export const ChatWindow = ({
   };
 
   const closeChatWindow = () => {
-    console.log("채팅창닫기");
+    leaveChatRoom(dispath, chatRoomId);
   };
 
   const sendMessage = () => {
@@ -103,6 +110,8 @@ export const ChatWindow = ({
 
     const payment: SendMessagePayload = {
       chatRoomId,
+      originalName: "",
+      targetUserId,
       content: message,
       contentType: "TEXT",
     };
@@ -202,24 +211,8 @@ export const ChatWindow = ({
           }}
           overflow={"scroll"}
         >
-          <Box
-            key={1}
-            sx={{
-              display: "flex",
-              marginTop: "0.5rem",
-              right: 1,
-              justifyContent: true ? "flex-end" : "flex-start",
-            }}
-          >
-            <FileBubble fileUrl="wdwdwd" key={12} isMyChat={true}></FileBubble>
-          </Box>
-          <Box sx={{ justifyContent: true ? "flex-end" : "flex-start" }}>
-            <ImageBubble imageUrl="wdasdw" key={11} isMyChat={true} />
-          </Box>
           {Array.isArray(messages) &&
             messages.map((el, index) => {
-              console.log(messages);
-
               const isMyMsg = el.senderId === myId;
 
               return (
@@ -240,7 +233,11 @@ export const ChatWindow = ({
                       isMyChat={isMyMsg}
                     />
                   ) : el.contentType === "FILE" ? (
-                    <FileBubble fileUrl={`${el.content}`} isMyChat={isMyMsg} />
+                    <FileBubble
+                      fileName={`${el.originalName}`}
+                      fileUrl={`${el.content}`}
+                      isMyChat={isMyMsg}
+                    />
                   ) : (
                     <Box></Box>
                   )}

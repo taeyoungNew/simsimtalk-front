@@ -27,6 +27,8 @@ export const initSocket = (dispatch: AppDispath) => {
   });
 
   socket.on("receiveMessage", async (params) => {
+    console.log("receiveMessage = ", params);
+
     dispatch(addMessage(params));
   });
   socket.on("chatHistory", async (params) => {
