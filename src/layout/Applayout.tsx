@@ -45,9 +45,8 @@ export const Applayout = () => {
 
         <Outlet />
 
-        {isLogin == true ? <Box>test3</Box> : <Box></Box>}
+        {isLogin == true ? <Box>chat room list</Box> : <Box></Box>}
         <ChatContainer />
-        {/* <ChatWindow /> */}
       </Box>
     </>
   );

@@ -24,7 +24,7 @@ export interface ChatMessageState {
   error: null | Error;
 }
 
-const messageInittialState: ChatMessageState = {
+const messageInitialState: ChatMessageState = {
   messagesByRoom: {},
   isLoading: false,
   success: false,
@@ -37,7 +37,7 @@ const messageInittialState: ChatMessageState = {
 
 export const messageSlice = createSlice({
   name: "message",
-  initialState: messageInittialState,
+  initialState: messageInitialState,
   reducers: {
     getChatMessageByRoom(state, action) {
       console.log(state.messagesByRoom);

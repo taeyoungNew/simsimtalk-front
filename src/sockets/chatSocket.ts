@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux";
 import { getSocket } from ".";
 import { useAppDispatch } from "../store/hook";
 import { clearMessageByRoom } from "../store/message/messageSlice";
 import { messageThunk } from "../store/message/messageThunk";
-import { useDispatch } from "react-redux";
 import { AppDispath } from "../store";
 import { deleteChatRoom } from "../store/chat/chatSlice";
 
