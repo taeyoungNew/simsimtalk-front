@@ -24,6 +24,7 @@ interface MessageRes {
 interface ImagOrFileUploadReq {
   file: File;
   chatRoomId: string;
+  targetUserId: string;
 }
 
 export const messageThunk = createAsyncThunk<
@@ -46,26 +47,39 @@ export const fileUploadThunk = createAsyncThunk<
   void,
   ImagOrFileUploadReq,
   { rejectValue: Error }
->("message/file-upload", async ({ file, chatRoomId }) => {
+>("message/file-upload", async ({ file, chatRoomId, targetUserId }) => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("chatRoomId", chatRoomId);
 
   const result = await uploadFile(formData);
+  const payload = {
+    chatRoomId: result.data.chatRoomId,
+    content: result.data.content,
+    targetUserId,
+    originalName: result.data.originalName,
+    contentType: result.data.contentType,
+  };
 
-  sendMessageEvent(result.data);
+  sendMessageEvent(payload);
 });
 
 export const imgageUploadThunk = createAsyncThunk<
   void,
   ImagOrFileUploadReq,
   { rejectValue: Error }
->("message/image-upload", async ({ file, chatRoomId }) => {
+>("message/image-upload", async ({ file, chatRoomId, targetUserId }) => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("chatRoomId", chatRoomId);
 
   const result = await uploadImage(formData);
-
-  sendMessageEvent(result.data);
+  const payload = {
+    chatRoomId: result.data.chatRoomId,
+    content: result.data.content,
+    targetUserId,
+    originalName: result.data.originalName,
+    contentType: result.data.contentType,
+  };
+  sendMessageEvent(payload);
 });

@@ -88,6 +88,7 @@ export const ChatWindow = ({
     const payment = {
       file,
       chatRoomId,
+      targetUserId,
     };
 
     if (type === "IMAGE") {

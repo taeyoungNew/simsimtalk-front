@@ -12,6 +12,9 @@ import Badge from "@mui/material/Badge/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -20,15 +23,23 @@ import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 
 import { logoutThunk } from "../../store/auth/authThunk";
+import { useEffect } from "react";
+import { selectUnreadAlramCnt } from "../../store/messageAlram/messageAlramSelector";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
+  const alramList = useSelector(
+    (state: RootState) => state.MessageAlramSlice.alarmsByRoom,
+  );
+  let alramCnt = useSelector(selectUnreadAlramCnt);
+  const [showAlramAnchorEl, setShowAlramAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const prevPathName = location.pathname;
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+  const [_, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(showAlramAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,6 +48,17 @@ export default function NavBar() {
     const keepUserId = userId;
     await dispatch(logoutThunk({ userId: keepUserId }));
   };
+
+  const showAlrams = async (event: React.MouseEvent<HTMLElement>) => {
+    setShowAlramAnchorEl(event.currentTarget);
+  };
+  const closeAlrams = async () => {
+    setShowAlramAnchorEl(null);
+  };
+
+  useEffect(() => {
+    console.log("useEffect", alramList);
+  }, [alramList]);
 
   return (
     <Box>
@@ -85,16 +107,36 @@ export default function NavBar() {
                 </Badge>
               </IconButton>
               <IconButton
+                onClick={showAlrams}
                 size="large"
                 aria-label="show 17 new notifications"
                 color="inherit"
               >
-                <Badge badgeContent={17} color="error">
+                <Badge
+                  badgeContent={alramCnt > 0 ? alramCnt : undefined}
+                  color="error"
+                >
                   <NotificationsNoneIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
                 </Badge>
               </IconButton>
+              <Menu
+                id="fade-menu"
+                slotProps={{
+                  list: {
+                    "aria-labelledby": "fade-button",
+                  },
+                }}
+                slots={{ transition: Fade }}
+                anchorEl={showAlramAnchorEl}
+                open={open}
+                onClose={closeAlrams}
+              >
+                <MenuItem onClick={closeAlrams}>Profile</MenuItem>
+                <MenuItem onClick={closeAlrams}>My account</MenuItem>
+                <MenuItem onClick={closeAlrams}>Logout</MenuItem>
+              </Menu>
               <NavLink to={`/myPage`} state={{ myPage: true, prevPathName }}>
                 <IconButton
                   size="large"

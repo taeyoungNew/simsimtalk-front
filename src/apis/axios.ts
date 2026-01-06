@@ -21,7 +21,6 @@ instance.interceptors.response.use(
   (res) => res,
   (err) => {
     const status = err.response?.status;
-    console.log();
 
     if (status === 401) {
       logout();

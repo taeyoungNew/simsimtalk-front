@@ -4,6 +4,7 @@ import { AppDispath } from "../store";
 import { receiveMessage } from "./chatSocket";
 import { messageThunk } from "../store/message/messageThunk";
 import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
+import { getMessageAlramThunk } from "../store/messageAlram/messageAlramThunk";
 
 let socket: Socket | null = null;
 
@@ -27,12 +28,15 @@ export const initSocket = (dispatch: AppDispath) => {
   });
 
   socket.on("receiveMessage", async (params) => {
-    console.log("receiveMessage = ", params);
-
     dispatch(addMessage(params));
   });
   socket.on("chatHistory", async (params) => {
     dispatch(setMessagesByRoom(params));
+  });
+  socket.on("emitAlrams", async (params) => {
+    console.log("내 알람가져오기", params);
+
+    dispatch(getMessageAlramThunk(params));
   });
   return socket;
 };
