@@ -1,6 +1,6 @@
 import { getSocket } from ".";
 
-export const authenticatSeocket = () => {
+export const authenticatSocket = () => {
   const socket = getSocket();
   if (!socket?.connected) {
     socket?.connect();

@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getMessageAlramThunk } from "./messageAlramThunk";
+import {
+  getMessageAlramThunk,
+  markAlarmAsReadByRoomThunk,
+} from "./messageAlramThunk";
+import { ChatSharp } from "@mui/icons-material";
 
 interface Error {
   status: number;
@@ -9,6 +13,7 @@ interface Error {
 
 interface MessageAlarm {
   id: number;
+  chatRoomId: string;
   senderId: string;
   senderNickname: string;
   content: string;
@@ -65,6 +70,7 @@ export const messageAlramSlice = createSlice({
             state.alarmsByRoom[roomId].push({
               content: el.content,
               id: el.id,
+              chatRoomId: el.chatRoomId,
               senderId: el.senderId,
               senderNickname: el.senderNickname,
               contentType: el.contentType,
@@ -77,6 +83,22 @@ export const messageAlramSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getMessageAlramThunk.rejected, (state, _) => {
+        state.isLoading = false;
+      })
+
+      .addCase(markAlarmAsReadByRoomThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(markAlarmAsReadByRoomThunk.fulfilled, (state, action) => {
+        const chatRoomId = action.payload.chatRoomId;
+        console.log("chatRoomId = ", chatRoomId);
+
+        delete state.alarmsByRoom[chatRoomId];
+        console.log(state.alarmsByRoom);
+
+        state.isLoading = false;
+      })
+      .addCase(markAlarmAsReadByRoomThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

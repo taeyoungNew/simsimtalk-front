@@ -1,3 +1,4 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 export const selectUnreadAlramCnt = (state: RootState) =>
@@ -5,3 +6,15 @@ export const selectUnreadAlramCnt = (state: RootState) =>
     (acc, alrams) => acc + alrams.length,
     0,
   );
+
+export const selectUnreadAlrams = createSelector(
+  (state: RootState) => state.MessageAlramSlice.alarmsByRoom,
+  (el) => {
+    return Object.values(el)
+      .flat()
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+  },
+);

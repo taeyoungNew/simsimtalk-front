@@ -30,6 +30,7 @@ import {
   imgageUploadThunk,
 } from "../../store/message/messageThunk";
 import { useAppDispatch } from "../../store/hook";
+import { markAlarmAsReadByRoomThunk } from "../../store/messageAlram/messageAlramThunk";
 
 type SendMessagePayload = {
   chatRoomId: string;
@@ -64,7 +65,9 @@ export const ChatWindow = ({
   const messages = useSelector(selectMessagesByRoom(chatRoomId));
   const dispath = useAppDispatch();
 
+  // useEffect(() => {}, []);
   useEffect(() => {
+    dispath(markAlarmAsReadByRoomThunk({ chatRoomId }));
     socket?.emit("getChatHistory", { chatRoomId });
   }, [chatRoomId]);
 
@@ -245,7 +248,6 @@ export const ChatWindow = ({
                 </Box>
               );
             })}
-          {/* 👇 이게 핵심 */}
           <div ref={bottomRef} />
         </Box>
         <Box

@@ -24,7 +24,11 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 
 import { logoutThunk } from "../../store/auth/authThunk";
 import { useEffect } from "react";
-import { selectUnreadAlramCnt } from "../../store/messageAlram/messageAlramSelector";
+import {
+  selectUnreadAlramCnt,
+  selectUnreadAlrams,
+} from "../../store/messageAlram/messageAlramSelector";
+import MessageAlramItem from "../atoms/alram/MessageAlramItem";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -33,6 +37,8 @@ export default function NavBar() {
     (state: RootState) => state.MessageAlramSlice.alarmsByRoom,
   );
   let alramCnt = useSelector(selectUnreadAlramCnt);
+  let alrams = useSelector(selectUnreadAlrams);
+
   const [showAlramAnchorEl, setShowAlramAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const prevPathName = location.pathname;
@@ -55,10 +61,6 @@ export default function NavBar() {
   const closeAlrams = async () => {
     setShowAlramAnchorEl(null);
   };
-
-  useEffect(() => {
-    console.log("useEffect", alramList);
-  }, [alramList]);
 
   return (
     <Box>
@@ -127,15 +129,30 @@ export default function NavBar() {
                   list: {
                     "aria-labelledby": "fade-button",
                   },
+                  paper: {
+                    sx: {
+                      width: "19rem", // ⭐ 메뉴 전체 폭
+                      maxHeight: "14rem", // 스크롤 대비
+                    },
+                  },
                 }}
                 slots={{ transition: Fade }}
                 anchorEl={showAlramAnchorEl}
                 open={open}
                 onClose={closeAlrams}
               >
-                <MenuItem onClick={closeAlrams}>Profile</MenuItem>
-                <MenuItem onClick={closeAlrams}>My account</MenuItem>
-                <MenuItem onClick={closeAlrams}>Logout</MenuItem>
+                {alrams.map((el, index) => {
+                  return (
+                    <MessageAlramItem
+                      key={index}
+                      chatRoomId={el.chatRoomId}
+                      content={el.content}
+                      contentType={el.contentType}
+                      senderId={el.senderId}
+                      senderNickname={el.senderNickname}
+                    />
+                  );
+                })}
               </Menu>
               <NavLink to={`/myPage`} state={{ myPage: true, prevPathName }}>
                 <IconButton
