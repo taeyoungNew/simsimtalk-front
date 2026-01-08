@@ -4,7 +4,11 @@ import { AppDispath } from "../store";
 import { receiveMessage } from "./chatSocket";
 import { messageThunk } from "../store/message/messageThunk";
 import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
-import { getMessageAlramThunk } from "../store/messageAlram/messageAlramThunk";
+import {
+  addMessageAlramThunk,
+  clearAlramsByChatRoomThunk,
+  getMessageAlramThunk,
+} from "../store/messageAlram/messageAlramThunk";
 import { getAlramSocket } from "./alramSocket";
 
 let socket: Socket | null = null;
@@ -39,6 +43,12 @@ export const initSocket = (dispatch: AppDispath) => {
   });
   socket.on("emitAlrams", async (params) => {
     dispatch(getMessageAlramThunk(params));
+  });
+  socket.on("alramsRead", async (param) => {
+    dispatch(clearAlramsByChatRoomThunk(param));
+  });
+  socket.on("notifyMessageAlarm", async (param) => {
+    dispatch(addMessageAlramThunk(param));
   });
   return socket;
 };

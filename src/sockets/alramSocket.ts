@@ -14,3 +14,13 @@ export const getAlramSocket = () => {
     }
   });
 };
+
+export const alramsRead = (chatRoomId: string) => {
+  const socket = getSocket();
+
+  if (!socket?.connected) {
+    socket?.connect();
+  }
+
+  socket?.emit("alramsRead", { chatRoomId });
+};
