@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
+  addMessageAlramThunk,
+  clearAlramsByChatRoomThunk,
   getMessageAlramThunk,
   markAlarmAsReadByRoomThunk,
 } from "./messageAlramThunk";
-import { ChatSharp } from "@mui/icons-material";
 
 interface Error {
   status: number;
@@ -56,6 +57,38 @@ export const messageAlramSlice = createSlice({
   },
   extraReducers: async (builder) => {
     builder
+      .addCase(addMessageAlramThunk.pending, (state, _) => {
+        state.isLoading = true;
+      })
+      .addCase(addMessageAlramThunk.fulfilled, (state, action) => {
+        const {
+          id,
+          chatRoomId,
+          content,
+          contentType,
+          createdAt,
+          messageId,
+          senderId,
+          senderNickname,
+        } = action.payload;
+        if (!state.alarmsByRoom[chatRoomId]) {
+          state.alarmsByRoom[chatRoomId] = [];
+        }
+        state.alarmsByRoom[chatRoomId].push({
+          content: content,
+          id: id,
+          chatRoomId: chatRoomId,
+          senderId: senderId,
+          senderNickname: senderNickname,
+          contentType: contentType,
+          messageId: messageId,
+          createdAt: createdAt,
+        });
+        state.isLoading = false;
+      })
+      .addCase(addMessageAlramThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       .addCase(getMessageAlramThunk.pending, (state, _) => {
         state.isLoading = true;
       })
@@ -91,14 +124,25 @@ export const messageAlramSlice = createSlice({
       })
       .addCase(markAlarmAsReadByRoomThunk.fulfilled, (state, action) => {
         const chatRoomId = action.payload.chatRoomId;
-        console.log("chatRoomId = ", chatRoomId);
 
         delete state.alarmsByRoom[chatRoomId];
-        console.log(state.alarmsByRoom);
 
         state.isLoading = false;
       })
       .addCase(markAlarmAsReadByRoomThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(clearAlramsByChatRoomThunk.pending, (state, _) => {
+        state.isLoading = true;
+      })
+      .addCase(clearAlramsByChatRoomThunk.fulfilled, (state, action) => {
+        const chatRoomId = action.payload.chatRoomId;
+
+        delete state.alarmsByRoom[chatRoomId];
+
+        state.isLoading = false;
+      })
+      .addCase(clearAlramsByChatRoomThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
   },

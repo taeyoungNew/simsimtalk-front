@@ -33,9 +33,6 @@ import MessageAlramItem from "../atoms/alram/MessageAlramItem";
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
-  const alramList = useSelector(
-    (state: RootState) => state.MessageAlramSlice.alarmsByRoom,
-  );
   let alramCnt = useSelector(selectUnreadAlramCnt);
   let alrams = useSelector(selectUnreadAlrams);
 
@@ -56,7 +53,7 @@ export default function NavBar() {
   };
 
   const showAlrams = async (event: React.MouseEvent<HTMLElement>) => {
-    setShowAlramAnchorEl(event.currentTarget);
+    if (alrams.length > 0) setShowAlramAnchorEl(event.currentTarget);
   };
   const closeAlrams = async () => {
     setShowAlramAnchorEl(null);
@@ -103,7 +100,7 @@ export default function NavBar() {
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton size="large" aria-label="show 4 new mails">
                 <Badge badgeContent={4} color="error">
-                  <MailOutlineIcon
+                  <NotificationsNoneIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
                 </Badge>
@@ -118,7 +115,7 @@ export default function NavBar() {
                   badgeContent={alramCnt > 0 ? alramCnt : undefined}
                   color="error"
                 >
-                  <NotificationsNoneIcon
+                  <MailOutlineIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
                 </Badge>
