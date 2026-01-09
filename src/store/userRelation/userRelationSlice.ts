@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getFollowingsThunk } from "./userRelationThunk";
+import { followingCencelThunk, followingThunk } from "../follow/followThunk";
 
 interface Error {
   status: number;
@@ -8,8 +9,8 @@ interface Error {
 }
 
 interface FollowingUserInfo {
-  id: string;
-  nickname: string;
+  followingId: string;
+  followingNickname: string;
   profileUrl: string;
 }
 
@@ -55,11 +56,40 @@ export const userRelationSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getFollowingsThunk.fulfilled, (state, action) => {
-        state.followins = action.payload;
+        if (action.payload.length > 0) state.followins = action.payload;
         state.isLoading = false;
       })
       .addCase(getFollowingsThunk.rejected, (state, action) => {
         state.isLoading = false;
+      })
+      .addCase(followingThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(followingThunk.fulfilled, (state, action) => {
+        const { followId, followingNickname } = action.payload;
+        state.followins.push({
+          profileUrl: "",
+          followingId: followId,
+          followingNickname,
+        });
+
+        state.isLoading = false;
+      })
+      .addCase(followingThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(followingCencelThunk.pending, (state, _) => {
+        state.isLoading = false;
+      })
+      .addCase(followingCencelThunk.fulfilled, (state, action) => {
+        const { followId } = action.payload;
+        state.followins = state.followins.filter(
+          (el) => el.followingId !== followId,
+        );
+        state.isLoading = true;
+      })
+      .addCase(followingCencelThunk.rejected, (state, action) => {
+        state.isLoading = true;
       });
   },
 });

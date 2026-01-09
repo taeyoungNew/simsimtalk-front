@@ -8,8 +8,14 @@ interface Error {
 }
 
 interface FollowingUserInfoRes {
-  id: string;
-  nickname: string;
+  followingId: string;
+  followingNickname: string;
+  profileUrl: string;
+}
+
+interface FriendUserInfores {
+  friendId: string;
+  friendNickname: string;
   profileUrl: string;
 }
 
@@ -30,3 +36,15 @@ export const getFollowingsThunk = createAsyncThunk<
     });
   }
 });
+
+// export const getFriendsThunk = createAsyncThunk<
+//   FriendUserInfores[],
+//   void,
+//   { rejectValue: Error }
+// >("userRelation/friends", async () => {
+//   try {
+
+//   } catch (error) {
+
+//   }
+// });

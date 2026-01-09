@@ -28,7 +28,6 @@ export const chatSlice = createSlice({
   initialState: chatInittialState,
   reducers: {
     deleteChatRoom(state, action) {
-      console.log(action.payload);
       const roomId = action.payload;
       state.openedChatRooms = state.openedChatRooms.filter(
         (el) => el.chatRoomId !== roomId,

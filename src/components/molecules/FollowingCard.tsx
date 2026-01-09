@@ -43,7 +43,7 @@ export const FollowinCard = ({
             />
           </Box>
           <Typography
-            sx={{ fontSize: "0.8rem", color: theme.palette.fontColor.assist }}
+            sx={{ fontSize: "0.7rem", color: theme.palette.fontColor.assist }}
           >
             {isOnline ? "online" : "offline"}
           </Typography>

@@ -101,11 +101,25 @@ export const PostDetailHeader = ({
   };
 
   const following = async () => {
-    await dispatch(followingThunk({ followId: userId, isMyPage }));
+    console.log(userNickname);
+
+    await dispatch(
+      followingThunk({
+        followId: userId,
+        isMyPage,
+        followingNickname: userNickname,
+      }),
+    );
   };
 
   const followingCencel = async () => {
-    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
+    await dispatch(
+      followingCencelThunk({
+        followId: userId,
+        isMyPage,
+        followingNickname: userNickname,
+      }),
+    );
   };
 
   return (
