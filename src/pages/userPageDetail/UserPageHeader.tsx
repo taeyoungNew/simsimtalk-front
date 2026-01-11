@@ -34,11 +34,23 @@ export const UserPageHeader = ({
   const dispatch = useAppDispatch();
 
   const following = async () => {
-    await dispatch(followingThunk({ followId: userId, isMyPage }));
+    await dispatch(
+      followingThunk({
+        followId: userId,
+        isMyPage,
+        followingNickname: userInfo.nickname,
+      }),
+    );
   };
 
   const followingCencel = async () => {
-    await dispatch(followingCencelThunk({ followId: userId, isMyPage }));
+    await dispatch(
+      followingCencelThunk({
+        followId: userId,
+        isMyPage,
+        followingNickname: userInfo.nickname,
+      }),
+    );
   };
 
   useEffect(() => {

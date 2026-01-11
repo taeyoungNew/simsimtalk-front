@@ -10,6 +10,7 @@ export const CustomAvatar = styled(AccountCircleIcon, {
 })<AvatarProps>(({ theme, isOnline }) => ({
   width: "inherit",
   height: "inherit",
+
   backgroundColor: theme.palette.fontColor.icon,
   color: theme.palette.background.paper,
   fontWeight: "bold",

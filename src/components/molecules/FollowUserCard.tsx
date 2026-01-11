@@ -29,11 +29,23 @@ export const FollowUserCard = ({
   const dispatch = useAppDispatch();
 
   const following = async () => {
-    await dispatch(followingThunk({ followId: id, isMyPage }));
+    await dispatch(
+      followingThunk({
+        followId: id,
+        isMyPage,
+        followingNickname: nickname,
+      }),
+    );
   };
 
   const followingCencel = async () => {
-    await dispatch(followingCencelThunk({ followId: id, isMyPage }));
+    await dispatch(
+      followingCencelThunk({
+        followId: id,
+        isMyPage,
+        followingNickname: nickname,
+      }),
+    );
   };
   return (
     <Box

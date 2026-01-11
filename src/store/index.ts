@@ -9,6 +9,7 @@ import { onlineUsersSlice } from "./onlineUsers/onlineUsersSlice";
 import { chatSlice } from "./chat/chatSlice";
 import { messageSlice } from "./message/messageSlice";
 import { messageAlramSlice } from "./messageAlram/messageAlramSlice";
+import { userRelationSlice } from "./userRelation/userRelationSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     ChatRoomSlice: chatSlice.reducer,
     MessageSlice: messageSlice.reducer,
     MessageAlramSlice: messageAlramSlice.reducer,
+    UserRelationSlice: userRelationSlice.reducer,
   },
   devTools: true,
 });

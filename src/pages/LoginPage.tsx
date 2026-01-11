@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 import { resetLiked } from "../store/post/allPostsSlice";
+import { getFollowingsThunk } from "../store/userRelation/userRelationThunk";
 
 type LoginType = {
   email: string;
@@ -34,8 +35,8 @@ export const LoginPage = () => {
   const login = async (data: LoginType) => {
     dispatch(resetLiked());
     await dispatch(loginThunk(data));
+    await dispatch(getFollowingsThunk());
   };
-
   return (
     <>
       <Box

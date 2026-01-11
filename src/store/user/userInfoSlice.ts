@@ -271,10 +271,6 @@ export const userInfoSlice = createSlice({
         state.followerCnt = action.payload.followerCnt;
         state.followingCnt = action.payload.followingCnt;
         state.postCnt = action.payload?.postCnt;
-        console.log(
-          "action.payload.isFollowingedIds = ",
-          action.payload.isFollowingedIds,
-        );
 
         for (let idx = 0; idx < action.payload?.Followers.length; idx++) {
           state.followers.push({

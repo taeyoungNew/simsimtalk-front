@@ -19,6 +19,7 @@ import AuthRoute from "./route/AuthRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { getSocket, initSocket } from "./sockets";
+import { getFollowingsThunk } from "./store/userRelation/userRelationThunk";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
+      await dispatch(getFollowingsThunk());
     };
     checkAuth();
   }, [dispatch]);

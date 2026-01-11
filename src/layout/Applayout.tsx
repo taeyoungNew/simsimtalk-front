@@ -11,12 +11,16 @@ import { resetSignupError } from "../store/user/userSignupSlice";
 import { resetEditMyInfoError } from "../store/user/userInfoSlice";
 import { ChatWindow } from "../components/molecules/ChatWindow";
 import { ChatContainer } from "../components/organisms/chat/ChatContainer";
+import { MyFriends } from "../components/common/MyFriends";
+import { MyChattingRooms } from "../components/common/MyChattingRooms";
 
 export const Applayout = () => {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const dispatch = useAppDispatch();
   const location = useLocation();
-
+  const followingCnt = useSelector(
+    (state: RootState) => state.UserRelationSlice.followins.length,
+  );
   useEffect(() => {
     dispatch(resetUserError());
     dispatch(resetSignupError());
@@ -41,11 +45,22 @@ export const Applayout = () => {
           p: 2,
         }}
       >
-        {isLogin == true ? <MyFollowings></MyFollowings> : <Box></Box>}
+        {isLogin == true ? (
+          <MyFollowings followingCnt={followingCnt}></MyFollowings>
+        ) : (
+          <Box></Box>
+        )}
 
         <Outlet />
 
-        {isLogin == true ? <Box>chat room list</Box> : <Box></Box>}
+        {isLogin == true ? (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <MyFriends />
+            <MyChattingRooms />
+          </Box>
+        ) : (
+          <Box></Box>
+        )}
         <ChatContainer />
       </Box>
     </>
