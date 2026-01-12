@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { AvatarMenu } from "./AvatarMenu";
 
 export const ChatRoomCard = () => {
   return (
-    <Box sx={{ display: "flex", border: "0.5px solid black", gap: 1 }}>
+    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
       <Box>
         <AvatarMenu
           sx={{ width: "1.9rem" }}
@@ -15,12 +15,12 @@ export const ChatRoomCard = () => {
         />
       </Box>
       <Box>
-        <Box>nickname</Box>
-        <Box>message...</Box>
+        <Typography sx={{ fontSize: "1rem" }}>nickname</Typography>
+        <Typography sx={{ fontSize: "0.8rem" }}>message...</Typography>
       </Box>
       <Box>
-        <Box>방금</Box>
-        <Box>3</Box>
+        <Typography sx={{ fontSize: "0.8rem" }}>방금</Typography>
+        <Typography sx={{ fontSize: "0.8rem" }}>3</Typography>
       </Box>
     </Box>
   );
