@@ -19,7 +19,11 @@ import AuthRoute from "./route/AuthRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { getSocket, initSocket } from "./sockets";
-import { getFollowingsThunk } from "./store/userRelation/userRelationThunk";
+import {
+  getFollowingsThunk,
+  getFriendsThunk,
+} from "./store/userRelation/userRelationThunk";
+import { getChatsThunk } from "./store/chat/chatThunk";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -28,6 +32,8 @@ function App() {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
       await dispatch(getFollowingsThunk());
+      await dispatch(getFriendsThunk());
+      await dispatch(getChatsThunk());
     };
     checkAuth();
   }, [dispatch]);

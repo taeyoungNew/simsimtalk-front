@@ -1,8 +1,15 @@
 import { Box, Typography } from "@mui/material";
-import { theme } from "../../theme/theme";
 import { FriendsCard } from "../molecules/FriendCard";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export const MyFriends = () => {
+  const friends = useSelector(
+    (state: RootState) => state.UserRelationSlice.friends,
+  );
+  const onlineUsers = useSelector(
+    (state: RootState) => state.OnlineUsersSlice.ids,
+  );
   return (
     <Box
       sx={{
@@ -18,7 +25,19 @@ export const MyFriends = () => {
         friends
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <FriendsCard />
+        {friends.map((el, index) => {
+          return (
+            <FriendsCard
+              key={index}
+              friendId={el.friendId}
+              email={el.email}
+              nickname={el.nickname}
+              chatRoomId={el.chatRoomId}
+              profileUrl={""}
+              onlineUsers={onlineUsers}
+            />
+          );
+        })}
       </Box>
     </Box>
   );

@@ -2,8 +2,38 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { AvatarMenu } from "./AvatarMenu";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { theme } from "../../theme/theme";
+import { useAppDispatch } from "../../store/hook";
+import { chatThunk } from "../../store/chat/chatThunk";
+import { checkOnline } from "../../utils/checktOnline";
 
-export const FriendsCard = () => {
+interface FriendsProps {
+  friendId: string;
+  email: string;
+  nickname: string;
+  chatRoomId: string;
+  profileUrl: string;
+  onlineUsers: string[];
+}
+
+export const FriendsCard = ({
+  chatRoomId,
+  email,
+  friendId,
+  nickname,
+  profileUrl,
+  onlineUsers,
+}: FriendsProps) => {
+  const dispatch = useAppDispatch();
+  const isOnline = checkOnline(friendId, onlineUsers);
+  const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
+    // setAnchorEl(null);
+
+    setTimeout(() => {
+      dispatch(
+        chatThunk({ targetUserId: friendId, targetUserNickname: nickname }),
+      );
+    }, 0);
+  };
   return (
     <Box sx={{ display: "flex", gap: 1 }}>
       <Box
@@ -23,12 +53,12 @@ export const FriendsCard = () => {
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold" }}>
-          nickname
+          {nickname}
         </Typography>
         <Typography
           sx={{ fontSize: "0.6rem", color: theme.palette.fontColor.assist }}
         >
-          test@test.com
+          {email}
         </Typography>
 
         <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -38,14 +68,16 @@ export const FriendsCard = () => {
                 width: "0.5rem",
                 height: "0.5rem",
                 borderRadius: "70px",
-                backgroundColor: theme.palette.success.main,
+                backgroundColor: isOnline
+                  ? theme.palette.success.main
+                  : theme.palette.error.main,
               }}
             />
           </Box>
           <Typography
-            sx={{ fontSize: "0.6rem", color: theme.palette.fontColor.assist }}
+            sx={{ fontSize: "0.7rem", color: theme.palette.fontColor.assist }}
           >
-            online
+            {isOnline ? "online" : "offline"}
           </Typography>
         </Box>
       </Box>
@@ -57,7 +89,7 @@ export const FriendsCard = () => {
           flexGrow: 1,
         }}
       >
-        <IconButton sx={{ ml: "auto" }}>
+        <IconButton onClick={openChatWindow} sx={{ ml: "auto" }}>
           <ForumRoundedIcon
             sx={{
               color: theme.palette.fontColor.assist,

@@ -10,7 +10,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 import { resetLiked } from "../store/post/allPostsSlice";
-import { getFollowingsThunk } from "../store/userRelation/userRelationThunk";
+import {
+  getFollowingsThunk,
+  getFriendsThunk,
+} from "../store/userRelation/userRelationThunk";
+import { getChatsThunk } from "../store/chat/chatThunk";
 
 type LoginType = {
   email: string;
@@ -36,6 +40,8 @@ export const LoginPage = () => {
     dispatch(resetLiked());
     await dispatch(loginThunk(data));
     await dispatch(getFollowingsThunk());
+    await dispatch(getFriendsThunk());
+    await dispatch(getChatsThunk());
   };
   return (
     <>

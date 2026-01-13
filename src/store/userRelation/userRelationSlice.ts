@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFollowingsThunk } from "./userRelationThunk";
+import { getFollowingsThunk, getFriendsThunk } from "./userRelationThunk";
 import { followingCencelThunk, followingThunk } from "../follow/followThunk";
 
 interface Error {
@@ -15,8 +15,10 @@ interface FollowingUserInfo {
 }
 
 interface FriendsInfo {
-  id: string;
+  friendId: string;
+  email: string;
   nickname: string;
+  chatRoomId: string;
   profileUrl: string;
 }
 
@@ -52,6 +54,25 @@ export const userRelationSlice = createSlice({
   reducers: {},
   extraReducers: async (builder) => {
     builder
+      .addCase(getFriendsThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getFriendsThunk.fulfilled, (state, action) => {
+        const friends = action.payload;
+        friends.forEach((el) => {
+          state.friends.push({
+            chatRoomId: el.chatRoomId,
+            email: el.email,
+            friendId: el.friendId,
+            nickname: el.nickname,
+            profileUrl: "",
+          });
+        });
+        state.isLoading = false;
+      })
+      .addCase(getFriendsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       .addCase(getFollowingsThunk.pending, (state, _) => {
         state.isLoading = true;
       })
