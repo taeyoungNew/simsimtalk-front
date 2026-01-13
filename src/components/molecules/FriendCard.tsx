@@ -13,7 +13,7 @@ export const FriendsCard = () => {
         }}
       >
         <AvatarMenu
-          sx={{ width: "1.8rem" }}
+          sx={{ width: "2.5rem" }}
           id={0}
           userId={"aa"}
           userNickname={"wdas"}
@@ -24,6 +24,11 @@ export const FriendsCard = () => {
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold" }}>
           nickname
+        </Typography>
+        <Typography
+          sx={{ fontSize: "0.6rem", color: theme.palette.fontColor.assist }}
+        >
+          test@test.com
         </Typography>
 
         <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -38,7 +43,7 @@ export const FriendsCard = () => {
             />
           </Box>
           <Typography
-            sx={{ fontSize: "0.7rem", color: theme.palette.fontColor.assist }}
+            sx={{ fontSize: "0.6rem", color: theme.palette.fontColor.assist }}
           >
             online
           </Typography>
