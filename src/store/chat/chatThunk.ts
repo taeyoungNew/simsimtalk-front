@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createChatRoom } from "../../apis/chat";
+import { createChatRoom, getChatListAPI } from "../../apis/chat";
 import { joinChatRoom } from "../../sockets/chatSocket";
+
+type MessageType = "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
 
 interface Error {
   status: number;
@@ -18,6 +20,37 @@ interface CreateChatRes {
   targetUserNickname: string;
   isNew: boolean;
 }
+interface ChatRoomType {
+  chatRoomId: string;
+  targetUserId: string;
+  targetUserEmail: string;
+  targetUserNickname: string;
+  lastMessagePreview: string;
+  lastMessageType: MessageType;
+  lastMessageAt: string;
+}
+
+interface GetChatListRes {
+  chatList: ChatRoomType[];
+}
+
+export const getChatsThunk = createAsyncThunk<
+  GetChatListRes,
+  void,
+  { rejectValue: Error }
+>("chat/getChats", async (_, thunkAPI) => {
+  try {
+    const chatList = await getChatListAPI();
+
+    return { chatList: chatList.data };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.data.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
 export const chatThunk = createAsyncThunk<
   CreateChatRes,

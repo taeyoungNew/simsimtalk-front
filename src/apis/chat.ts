@@ -11,3 +11,9 @@ export const createChatRoom = async (targetUserId: string) => {
     },
   );
 };
+
+export const getChatListAPI = async () => {
+  return await axios.get(`${import.meta.env.VITE_API_BASE}chat/get-chatlist`, {
+    withCredentials: true,
+  });
+};

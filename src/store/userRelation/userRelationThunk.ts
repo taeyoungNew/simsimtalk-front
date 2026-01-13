@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getFollowinsAPI } from "../../apis/userRelation";
+import { getFollowinsAPI, getFriendsAPI } from "../../apis/userRelation";
 
 interface Error {
   status: number;
@@ -13,10 +13,12 @@ interface FollowingUserInfoRes {
   profileUrl: string;
 }
 
-interface FriendUserInfores {
+interface FriendUserInfosRes {
   friendId: string;
-  friendNickname: string;
+  email: string;
+  nickname: string;
   profileUrl: string;
+  chatRoomId: string;
 }
 
 export const getFollowingsThunk = createAsyncThunk<
@@ -37,14 +39,20 @@ export const getFollowingsThunk = createAsyncThunk<
   }
 });
 
-// export const getFriendsThunk = createAsyncThunk<
-//   FriendUserInfores[],
-//   void,
-//   { rejectValue: Error }
-// >("userRelation/friends", async () => {
-//   try {
+export const getFriendsThunk = createAsyncThunk<
+  FriendUserInfosRes[],
+  void,
+  { rejectValue: Error }
+>("userRelation/friends", async (_, thunkAPI) => {
+  try {
+    const friendInfos = await getFriendsAPI();
 
-//   } catch (error) {
-
-//   }
-// });
+    return friendInfos.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});

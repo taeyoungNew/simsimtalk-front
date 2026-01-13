@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { chatThunk } from "./chatThunk";
+import { chatThunk, getChatsThunk } from "./chatThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -11,9 +11,19 @@ interface ChatRoomInfo {
   targetUserId: string;
 }
 
+interface ChatListInfos {
+  chatRoomId: string;
+  targetUserId: string;
+  targetUserEmail: string;
+  targetUserNickname: string;
+  lastMessagePreview: string;
+  lastMessageType: "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
+  lastMessageAt: string;
+}
 interface ChatInittialState {
   openedChatRooms: ChatRoomInfo[];
   activeChatRoomId: string | null;
+  chatList: ChatListInfos[];
 }
 
 const chatInittialState: IsLastIsLoading & ChatInittialState = {
@@ -21,8 +31,8 @@ const chatInittialState: IsLastIsLoading & ChatInittialState = {
   errorMessage: "",
   openedChatRooms: [],
   activeChatRoomId: null,
+  chatList: [],
 };
-
 export const chatSlice = createSlice({
   name: "chat/chatRooms",
   initialState: chatInittialState,
@@ -41,6 +51,18 @@ export const chatSlice = createSlice({
 
   extraReducers: async (builder) => {
     builder
+      .addCase(getChatsThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getChatsThunk.fulfilled, (state, action) => {
+        console.log(action.payload.chatList);
+        state.chatList = action.payload.chatList;
+
+        state.isLoading = false;
+      })
+      .addCase(getChatsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       .addCase(chatThunk.pending, (state, _) => {
         state.isLoading = true;
       })

@@ -71,21 +71,9 @@ export const AvatarMenu = ({
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
-        // open={Boolean(anchorEl)}
-        // onClose={() => setAnchorEl(null)}
         open={open}
         onClose={handleClose}
         slotProps={{
-          // transition: {
-          //   onExited: () => {
-          //     dispatch(
-          //       chatThunk({
-          //         targetUserId: userId,
-          //         targetUserNickname: userNickname,
-          //       }),
-          //     );
-          //   },
-          // },
           list: {
             "aria-labelledby": "basic-button",
           },
