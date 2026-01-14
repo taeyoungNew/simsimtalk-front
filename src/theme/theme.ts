@@ -14,6 +14,21 @@ declare module "@mui/material/styles" {
       assist: string;
       placeholder: string;
     };
+    chatCardColor: {
+      unreadNickname: string;
+      unreadBg: string;
+      unreadBd: string;
+      unreadMsg: string;
+      unreadTime: string;
+      unreadBadgeBg: string;
+      readNickname: string;
+      readBg: string;
+      readBd: string;
+      readMsg: string;
+      readTime: string;
+      readBadgeBg: string;
+      hoverBd: string;
+    };
     buttonColor: PaletteColor;
     borderLineColor: {
       normal: string;
@@ -32,6 +47,21 @@ declare module "@mui/material/styles" {
       isLike: string;
       assist: string;
       placeholder: string;
+    };
+    chatCardColor: {
+      unreadNickname: string;
+      unreadBg: string;
+      unreadBd: string;
+      unreadMsg: string;
+      unreadTime: string;
+      unreadBadgeBg: string;
+      readNickname: string;
+      readBg: string;
+      readBd: string;
+      readMsg: string;
+      readTime: string;
+      readBadgeBg: string;
+      hoverBd: string;
     };
     buttonColor: PaletteColorOptions;
     borderLineColor: {
@@ -86,6 +116,21 @@ export const theme = createTheme({
     },
     User: {
       online: " #10b981",
+    },
+    chatCardColor: {
+      unreadNickname: "#0f172a",
+      unreadBg: "#eff6ff",
+      unreadBd: "#bfdbfe",
+      unreadMsg: "#334155",
+      unreadTime: "#2563eb",
+      unreadBadgeBg: "#2563eb",
+      readNickname: "#334155",
+      readBg: "#ffffff",
+      readBd: "#e2e8f0",
+      readMsg: "#64748b",
+      readTime: "#94a3b8",
+      readBadgeBg: "",
+      hoverBd: "#93c5fd",
     },
   },
 

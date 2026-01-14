@@ -20,18 +20,26 @@ export const MyFollowings = ({ followingCnt }: MyFollowingsProps) => {
       <Box
         sx={{
           maxWidth: "100%",
-          height: followingCnt > 0 ? "10rem" : "5rem",
           backgroundColor: (theme) => theme.palette.background.paper,
           borderRadius: "10px",
           padding: "0.8rem",
-          maxHeight: "20rem",
+          maxHeight: "16rem",
         }}
       >
         <Typography sx={{ fontSize: "1rem", fontWeight: "Bold" }}>
           followings
         </Typography>
         {followingCnt > 0 ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              overflow: "scroll",
+              overflowY: "auto",
+              scrollbarGutter: "stable",
+            }}
+          >
             {followingList.map((el, index) => {
               return (
                 <FollowinCard

@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { theme } from "../../../theme/theme";
 import as from "../../../assets/imgs/chat-quote.svg";
+import ImageZoom from "../../common/ImageZoom";
 
 interface ImageBubbleProps {
   imageUrl: string;
@@ -16,17 +17,10 @@ export const ImageBubble = ({ imageUrl, isMyChat }: ImageBubbleProps) => {
         width: "7rem",
         border: "1px solid",
         borderColor: "divider",
+        cursor: "pointer  ",
       }}
     >
-      <img
-        src={imageUrl}
-        alt="chat-image"
-        style={{
-          width: "100%",
-          height: "auto",
-          display: "block",
-        }}
-      />
+      <ImageZoom src={imageUrl} />
     </Box>
   );
 };

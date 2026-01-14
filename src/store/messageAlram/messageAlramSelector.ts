@@ -18,3 +18,11 @@ export const selectUnreadAlrams = createSelector(
       );
   },
 );
+
+export const selectUnreadAlramCntByRoom =
+  (chatRoomId: string) => (state: RootState) => {
+    if (state.MessageAlramSlice.alarmsByRoom[`${chatRoomId}`]) {
+      return state.MessageAlramSlice.alarmsByRoom[`${chatRoomId}`].length;
+    }
+    return 0;
+  };

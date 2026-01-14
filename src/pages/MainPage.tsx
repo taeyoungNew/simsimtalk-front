@@ -88,7 +88,7 @@ export const MainPage = () => {
             justifyContent: "flex-end",
           }}
         ></Box>
-        {isLogin === true ? <WritePost></WritePost> : <Box></Box>}
+        {isLogin === true ? <WritePost /> : <Box />}
         <Box height="inherit">
           <Grid2 container rowSpacing={3} direction="column">
             <Grid2 size={12}>

@@ -26,8 +26,6 @@ export const FriendsCard = ({
   const dispatch = useAppDispatch();
   const isOnline = checkOnline(friendId, onlineUsers);
   const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
-    // setAnchorEl(null);
-
     setTimeout(() => {
       dispatch(
         chatThunk({ targetUserId: friendId, targetUserNickname: nickname }),

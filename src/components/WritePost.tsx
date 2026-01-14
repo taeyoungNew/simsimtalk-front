@@ -13,13 +13,16 @@ interface WritePost {
 
 export const WritePost = () => {
   const dispatch = useAppDispatch();
-  const { control, handleSubmit } = useForm<WritePost>({
+  const { control, handleSubmit, reset } = useForm<WritePost>({
     defaultValues: {
       content: "",
     },
   });
   const writePost = async (data: WritePost) => {
-    await dispatch(createPostThunk(data.content));
+    const normalized = data.content.replace(/\n{2,}/g, "\n");
+
+    await dispatch(createPostThunk(normalized));
+    reset();
   };
 
   const imoge = () => {
@@ -58,6 +61,12 @@ export const WritePost = () => {
             <Controller
               name="content"
               control={control}
+              rules={{
+                maxLength: {
+                  value: 300,
+                  message: "글자수를 300이하로 입력해주십시오",
+                },
+              }}
               render={({ field }) => (
                 <CustomTextArea {...field}></CustomTextArea>
               )}
