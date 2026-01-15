@@ -26,6 +26,7 @@ const MessageAlramItem = forwardRef<HTMLInputElement, MessageAlramProps>(
     return (
       <Box
         sx={{
+          width: "100%",
           display: "flex",
           padding: "0 0.3rem 0.3rem 0.3rem",
           gap: 0.3,

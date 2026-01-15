@@ -65,7 +65,6 @@ export const ChatWindow = ({
   const messages = useSelector(selectMessagesByRoom(chatRoomId));
   const dispath = useAppDispatch();
 
-  // useEffect(() => {}, []);
   useEffect(() => {
     dispath(markAlarmAsReadByRoomThunk({ chatRoomId }));
     socket?.emit("getChatHistory", { chatRoomId });

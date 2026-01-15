@@ -36,7 +36,6 @@ interface Post {
 
 interface ModifyPost {
   id: number;
-  title: string;
   content: string;
 }
 

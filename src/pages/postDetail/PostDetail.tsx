@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { PostDetailHeader } from "./PostDetailHeader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -23,7 +23,7 @@ export const PostDetail = () => {
   const getPostDetail = async (postId: number) => {
     await dispatch(getPostDetailThunk({ postId, postUserId }));
   };
-
+  const [isModifyPost, setIsModifyPost] = useState(false);
   useEffect(() => {
     getPostDetail(Number(postId));
   }, []);
@@ -46,6 +46,8 @@ export const PostDetail = () => {
             userNickname={postDetailInfo.userNickname}
             userId={postDetailInfo.userId}
             isFollowinged={postDetailInfo.isFollowinged}
+            setIsModifyPost={setIsModifyPost}
+            isModifyPost={isModifyPost}
           ></PostDetailHeader>
           <PostDetailBody
             postId={postDetailInfo.id}
@@ -53,7 +55,8 @@ export const PostDetail = () => {
             likeCnt={postDetailInfo.likeCnt}
             commentCnt={postDetailInfo.commentCnt}
             isLiked={postDetailInfo.isLiked}
-            isEditing={true}
+            isModifyPost={isModifyPost}
+            setIsModifyPost={setIsModifyPost}
           ></PostDetailBody>
         </Box>
         <Box
