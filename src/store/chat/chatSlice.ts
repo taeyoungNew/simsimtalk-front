@@ -37,6 +37,16 @@ export const chatSlice = createSlice({
   name: "chat/chatRooms",
   initialState: chatInittialState,
   reducers: {
+    updateChatList(state, action) {
+      const { chatRoomId, createdAt, content, contentType } = action.payload;
+      const room = state.chatList.find((el) => el.chatRoomId === chatRoomId);
+
+      if (!room) return;
+
+      room.lastMessageAt = createdAt;
+      room.lastMessagePreview = content;
+      room.lastMessageType = contentType;
+    },
     deleteChatRoom(state, action) {
       const roomId = action.payload;
       state.openedChatRooms = state.openedChatRooms.filter(
@@ -55,7 +65,6 @@ export const chatSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getChatsThunk.fulfilled, (state, action) => {
-        console.log(action.payload.chatList);
         state.chatList = action.payload.chatList;
 
         state.isLoading = false;
@@ -90,5 +99,5 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { deleteChatRoom } = chatSlice.actions;
+export const { deleteChatRoom, updateChatList } = chatSlice.actions;
 export default chatSlice.reducer;

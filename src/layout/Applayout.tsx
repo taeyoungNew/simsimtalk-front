@@ -54,7 +54,7 @@ export const Applayout = () => {
         <Outlet />
 
         {isLogin == true ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <MyFriends />
             <MyChattingRooms />
           </Box>

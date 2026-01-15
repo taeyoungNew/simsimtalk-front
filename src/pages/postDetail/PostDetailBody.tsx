@@ -30,7 +30,6 @@ export const PostDetailBody = ({
   isEditing,
   isLiked,
 }: PostDetailBodyProps & PostEditingProps) => {
-  
   const dispatch = useAppDispatch();
   const postLike = async () => {
     await dispatch(postLikeThunk(postId));
@@ -67,6 +66,7 @@ export const PostDetailBody = ({
             sx={{
               fontSize: "1.3rem",
               color: (theme) => theme.palette.fontColor.main,
+              whiteSpace: "pre-wrap",
             }}
           >
             {content}

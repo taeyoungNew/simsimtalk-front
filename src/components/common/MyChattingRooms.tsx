@@ -13,6 +13,7 @@ export const MyChattingRooms = () => {
       sx={{
         maxWidth: "100%",
         height: "auto",
+        maxHeight: "14rem",
         backgroundColor: (theme) => theme.palette.background.paper,
         borderRadius: "10px",
         padding: "0.8rem",
@@ -33,9 +34,10 @@ export const MyChattingRooms = () => {
           display: "flex",
           flexDirection: "column",
           gap: 0.8,
-          maxHeight: "10rem",
-          paddingRight: "0.5rem",
+          maxHeight: "inherit",
           overflow: "scroll",
+          overflowY: "auto",
+          scrollbarGutter: "stable",
         }}
       >
         {chatList.map((el, index) => {

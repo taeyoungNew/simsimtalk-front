@@ -39,9 +39,6 @@ export const messageSlice = createSlice({
   name: "message",
   initialState: messageInitialState,
   reducers: {
-    getChatMessageByRoom(state, action) {
-      // console.log(state.messagesByRoom);
-    },
     setMessagesByRoom(
       state,
       action: PayloadAction<{

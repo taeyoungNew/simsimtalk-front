@@ -14,17 +14,28 @@ export const MyFriends = () => {
     <Box
       sx={{
         maxWidth: "100%",
-        height: "10rem",
+        height: "auto",
         backgroundColor: (theme) => theme.palette.background.paper,
         borderRadius: "10px",
         padding: "0.8rem",
-        maxHeight: "20rem",
+        maxHeight: "10em",
+        overflow: "hidden",
       }}
     >
       <Typography sx={{ fontSize: "1rem", fontWeight: "Bold" }}>
         friends
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          overflow: "scroll",
+          overflowY: "auto",
+          scrollbarGutter: "stable",
+          maxHeight: "inherit",
+        }}
+      >
         {friends.map((el, index) => {
           return (
             <FriendsCard
