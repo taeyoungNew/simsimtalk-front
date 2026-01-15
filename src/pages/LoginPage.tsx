@@ -1,6 +1,6 @@
 import { Box, Button, Grid2 } from "@mui/material";
 import { ChatQuote } from "../assets/icons/ChatQuote";
-import "../assets/css/loginPage.css";
+import "../assets/style/loginPage.css";
 import { theme } from "../theme/theme";
 import { SimSimTextField } from "../components/atoms/inputs/SimsimTextField";
 import { useForm, Controller } from "react-hook-form";

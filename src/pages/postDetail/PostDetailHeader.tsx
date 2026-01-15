@@ -1,16 +1,12 @@
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { theme } from "../../theme/theme";
 import { useAppDispatch } from "../../store/hook";
-import {
-  deletePostThunk,
-  modifyPostThunk,
-} from "../../store/post/postDetailThunk";
-import { Controller, useForm } from "react-hook-form";
+import { deletePostThunk } from "../../store/post/postDetailThunk";
 import {
   followingCencelThunk,
   followingThunk,
@@ -36,12 +32,8 @@ interface PostDetailHeaderProps {
   userNickname: string;
   userId: string;
   isFollowinged: boolean;
-}
-
-interface ModifyPost {
-  id: number;
-  title: string;
-  content: string;
+  setIsModifyPost: Dispatch<SetStateAction<boolean>>;
+  isModifyPost: boolean;
 }
 
 export const PostDetailHeader = ({
@@ -50,17 +42,19 @@ export const PostDetailHeader = ({
   userNickname,
   userId,
   isFollowinged,
+  setIsModifyPost,
+  isModifyPost,
 }: PostDetailHeaderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openDeletePostModal, setOpenDeletePostModal] = useState(false);
-  const [openModifyPostModal, setOpenModifyPostModal] = useState(false);
-  const { control, handleSubmit } = useForm<ModifyPost>({
-    defaultValues: {
-      title: "",
-      content: "",
-    },
-  });
+  // const [openModifyPostModal, setOpenModifyPostModal] = useState(false);
+  // const { control, handleSubmit } = useForm<ModifyPost>({
+  //   defaultValues: {
+  //     title: "",
+  //     content: "",
+  //   },
+  // });
 
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
@@ -77,22 +71,22 @@ export const PostDetailHeader = ({
     setOpenDeletePostModal(false);
   };
 
-  const modifyPostHandleOpen = () => {
-    setOpenModifyPostModal(true);
+  const modifyPostHandler = () => {
+    setIsModifyPost((prev) => !prev);
   };
-  const modifyPostHandleClose = () => {
-    setOpenModifyPostModal(false);
-  };
+  // const modifyPostHandleClose = () => {
+  //   setOpenModifyPostModal(false);
+  // };
 
-  const modifyPost = async (data: ModifyPost) => {
-    const payload: ModifyPost = {
-      id: postId,
-      title: data.title,
-      content: data.content,
-    };
-    await dispatch(modifyPostThunk(payload));
-    modifyPostHandleClose();
-  };
+  // const modifyPost = async (data: ModifyPost) => {
+  //   const payload: ModifyPost = {
+  //     id: postId,
+  //     title: data.title,
+  //     content: data.content,
+  //   };
+  //   await dispatch(modifyPostThunk(payload));
+  //   // modifyPostHandleClose();
+  // };
 
   const deletePost = async () => {
     await dispatch(deletePostThunk(postId));
@@ -139,8 +133,10 @@ export const PostDetailHeader = ({
           </NavLink>
           {isMyPost === true ? (
             <Box>
-              <Button onClick={modifyPostHandleOpen}>수정</Button>
-              <Button onClick={deletePostHandleOpen}>삭제</Button>
+              <Button onClick={modifyPostHandler}>
+                {isModifyPost ? "cencel" : "update"}
+              </Button>
+              <Button onClick={deletePostHandleOpen}>DELETE</Button>
             </Box>
           ) : (
             <Box></Box>
@@ -166,60 +162,6 @@ export const PostDetailHeader = ({
                 <Button onClick={deletePostHandleClose}>Cancle</Button>
               </Box>
             </Box>
-          </Modal>
-          {/* 게시물수정입력창 */}
-          <Modal
-            open={openModifyPostModal}
-            onClose={modifyPostHandleClose}
-            aria-labelledby="child-modal-title"
-            aria-describedby="child-modal-description"
-          >
-            <form onSubmit={handleSubmit(modifyPost)}>
-              <Box sx={{ ...style }}>
-                <Controller
-                  name="title"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      id="standard-basic"
-                      label="title"
-                      variant="standard"
-                      // defaultValue="title"
-                      {...field}
-                    />
-                  )}
-                />
-
-                <Box sx={{ width: "100%" }}>
-                  <Controller
-                    name="content"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        id="standard-multiline-static"
-                        label="contents"
-                        multiline
-                        rows={4}
-                        variant="standard"
-                        sx={{ width: "inherit" }}
-                        // defaultValue="contents"
-                        {...field}
-                      />
-                    )}
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Button type="submit">Modify Post</Button>
-                  <Button onClick={modifyPostHandleClose}>Close</Button>
-                </Box>
-              </Box>
-            </form>
           </Modal>
         </Box>
 

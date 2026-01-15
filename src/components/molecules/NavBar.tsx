@@ -106,6 +106,7 @@ export default function NavBar() {
                 </Badge>
               </IconButton>
               <IconButton
+                sx={{ position: "relative" }}
                 onClick={showAlrams}
                 size="large"
                 aria-label="show 17 new notifications"
@@ -128,7 +129,7 @@ export default function NavBar() {
                   },
                   paper: {
                     sx: {
-                      width: "19rem", // ⭐ 메뉴 전체 폭
+                      width: "16rem", // ⭐ 메뉴 전체 폭
                       maxHeight: "14rem", // 스크롤 대비
                     },
                   },
