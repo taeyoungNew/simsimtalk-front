@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import { forwardRef } from "react";
 import { AvatarMenu } from "../../molecules/AvatarMenu";
-interface MessageAlramProps {
+interface messageAlarmProps {
   chatRoomId: string;
   content: string;
   contentType: string;
   senderId: string;
   senderNickname: string;
 }
-const MessageAlramItem = forwardRef<HTMLInputElement, MessageAlramProps>(
+const messageAlarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
   ({ chatRoomId, content, contentType, senderId, senderNickname }, ref) => {
     let type = "";
     switch (contentType) {
@@ -39,8 +39,8 @@ const MessageAlramItem = forwardRef<HTMLInputElement, MessageAlramProps>(
             <AvatarMenu
               sx={{ width: "1.8rem" }}
               id={0}
-              userId={senderId}
-              userNickname={senderNickname}
+              userId={"senderId"}
+              userNickname={"senderNickname"}
               isLiked={false}
               to={to}
             ></AvatarMenu>
@@ -73,4 +73,4 @@ const MessageAlramItem = forwardRef<HTMLInputElement, MessageAlramProps>(
   },
 );
 
-export default MessageAlramItem;
+export default messageAlarmItem;

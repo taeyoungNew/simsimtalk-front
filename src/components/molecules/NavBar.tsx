@@ -13,7 +13,6 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 
 import { useSelector } from "react-redux";
@@ -23,26 +22,29 @@ import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 
 import { logoutThunk } from "../../store/auth/authThunk";
-import { useEffect } from "react";
 import {
-  selectUnreadAlramCnt,
-  selectUnreadAlrams,
-} from "../../store/messageAlram/messageAlramSelector";
-import MessageAlramItem from "../atoms/alram/MessageAlramItem";
+  selectUnreadalarmCnt,
+  selectUnreadalarms,
+} from "../../store/messageAlarm/messageAlarmSelector";
+import messageAlarmItem from "../atoms/alarm/messageAlarmItem";
+import alarmItem from "../atoms/alarm/alarmItem";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
-  let alramCnt = useSelector(selectUnreadAlramCnt);
-  let alrams = useSelector(selectUnreadAlrams);
+  let alarmCnt = useSelector(selectUnreadalarmCnt);
+  let alarms = useSelector(selectUnreadalarms);
 
-  const [showAlramAnchorEl, setShowAlramAnchorEl] =
+  const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const [showalarmAnchorEl, setShowalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const prevPathName = location.pathname;
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [_, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(showAlramAnchorEl);
+  const msgListOpen = Boolean(showMsgalarmAnchorEl);
+  const alarmOpen = Boolean(showalarmAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,11 +54,17 @@ export default function NavBar() {
     await dispatch(logoutThunk({ userId: keepUserId }));
   };
 
-  const showAlrams = async (event: React.MouseEvent<HTMLElement>) => {
-    if (alrams.length > 0) setShowAlramAnchorEl(event.currentTarget);
+  const showMsgalarms = async (event: React.MouseEvent<HTMLElement>) => {
+    if (alarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
   };
-  const closeAlrams = async () => {
-    setShowAlramAnchorEl(null);
+  const closeMsgalarms = async () => {
+    setShowMsgalarmAnchorEl(null);
+  };
+  const showalarms = async (event: React.MouseEvent<HTMLElement>) => {
+    if (alarms.length > 0) setShowalarmAnchorEl(event.currentTarget);
+  };
+  const closealarms = async () => {
+    setShowalarmAnchorEl(null);
   };
 
   return (
@@ -97,23 +105,51 @@ export default function NavBar() {
           </Box>
 
           {isLogin === true ? (
+            // 알람
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton size="large" aria-label="show 4 new mails">
+              <IconButton
+                onClick={showalarms}
+                size="large"
+                aria-label="show 4 new mails"
+              >
                 <Badge badgeContent={4} color="error">
                   <NotificationsNoneIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
                 </Badge>
               </IconButton>
+              <Menu
+                id="fade-menu"
+                slotProps={{
+                  list: {
+                    "aria-labelledby": "fade-button",
+                  },
+                  paper: {
+                    sx: {
+                      width: "19rem", // ⭐ 메뉴 전체 폭
+                      maxHeight: "14rem", // 스크롤 대비
+                    },
+                  },
+                }}
+                slots={{ transition: Fade }}
+                anchorEl={showalarmAnchorEl}
+                open={alarmOpen}
+                onClose={closealarms}
+              >
+                <alarmItem contentType="like" />
+                <alarmItem contentType="follow" />
+                <alarmItem contentType="comment" />
+              </Menu>
+              {/* 메세지알람 */}
               <IconButton
                 sx={{ position: "relative" }}
-                onClick={showAlrams}
+                onClick={showMsgalarms}
                 size="large"
                 aria-label="show 17 new notifications"
                 color="inherit"
               >
                 <Badge
-                  badgeContent={alramCnt > 0 ? alramCnt : undefined}
+                  badgeContent={alarmCnt > 0 ? alarmCnt : undefined}
                   color="error"
                 >
                   <MailOutlineIcon
@@ -135,13 +171,13 @@ export default function NavBar() {
                   },
                 }}
                 slots={{ transition: Fade }}
-                anchorEl={showAlramAnchorEl}
-                open={open}
-                onClose={closeAlrams}
+                anchorEl={showMsgalarmAnchorEl}
+                open={msgListOpen}
+                onClose={closeMsgalarms}
               >
-                {alrams.map((el, index) => {
+                {alarms.map((el, index) => {
                   return (
-                    <MessageAlramItem
+                    <messageAlarmItem
                       key={index}
                       chatRoomId={el.chatRoomId}
                       content={el.content}

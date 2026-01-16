@@ -18,7 +18,7 @@ interface CardProps {
   likeCnt: number;
   isLiked: boolean;
   commentsCnt: number;
-  onlineUsers: string[];
+  onlineUsers?: string[];
 }
 const DetailPostLink = styled(NavLink)`
   text-decoration: none;
@@ -45,7 +45,7 @@ export const PostCard = ({
 }: CardProps) => {
   const to = location.pathname;
   const prevPathName = location.pathname;
-  const isOnline = checkOnline(userId, onlineUsers);
+  const isOnline = onlineUsers ? checkOnline(userId, onlineUsers) : false;
   const myId = useSelector((state: RootState) => state.User.id);
   const isMy = myId === userId ? true : false;
   return (

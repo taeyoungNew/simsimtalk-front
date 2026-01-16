@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  addMessageAlramThunk,
-  clearAlramsByChatRoomThunk,
-  getMessageAlramThunk,
+  addmessageAlarmThunk,
+  clearalarmsByChatRoomThunk,
+  getmessageAlarmThunk,
   markAlarmAsReadByRoomThunk,
-} from "./messageAlramThunk";
+} from "./messageAlarmThunk";
 
 interface Error {
   status: number;
@@ -12,7 +12,7 @@ interface Error {
   message: string;
 }
 
-interface MessageAlarm {
+interface messageAlarm {
   id: number;
   chatRoomId: string;
   senderId: string;
@@ -23,13 +23,13 @@ interface MessageAlarm {
   createdAt: string;
 }
 
-interface MessageAlramState {
+interface messageAlarmState {
   isLoading: boolean;
-  alarmsByRoom: Record<string, MessageAlarm[]>;
+  alarmsByRoom: Record<string, messageAlarm[]>;
   error: null | Error;
 }
 
-const messageAlramInitialState: MessageAlramState = {
+const messageAlarmInitialState: messageAlarmState = {
   isLoading: false,
   alarmsByRoom: {},
   error: {
@@ -39,11 +39,11 @@ const messageAlramInitialState: MessageAlramState = {
   },
 };
 
-export const messageAlramSlice = createSlice({
-  name: "messageAlram",
-  initialState: messageAlramInitialState,
+export const messageAlarmSlice = createSlice({
+  name: "messageAlarm",
+  initialState: messageAlarmInitialState,
   reducers: {
-    addMessageAlarms: (state, action) => {
+    addmessageAlarms: (state, action) => {
       action.payload.forEach((alarm: any) => {
         const roomId = alarm.chatRoomId;
 
@@ -57,10 +57,10 @@ export const messageAlramSlice = createSlice({
   },
   extraReducers: async (builder) => {
     builder
-      .addCase(addMessageAlramThunk.pending, (state, _) => {
+      .addCase(addmessageAlarmThunk.pending, (state, _) => {
         state.isLoading = true;
       })
-      .addCase(addMessageAlramThunk.fulfilled, (state, action) => {
+      .addCase(addmessageAlarmThunk.fulfilled, (state, action) => {
         const {
           id,
           chatRoomId,
@@ -86,16 +86,16 @@ export const messageAlramSlice = createSlice({
         });
         state.isLoading = false;
       })
-      .addCase(addMessageAlramThunk.rejected, (state, action) => {
+      .addCase(addmessageAlarmThunk.rejected, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(getMessageAlramThunk.pending, (state, _) => {
+      .addCase(getmessageAlarmThunk.pending, (state, _) => {
         state.isLoading = true;
       })
-      .addCase(getMessageAlramThunk.fulfilled, (state, action) => {
-        const getAlrams = action.payload.getAlrams;
-        if (getAlrams) {
-          getAlrams.forEach((el) => {
+      .addCase(getmessageAlarmThunk.fulfilled, (state, action) => {
+        const getAlarms = action.payload.getAlarms;
+        if (getAlarms) {
+          getAlarms.forEach((el) => {
             const roomId = el.chatRoomId;
             if (!state.alarmsByRoom[roomId]) {
               state.alarmsByRoom[roomId] = [];
@@ -115,7 +115,7 @@ export const messageAlramSlice = createSlice({
 
         state.isLoading = false;
       })
-      .addCase(getMessageAlramThunk.rejected, (state, _) => {
+      .addCase(getmessageAlarmThunk.rejected, (state, _) => {
         state.isLoading = false;
       })
 
@@ -132,21 +132,21 @@ export const messageAlramSlice = createSlice({
       .addCase(markAlarmAsReadByRoomThunk.rejected, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(clearAlramsByChatRoomThunk.pending, (state, _) => {
+      .addCase(clearalarmsByChatRoomThunk.pending, (state, _) => {
         state.isLoading = true;
       })
-      .addCase(clearAlramsByChatRoomThunk.fulfilled, (state, action) => {
+      .addCase(clearalarmsByChatRoomThunk.fulfilled, (state, action) => {
         const chatRoomId = action.payload.chatRoomId;
 
         delete state.alarmsByRoom[chatRoomId];
 
         state.isLoading = false;
       })
-      .addCase(clearAlramsByChatRoomThunk.rejected, (state, action) => {
+      .addCase(clearalarmsByChatRoomThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
   },
 });
 
-export const { addMessageAlarms } = messageAlramSlice.actions;
-export default messageAlramSlice.reducer;
+export const { addmessageAlarms } = messageAlarmSlice.actions;
+export default messageAlarmSlice.reducer;

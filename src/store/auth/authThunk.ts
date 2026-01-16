@@ -5,7 +5,7 @@ import {
   loginSocket,
   logoutSocket,
 } from "../../sockets/authSocket";
-import { getAlramSocket } from "../../sockets/alramSocket";
+import { getAlarmsocket } from "../../sockets/alarmSocket";
 import { deleteAuth } from "./authSlice";
 import { resetLiked } from "../post/allPostsSlice";
 import { reconnectSocket } from "../../sockets";
@@ -52,7 +52,7 @@ export const loginThunk = createAsyncThunk<
     thunkAPI.dispatch(resetLiked());
     reconnectSocket();
     loginSocket(loginResult.data.data.id);
-    getAlramSocket();
+    getAlarmsocket();
     return { message: loginResult.data.message, data: loginResult.data.data };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

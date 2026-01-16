@@ -7,7 +7,7 @@ import { theme } from "../../theme/theme";
 import { chatThunk } from "../../store/chat/chatThunk";
 import { useAppDispatch } from "../../store/hook";
 import { useSelector } from "react-redux";
-import { selectUnreadAlramCntByRoom } from "../../store/messageAlram/messageAlramSelector";
+import { selectUnreadalarmCntByRoom } from "../../store/messageAlarm/messageAlarmSelector";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
 
 interface ChatRoomCardProps {
@@ -30,7 +30,7 @@ export const ChatRoomCard = ({
   targetUserNickname,
 }: ChatRoomCardProps) => {
   const dispatch = useAppDispatch();
-  const unreadMsgByChat = useSelector(selectUnreadAlramCntByRoom(chatRoomId));
+  const unreadMsgByChat = useSelector(selectUnreadalarmCntByRoom(chatRoomId));
 
   const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
     setTimeout(() => {

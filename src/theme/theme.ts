@@ -29,6 +29,15 @@ declare module "@mui/material/styles" {
       readBadgeBg: string;
       hoverBd: string;
     };
+
+    alarmCardIconColor: {
+      likeBg: string;
+      likeIconColr: string;
+      commentBg: string;
+      commentIconColr: string;
+      followBg: string;
+      followIconColr: string;
+    };
     buttonColor: PaletteColor;
     borderLineColor: {
       normal: string;
@@ -62,6 +71,14 @@ declare module "@mui/material/styles" {
       readTime: string;
       readBadgeBg: string;
       hoverBd: string;
+    };
+    alarmCardIconColor: {
+      likeBg: string;
+      likeIconColr: string;
+      commentBg: string;
+      commentIconColr: string;
+      followBg: string;
+      followIconColr: string;
     };
     buttonColor: PaletteColorOptions;
     borderLineColor: {
@@ -131,6 +148,21 @@ export const theme = createTheme({
       readTime: "#94a3b8",
       readBadgeBg: "",
       hoverBd: "#93c5fd",
+    },
+    //     | 타입 | 아이콘 배경 | 아이콘 색상
+    // |-----|-----|-----
+    // | message | `bg-blue-100` = `#dbeafe` | `text-blue-600` = `#2563eb`
+    // | like | `bg-red-100` = `#fee2e2` | `text-red-600` = `#dc2626`
+    // | comment | `bg-green-100` = `#dcfce7` | `text-green-600` = `#16a34a`
+    // | follow | `bg-purple-100` = `#f3e8ff` | `text-purple-600` = `#9333ea`
+    // | share | `bg-orange-100` = `#ffedd5` | `text-orange-600` = `#ea580c`
+    alarmCardIconColor: {
+      likeBg: "#fee2e2",
+      likeIconColr: "#dc2626",
+      commentBg: "#dcfce7",
+      commentIconColr: "#16a34a",
+      followBg: "#f3e8ff",
+      followIconColr: "",
     },
   },
 

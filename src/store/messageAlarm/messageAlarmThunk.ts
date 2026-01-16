@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { markAlarmAsReadByRoomAPI } from "../../apis/alram";
-import { alramsRead } from "../../sockets/alramSocket";
+import { markAlarmAsReadByRoomAPI } from "../../apis/alarm";
+import { alarmsRead } from "../../sockets/alarmSocket";
 interface Error {
   status: number;
   errorCode: string;
   message: string;
 }
 
-interface AddMessageAlramReq {
+interface AddmessageAlarmReq {
   id: number;
   chatRoomId: string;
   senderId: string;
@@ -18,7 +18,7 @@ interface AddMessageAlramReq {
   createdAt: string;
 }
 
-interface AddMessageAlramRes {
+interface AddmessageAlarmRes {
   id: number;
   chatRoomId: string;
   senderId: string;
@@ -40,15 +40,15 @@ interface MessageArlam {
   createdAt: string;
 }
 
-interface GetMessageAlram {
-  getAlrams: MessageArlam[];
+interface GetmessageAlarm {
+  getAlarms: MessageArlam[];
 }
 
-export const getMessageAlramThunk = createAsyncThunk<
-  GetMessageAlram,
-  GetMessageAlram,
+export const getmessageAlarmThunk = createAsyncThunk<
+  GetmessageAlarm,
+  GetmessageAlarm,
   { rejectValue: Error }
->("messageAlram", async (params, thunkAPI) => {
+>("messageAlarm", async (params, thunkAPI) => {
   try {
     return params;
   } catch (error: any) {
@@ -64,10 +64,10 @@ export const markAlarmAsReadByRoomThunk = createAsyncThunk<
   { chatRoomId: string },
   { chatRoomId: string },
   { rejectValue: Error }
->("messageAlram/markAlarmAsReadByRoom", async ({ chatRoomId }, thunkAPI) => {
+>("messageAlarm/markAlarmAsReadByRoom", async ({ chatRoomId }, thunkAPI) => {
   try {
     const result = (await markAlarmAsReadByRoomAPI(chatRoomId)).data;
-    alramsRead(chatRoomId);
+    alarmsRead(chatRoomId);
     return { chatRoomId: result.chatRoomId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
@@ -78,11 +78,11 @@ export const markAlarmAsReadByRoomThunk = createAsyncThunk<
   }
 });
 
-export const addMessageAlramThunk = createAsyncThunk<
-  AddMessageAlramReq,
-  AddMessageAlramRes,
+export const addmessageAlarmThunk = createAsyncThunk<
+  AddmessageAlarmReq,
+  AddmessageAlarmRes,
   { rejectValue: Error }
->("messageAlram/addAlram", async (param, thunkAPI) => {
+>("messageAlarm/addalarm", async (param, thunkAPI) => {
   try {
     return param;
   } catch (error: any) {
@@ -94,11 +94,11 @@ export const addMessageAlramThunk = createAsyncThunk<
   }
 });
 
-export const clearAlramsByChatRoomThunk = createAsyncThunk<
+export const clearalarmsByChatRoomThunk = createAsyncThunk<
   { chatRoomId: string },
   { chatRoomId: string },
   { rejectValue: Error }
->("messageAlram/clearAlarmsByChatRoom", async ({ chatRoomId }, thunkAPI) => {
+>("messageAlarm/clearAlarmsByChatRoom", async ({ chatRoomId }, thunkAPI) => {
   try {
     return { chatRoomId };
   } catch (error: any) {

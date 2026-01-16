@@ -30,7 +30,7 @@ import {
   imgageUploadThunk,
 } from "../../store/message/messageThunk";
 import { useAppDispatch } from "../../store/hook";
-import { markAlarmAsReadByRoomThunk } from "../../store/messageAlram/messageAlramThunk";
+import { markAlarmAsReadByRoomThunk } from "../../store/messageAlarm/messageAlarmThunk";
 
 type SendMessagePayload = {
   chatRoomId: string;

@@ -3,11 +3,11 @@ import { setOnlineUsers } from "../store/onlineUsers/onlineUsersSlice";
 import { AppDispath } from "../store";
 import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
 import {
-  addMessageAlramThunk,
-  clearAlramsByChatRoomThunk,
-  getMessageAlramThunk,
-} from "../store/messageAlram/messageAlramThunk";
-import { getAlramSocket } from "./alramSocket";
+  addmessageAlarmThunk,
+  clearalarmsByChatRoomThunk,
+  getmessageAlarmThunk,
+} from "../store/messageAlarm/messageAlarmThunk";
+import { getAlarmsocket } from "./alarmSocket";
 import { updateChatList } from "../store/chat/chatSlice";
 
 let socket: Socket | null = null;
@@ -39,16 +39,16 @@ export const initSocket = (dispatch: AppDispath) => {
     dispatch(setMessagesByRoom(params));
   });
   socket.on("socketAuthenticated", async () => {
-    getAlramSocket();
+    getAlarmsocket();
   });
-  socket.on("emitAlrams", async (params) => {
-    dispatch(getMessageAlramThunk(params));
+  socket.on("emitalarms", async (params) => {
+    dispatch(getmessageAlarmThunk(params));
   });
-  socket.on("alramsRead", async (param) => {
-    dispatch(clearAlramsByChatRoomThunk(param));
+  socket.on("alarmsRead", async (param) => {
+    dispatch(clearalarmsByChatRoomThunk(param));
   });
-  socket.on("notifyMessageAlarm", async (params) => {
-    dispatch(addMessageAlramThunk(params));
+  socket.on("notifymessageAlarm", async (params) => {
+    dispatch(addmessageAlarmThunk(params));
     dispatch(updateChatList(params));
   });
   return socket;
