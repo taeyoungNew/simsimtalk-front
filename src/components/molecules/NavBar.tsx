@@ -26,8 +26,8 @@ import {
   selectUnreadalarmCnt,
   selectUnreadalarms,
 } from "../../store/messageAlarm/messageAlarmSelector";
-import messageAlarmItem from "../atoms/alarm/messageAlarmItem";
-import alarmItem from "../atoms/alarm/alarmItem";
+import MessasgeAlarmItem from "../atoms/alram/MessageAlramItem";
+import AlarmItem from "../atoms/alram/AlramItem";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -37,14 +37,14 @@ export default function NavBar() {
 
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
-  const [showalarmAnchorEl, setShowalarmAnchorEl] =
+  const [showAlarmAnchorEl, setShowAlarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const prevPathName = location.pathname;
   const dispatch = useAppDispatch();
   const menuId = "primary-search-account-menu";
   const [_, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const msgListOpen = Boolean(showMsgalarmAnchorEl);
-  const alarmOpen = Boolean(showalarmAnchorEl);
+  const alarmOpen = Boolean(showAlarmAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -54,17 +54,20 @@ export default function NavBar() {
     await dispatch(logoutThunk({ userId: keepUserId }));
   };
 
-  const showMsgalarms = async (event: React.MouseEvent<HTMLElement>) => {
+  const showMsgAlarms = async (event: React.MouseEvent<HTMLElement>) => {
     if (alarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
   };
-  const closeMsgalarms = async () => {
+  const closeMsgAlarms = async () => {
     setShowMsgalarmAnchorEl(null);
   };
-  const showalarms = async (event: React.MouseEvent<HTMLElement>) => {
-    if (alarms.length > 0) setShowalarmAnchorEl(event.currentTarget);
+  const showAlarms = async (event: React.MouseEvent<HTMLElement>) => {
+    console.log("알림창열기");
+
+    setShowAlarmAnchorEl(event.currentTarget);
+    console.log(showAlarms);
   };
-  const closealarms = async () => {
-    setShowalarmAnchorEl(null);
+  const closeAlarms = async () => {
+    setShowAlarmAnchorEl(null);
   };
 
   return (
@@ -108,7 +111,7 @@ export default function NavBar() {
             // 알람
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
-                onClick={showalarms}
+                onClick={showAlarms}
                 size="large"
                 aria-label="show 4 new mails"
               >
@@ -132,18 +135,18 @@ export default function NavBar() {
                   },
                 }}
                 slots={{ transition: Fade }}
-                anchorEl={showalarmAnchorEl}
+                anchorEl={showAlarmAnchorEl}
                 open={alarmOpen}
-                onClose={closealarms}
+                onClose={closeAlarms}
               >
-                <alarmItem contentType="like" />
-                <alarmItem contentType="follow" />
-                <alarmItem contentType="comment" />
+                <AlarmItem contentType="like" />
+                <AlarmItem contentType="follow" />
+                <AlarmItem contentType="comment" />
               </Menu>
               {/* 메세지알람 */}
               <IconButton
                 sx={{ position: "relative" }}
-                onClick={showMsgalarms}
+                onClick={showMsgAlarms}
                 size="large"
                 aria-label="show 17 new notifications"
                 color="inherit"
@@ -173,11 +176,11 @@ export default function NavBar() {
                 slots={{ transition: Fade }}
                 anchorEl={showMsgalarmAnchorEl}
                 open={msgListOpen}
-                onClose={closeMsgalarms}
+                onClose={closeMsgAlarms}
               >
                 {alarms.map((el, index) => {
                   return (
-                    <messageAlarmItem
+                    <MessasgeAlarmItem
                       key={index}
                       chatRoomId={el.chatRoomId}
                       content={el.content}
