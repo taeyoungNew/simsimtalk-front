@@ -13,7 +13,7 @@ export const LikeIcon = ({ width, sx }: LikeIconProps) => {
       sx={{
         height: `${width * 1.7}rem`,
         width: `${width * 1.7}rem`,
-        backgroundColor: theme.palette.alramCardIconColor.likeBg,
+        backgroundColor: theme.palette.alarmCardIconColor.likeBg,
         borderRadius: "70%",
         padding: "0.3rem",
         display: "flex",
@@ -25,7 +25,7 @@ export const LikeIcon = ({ width, sx }: LikeIconProps) => {
     >
       <FavoriteBorderIcon
         sx={{
-          color: theme.palette.alramCardIconColor.likeIconColr,
+          color: theme.palette.alarmCardIconColor.likeIconColr,
           width: `${width}rem`,
         }}
       />

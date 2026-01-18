@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { AvatarMenu } from "../../molecules/AvatarMenu";
 import { CustomAvatar } from "../../../assets/icons/Avatar";
 import { theme } from "../../../theme/theme";
-import { LikeIcon } from "./likeIcon";
+import { LikeIcon } from "./LikeIcon";
 import { FollowIcon } from "./FollowIcon";
 import { CommentIcon } from "./CommentIcon";
 interface messageAlarmProps {

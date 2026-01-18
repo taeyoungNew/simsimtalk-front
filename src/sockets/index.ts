@@ -47,7 +47,7 @@ export const initSocket = (dispatch: AppDispath) => {
   socket.on("alarmsRead", async (param) => {
     dispatch(clearalarmsByChatRoomThunk(param));
   });
-  socket.on("notifymessageAlarm", async (params) => {
+  socket.on("notifyMessageAlarm", async (params) => {
     dispatch(addmessageAlarmThunk(params));
     dispatch(updateChatList(params));
   });
