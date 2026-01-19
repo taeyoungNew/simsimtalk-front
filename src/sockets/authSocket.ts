@@ -18,6 +18,8 @@ export const registerOnline = (userId: string) => {
 
 export const loginSocket = (userId: string) => {
   const socket = getSocket();
+  console.log("socket = ", socket);
+
   if (!socket?.connected) {
     socket?.connect();
   }

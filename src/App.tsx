@@ -27,13 +27,12 @@ import { getChatsThunk } from "./store/chat/chatThunk";
 
 function App() {
   const dispatch = useAppDispatch();
+  const isLogin = useSelector((state: RootState) => state.User.isLogin);
+
   const { id, initialized } = useSelector((state: RootState) => state.User);
   useEffect(() => {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
-      await dispatch(getFollowingsThunk());
-      await dispatch(getFriendsThunk());
-      await dispatch(getChatsThunk());
     };
     checkAuth();
   }, [dispatch]);
@@ -44,6 +43,13 @@ function App() {
     initSocket(dispatch);
   }, []);
 
+  useEffect(() => {
+    if (isLogin) {
+      dispatch(getFollowingsThunk());
+      dispatch(getFriendsThunk());
+      dispatch(getChatsThunk());
+    }
+  }, [isLogin]);
   useEffect(() => {
     const socket = getSocket();
     if (id && socket) {
