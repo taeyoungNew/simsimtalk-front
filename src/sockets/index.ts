@@ -7,8 +7,10 @@ import {
   clearalarmsByChatRoomThunk,
   getmessageAlarmThunk,
 } from "../store/messageAlarm/messageAlarmThunk";
-import { getAlarmsocket } from "./alarmSocket";
+import { getMsgAlarmsSocket } from "./alarmSocket";
 import { updateChatList } from "../store/chat/chatSlice";
+import { loginSocket } from "./authSocket";
+import { getAlarmThunk } from "../store/alarm/alarmThunk";
 
 let socket: Socket | null = null;
 
@@ -25,7 +27,9 @@ export const initSocket = (dispatch: AppDispath) => {
     console.log("initSocket");
     console.log(msg);
   });
-
+  socket.on("socketReady", () => {
+    console.log("socket ready!");
+  });
   // 현재 로그인중인 유저의 리스트를 받기
   socket.on("onlineUsers", (params) => {
     dispatch(setOnlineUsers(params));
@@ -39,23 +43,30 @@ export const initSocket = (dispatch: AppDispath) => {
     dispatch(setMessagesByRoom(params));
   });
   socket.on("socketAuthenticated", async () => {
-    getAlarmsocket();
+    getMsgAlarmsSocket();
   });
   socket.on("emitalarms", async (params) => {
     dispatch(getmessageAlarmThunk(params));
   });
-  socket.on("alarmsRead", async (param) => {
+  socket.on("msgAlarmsRead", async (param) => {
     dispatch(clearalarmsByChatRoomThunk(param));
   });
   socket.on("notifyMessageAlarm", async (params) => {
     dispatch(addmessageAlarmThunk(params));
     dispatch(updateChatList(params));
   });
+  socket.on("sendAlarm", async (params) => {
+    dispatch(getAlarmThunk(params));
+  });
   return socket;
 };
-export const reconnectSocket = () => {
+export const reconnectSocket = (userId: string) => {
   if (socket) {
     socket.disconnect();
   }
   socket?.connect();
+
+  socket?.once("connect", () => {
+    loginSocket(userId);
+  });
 };
