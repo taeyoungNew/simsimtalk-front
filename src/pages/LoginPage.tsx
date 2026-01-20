@@ -15,6 +15,7 @@ import {
   getFriendsThunk,
 } from "../store/userRelation/userRelationThunk";
 import { getChatsThunk } from "../store/chat/chatThunk";
+import { getAllAlarmByUserThunk } from "../store/alarm/alarmThunk";
 
 type LoginType = {
   email: string;
@@ -42,6 +43,7 @@ export const LoginPage = () => {
     await dispatch(getFollowingsThunk());
     await dispatch(getFriendsThunk());
     await dispatch(getChatsThunk());
+    await dispatch(getAllAlarmByUserThunk());
   };
   return (
     <>

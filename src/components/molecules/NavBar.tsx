@@ -23,17 +23,26 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 
 import { logoutThunk } from "../../store/auth/authThunk";
 import {
-  selectUnreadalarmCnt,
-  selectUnreadalarms,
+  selectUnreadMsgAlarmCnt,
+  selectUnreadMsgAlarms,
 } from "../../store/messageAlarm/messageAlarmSelector";
 import MessasgeAlarmItem from "../atoms/alram/MessageAlramItem";
 import AlarmItem from "../atoms/alram/AlramItem";
+import {
+  selectAlarms,
+  selectUnreadAlarmCount,
+} from "../../store/alarm/alarmSelector";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
-  let alarmCnt = useSelector(selectUnreadalarmCnt);
-  let alarms = useSelector(selectUnreadalarms);
+  let msgAlarmCnt = useSelector(selectUnreadMsgAlarmCnt);
+  let msgAlarms = useSelector(selectUnreadMsgAlarms);
+  let alarmCnt = useSelector(selectUnreadAlarmCount);
+  let alarms = useSelector(selectAlarms);
+  // let msgAlarmCnt = useSelector(selectUnreadalarmCnt);
+  // let msgAlarms = useSelector(selectUnreadalarms);
+  // let AlarmCnt = useSelector()
 
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -55,7 +64,7 @@ export default function NavBar() {
   };
 
   const showMsgAlarms = async (event: React.MouseEvent<HTMLElement>) => {
-    if (alarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
+    if (msgAlarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
   };
   const closeMsgAlarms = async () => {
     setShowMsgalarmAnchorEl(null);
@@ -115,7 +124,7 @@ export default function NavBar() {
                 size="large"
                 aria-label="show 4 new mails"
               >
-                <Badge badgeContent={4} color="error">
+                <Badge badgeContent={alarmCnt} color="error">
                   <NotificationsNoneIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
@@ -126,6 +135,7 @@ export default function NavBar() {
                 slotProps={{
                   list: {
                     "aria-labelledby": "fade-button",
+                    disablePadding: true,
                   },
                   paper: {
                     sx: {
@@ -139,9 +149,24 @@ export default function NavBar() {
                 open={alarmOpen}
                 onClose={closeAlarms}
               >
-                <AlarmItem contentType="like" />
+                {alarms.map((el) => {
+                  return (
+                    <AlarmItem
+                      id={el.id}
+                      senderId={el.senderId}
+                      receiverId={el.receiverId}
+                      targetId={el.targetId}
+                      targetType={el.targetType}
+                      alarmType={el.alarmType}
+                      isRead={el.isRead}
+                      createdAt={el.createdAt}
+                      senderNickname={el.senderNickname}
+                    />
+                  );
+                })}
+                {/* <AlarmItem contentType="like" />
                 <AlarmItem contentType="follow" />
-                <AlarmItem contentType="comment" />
+                <AlarmItem contentType="comment" /> */}
               </Menu>
               {/* 메세지알람 */}
               <IconButton
@@ -152,7 +177,7 @@ export default function NavBar() {
                 color="inherit"
               >
                 <Badge
-                  badgeContent={alarmCnt > 0 ? alarmCnt : undefined}
+                  badgeContent={msgAlarmCnt > 0 ? msgAlarmCnt : undefined}
                   color="error"
                 >
                   <MailOutlineIcon
@@ -165,6 +190,7 @@ export default function NavBar() {
                 slotProps={{
                   list: {
                     "aria-labelledby": "fade-button",
+                    disablePadding: true,
                   },
                   paper: {
                     sx: {
@@ -178,7 +204,7 @@ export default function NavBar() {
                 open={msgListOpen}
                 onClose={closeMsgAlarms}
               >
-                {alarms.map((el, index) => {
+                {msgAlarms.map((el, index) => {
                   return (
                     <MessasgeAlarmItem
                       key={index}

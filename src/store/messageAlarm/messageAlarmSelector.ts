@@ -1,13 +1,13 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
-export const selectUnreadalarmCnt = (state: RootState) =>
+export const selectUnreadMsgAlarmCnt = (state: RootState) =>
   Object.values(state.messageAlarmSlice.alarmsByRoom).reduce(
     (acc, alarms) => acc + alarms.length,
     0,
   );
 
-export const selectUnreadalarms = createSelector(
+export const selectUnreadMsgAlarms = createSelector(
   (state: RootState) => state.messageAlarmSlice.alarmsByRoom,
   (el) => {
     return Object.values(el)
@@ -19,7 +19,7 @@ export const selectUnreadalarms = createSelector(
   },
 );
 
-export const selectUnreadalarmCntByRoom =
+export const selectUnreadMsgAlarmCntByRoom =
   (chatRoomId: string) => (state: RootState) => {
     if (state.messageAlarmSlice.alarmsByRoom[`${chatRoomId}`]) {
       return state.messageAlarmSlice.alarmsByRoom[`${chatRoomId}`].length;

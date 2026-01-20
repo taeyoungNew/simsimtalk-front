@@ -70,7 +70,6 @@ export const logoutThunk = createAsyncThunk<
 >("auth/logout", async ({ userId }, thunkAPI) => {
   try {
     const res = await logoutAPI();
-
     thunkAPI.dispatch(resetLiked());
     thunkAPI.dispatch(deleteAuth());
     logoutSocket(userId);

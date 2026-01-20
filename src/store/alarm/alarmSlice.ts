@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAlarmThunk } from "./alarmThunk";
+import {
+  getAlarmThunk,
+  getAllAlarmByUserThunk,
+  markAlarmThunk,
+} from "./alarmThunk";
 
 interface Error {
   status: number;
@@ -8,24 +12,29 @@ interface Error {
 }
 
 interface Alarm {
+  id: number;
   senderId: string;
   receiverId: string;
+  senderNickname: string;
   targetId: number | string;
   targetType: "USER" | "POST" | "COMMENT" | "SYSTEM";
   alarmType: "FOLLOW" | "LIKE" | "COMMENT" | "SYSTEM";
   isRead: boolean;
+  createdAt: string;
 }
 
 interface AlarmState {
+  ids: number[];
+  entities: Record<number, Alarm>;
   isLoading: boolean;
-  alaramsByUser: Alarm[];
   error: null | Error;
 }
 
 const alarmInitialState: AlarmState = {
   isLoading: false,
-  alaramsByUser: [],
   error: null,
+  ids: [],
+  entities: {},
 };
 
 export const alarmSlice = createSlice({
@@ -38,14 +47,43 @@ export const alarmSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getAlarmThunk.fulfilled, (state, action) => {
-        console.log(action.payload);
+        const alarm = action.payload;
 
-        state.alaramsByUser.push({
-          ...action.payload,
-        });
+        state.entities[alarm.id] = alarm;
+
+        if (!state.ids.includes(alarm.id)) {
+          state.ids.unshift(alarm.id);
+        }
         state.isLoading = false;
       })
       .addCase(getAlarmThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(markAlarmThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(markAlarmThunk.fulfilled, (state, action) => {
+        const alarmId = action.payload.alarmId;
+
+        state.entities[alarmId].isRead = true;
+        state.isLoading = false;
+      })
+      .addCase(markAlarmThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(getAllAlarmByUserThunk.pending, (state, _) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllAlarmByUserThunk.fulfilled, (state, action) => {
+        const alarmDatas = action.payload;
+
+        alarmDatas.map((el) => state.ids.push(el.id));
+        state.entities = alarmDatas;
+        console.log(state.entities);
+
+        state.isLoading = false;
+      })
+      .addCase(getAllAlarmByUserThunk.rejected, (state, action) => {
         state.isLoading = false;
       });
   },
