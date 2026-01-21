@@ -40,9 +40,6 @@ export default function NavBar() {
   let msgAlarms = useSelector(selectUnreadMsgAlarms);
   let alarmCnt = useSelector(selectUnreadAlarmCount);
   let alarms = useSelector(selectAlarms);
-  // let msgAlarmCnt = useSelector(selectUnreadalarmCnt);
-  // let msgAlarms = useSelector(selectUnreadalarms);
-  // let AlarmCnt = useSelector()
 
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -70,10 +67,7 @@ export default function NavBar() {
     setShowMsgalarmAnchorEl(null);
   };
   const showAlarms = async (event: React.MouseEvent<HTMLElement>) => {
-    console.log("알림창열기");
-
     setShowAlarmAnchorEl(event.currentTarget);
-    console.log(showAlarms);
   };
   const closeAlarms = async () => {
     setShowAlarmAnchorEl(null);
@@ -149,9 +143,10 @@ export default function NavBar() {
                 open={alarmOpen}
                 onClose={closeAlarms}
               >
-                {alarms.map((el) => {
+                {alarms.map((el, index) => {
                   return (
                     <AlarmItem
+                      key={index}
                       id={el.id}
                       senderId={el.senderId}
                       receiverId={el.receiverId}
@@ -164,9 +159,6 @@ export default function NavBar() {
                     />
                   );
                 })}
-                {/* <AlarmItem contentType="like" />
-                <AlarmItem contentType="follow" />
-                <AlarmItem contentType="comment" /> */}
               </Menu>
               {/* 메세지알람 */}
               <IconButton

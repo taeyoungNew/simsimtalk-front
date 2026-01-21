@@ -24,6 +24,7 @@ import {
   getFriendsThunk,
 } from "./store/userRelation/userRelationThunk";
 import { getChatsThunk } from "./store/chat/chatThunk";
+import { getAllAlarmByUserThunk } from "./store/alarm/alarmThunk";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -48,6 +49,7 @@ function App() {
       dispatch(getFollowingsThunk());
       dispatch(getFriendsThunk());
       dispatch(getChatsThunk());
+      dispatch(getAllAlarmByUserThunk());
     }
   }, [isLogin]);
   useEffect(() => {
@@ -100,7 +102,7 @@ function App() {
                   </AuthRoute>
                 }
               />
-              <Route path="/userPage/:id" element={<UserPageDetail />} />
+              <Route path="/userPage/:userId" element={<UserPageDetail />} />
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}

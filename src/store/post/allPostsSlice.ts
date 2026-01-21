@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 
@@ -36,6 +36,10 @@ const getAllPostsInitialState: getAllPostsSlice & IsLastIsLoading = {
   isLoading: false,
   isLast: false,
 };
+
+export const getAllPostsAdapter = createEntityAdapter<Post>({
+  sortComparer: false,
+});
 
 export const getAllPostsSlice = createSlice({
   name: "post/getAllPosts",

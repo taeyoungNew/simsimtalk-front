@@ -1,7 +1,7 @@
 import axios from "axios";
 export const markAlarmAPI = async (alarmId: number) => {
   return await axios.patch(
-    `${import.meta.env.VITE_API_BASE}alarms/${alarmId}/read`,
+    `${import.meta.env.VITE_API_BASE}alarms/${String(alarmId)}/read`,
     {},
     { withCredentials: true },
   );

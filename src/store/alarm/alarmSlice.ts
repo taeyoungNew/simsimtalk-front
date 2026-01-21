@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityId } from "@reduxjs/toolkit";
 import {
   getAlarmThunk,
   getAllAlarmByUserThunk,
@@ -36,6 +36,10 @@ const alarmInitialState: AlarmState = {
   ids: [],
   entities: {},
 };
+
+export const alarmAdapter = createEntityAdapter<Alarm>({
+  sortComparer: false,
+});
 
 export const alarmSlice = createSlice({
   name: "alarm",
@@ -77,10 +81,8 @@ export const alarmSlice = createSlice({
       .addCase(getAllAlarmByUserThunk.fulfilled, (state, action) => {
         const alarmDatas = action.payload;
 
-        alarmDatas.map((el) => state.ids.push(el.id));
-        state.entities = alarmDatas;
-        console.log(state.entities);
-
+        if (!Array.isArray(alarmDatas)) return;
+        alarmAdapter.setAll(state, alarmDatas);
         state.isLoading = false;
       })
       .addCase(getAllAlarmByUserThunk.rejected, (state, action) => {

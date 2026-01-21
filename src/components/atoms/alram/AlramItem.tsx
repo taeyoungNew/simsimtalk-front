@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import { forwardRef } from "react";
-import { AvatarMenu } from "../../molecules/AvatarMenu";
 import { CustomAvatar } from "../../../assets/icons/Avatar";
 import { theme } from "../../../theme/theme";
 import { LikeIcon } from "./LikeIcon";
@@ -9,6 +8,9 @@ import { CommentIcon } from "./CommentIcon";
 import { formatRelativeTime } from "../../../utils/formatRelativeTime";
 import { useAppDispatch } from "../../../store/hook";
 import { markAlarmThunk } from "../../../store/alarm/alarmThunk";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 interface messageAlarmProps {
   id: number;
   senderId: string;
@@ -35,7 +37,17 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
     },
     ref,
   ) => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const postId =
+      targetType === "POST" || targetType === "COMMENT"
+        ? Number(targetId)
+        : null;
+    const isLike = useSelector((state: RootState) => {
+      if (postId === null) return false;
+      const post = state.GetAllPosts.posts[postId];
+      return post?.isLiked ?? false;
+    });
     let type = "";
     switch (targetId) {
       case "POST":
@@ -48,7 +60,7 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
         type = "file";
         break;
     }
-    const to = location.pathname;
+    const prevPath = location.pathname;
     const alarmIcon = () => {
       switch (alarmType) {
         case "LIKE":
@@ -71,7 +83,37 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
     };
 
     const markAlarmFucn = async () => {
-      await dispatch(markAlarmThunk({ alarmId: id }));
+      if (!isRead) await dispatch(markAlarmThunk({ alarmId: id }));
+
+      let pathPathName: string;
+      switch (alarmType) {
+        case "FOLLOW":
+          pathPathName = `/userPage/${senderId}`;
+
+          navigate(pathPathName, {
+            state: {
+              myPage: false,
+              prevPathName: prevPath,
+            },
+          });
+          break;
+
+        case "LIKE":
+        case "COMMENT":
+          pathPathName = `/postDetail/${targetId}`;
+
+          navigate(pathPathName, {
+            state: {
+              from: prevPath,
+              isLike: isLike,
+              prevPathName: prevPath,
+            },
+          });
+          break;
+
+        default:
+          break;
+      }
     };
 
     const alarmCommentResult = alarmComment();
@@ -88,7 +130,9 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
           height: "3.5rem",
           marginBottom: type === "TEXT" ? "1rem" : "",
           cursor: "pointer",
-          backgroundColor: theme.palette.chatCardColor.unreadBg,
+          backgroundColor: isRead
+            ? theme.palette.chatCardColor.readBg
+            : theme.palette.chatCardColor.unreadBg,
         }}
       >
         <Box

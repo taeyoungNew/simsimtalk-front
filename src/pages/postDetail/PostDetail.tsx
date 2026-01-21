@@ -26,7 +26,7 @@ export const PostDetail = () => {
   const [isModifyPost, setIsModifyPost] = useState(false);
   useEffect(() => {
     getPostDetail(Number(postId));
-  }, []);
+  }, [postId]);
 
   return (
     <>
