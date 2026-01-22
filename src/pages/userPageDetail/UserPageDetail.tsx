@@ -3,7 +3,7 @@ import { UserPageBody } from "./UserPageBody";
 import { UserPageHeader } from "./UserPageHeader";
 import { useEffect, useRef, useState } from "react";
 import { RootState } from "../../store";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { resetIsLast, resetUserPosts } from "../../store/post/userPostsSlice";
 import {
   resetFollowings,

@@ -29,9 +29,9 @@ export const UserPageHeader = ({
   isMyPage,
   onViewContent,
 }: HeaderProps) => {
+  const dispatch = useAppDispatch();
   const userInfo = useSelector((state: RootState) => state.UserInfo);
   const postCnt = useSelector((state: RootState) => state.UserInfo.postCnt);
-  const dispatch = useAppDispatch();
 
   const following = async () => {
     await dispatch(
@@ -59,7 +59,7 @@ export const UserPageHeader = ({
     } else {
       dispatch(userInfoThunk(userId));
     }
-  }, []);
+  }, [userId]);
 
   return (
     <Box

@@ -1,23 +1,56 @@
 import { Box, Typography } from "@mui/material";
 import { forwardRef } from "react";
-import { AvatarMenu } from "../../molecules/AvatarMenu";
 import { CustomAvatar } from "../../../assets/icons/Avatar";
 import { theme } from "../../../theme/theme";
 import { LikeIcon } from "./LikeIcon";
 import { FollowIcon } from "./FollowIcon";
 import { CommentIcon } from "./CommentIcon";
+import { formatRelativeTime } from "../../../utils/formatRelativeTime";
+import { useAppDispatch } from "../../../store/hook";
+import { markAlarmThunk } from "../../../store/alarm/alarmThunk";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 interface messageAlarmProps {
-  chatRoomId?: string;
-  content?: string;
-  contentType?: string;
-  senderId?: string;
-  senderNickname?: string;
+  id: number;
+  senderId: string;
+  senderNickname: string;
+  receiverId: string;
+  targetId: number | string;
+  targetType: "USER" | "POST" | "COMMENT" | "SYSTEM";
+  alarmType: "FOLLOW" | "LIKE" | "COMMENT" | "SYSTEM";
+  isRead: boolean;
+  createdAt: string;
 }
 const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
-  ({ chatRoomId, content, contentType, senderId, senderNickname }, ref) => {
+  (
+    {
+      alarmType,
+      createdAt,
+      id,
+      isRead,
+      receiverId,
+      senderId,
+      senderNickname,
+      targetId,
+      targetType,
+    },
+    ref,
+  ) => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const postId =
+      targetType === "POST" || targetType === "COMMENT"
+        ? Number(targetId)
+        : null;
+    const isLike = useSelector((state: RootState) => {
+      if (postId === null) return false;
+      const post = state.GetAllPosts.posts[postId];
+      return post?.isLiked ?? false;
+    });
     let type = "";
-    switch (contentType) {
-      case "TEXT":
+    switch (targetId) {
+      case "POST":
         type = "message";
         break;
       case "IMAGE":
@@ -27,34 +60,85 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
         type = "file";
         break;
     }
-    const to = location.pathname;
+    const prevPath = location.pathname;
     const alarmIcon = () => {
-      switch (contentType) {
-        case "like":
+      switch (alarmType) {
+        case "LIKE":
           return <LikeIcon width={1} />;
-        case "follow":
+        case "FOLLOW":
           return <FollowIcon width={1} />;
-        case "comment":
+        case "COMMENT":
           return <CommentIcon width={1} />;
       }
     };
+    const alarmComment = () => {
+      switch (alarmType) {
+        case "LIKE":
+          return "좋아요를 눌렀습니다.";
+        case "FOLLOW":
+          return "팔로잉했습니다.";
+        case "COMMENT":
+          return "댓글을 달았습니다.";
+      }
+    };
+
+    const markAlarmFucn = async () => {
+      if (!isRead) await dispatch(markAlarmThunk({ alarmId: id }));
+
+      let pathPathName: string;
+      switch (alarmType) {
+        case "FOLLOW":
+          pathPathName = `/userPage/${senderId}`;
+
+          navigate(pathPathName, {
+            state: {
+              myPage: false,
+              prevPathName: prevPath,
+            },
+          });
+          break;
+
+        case "LIKE":
+        case "COMMENT":
+          pathPathName = `/postDetail/${targetId}`;
+
+          navigate(pathPathName, {
+            state: {
+              from: prevPath,
+              isLike: isLike,
+              prevPathName: prevPath,
+            },
+          });
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    const alarmCommentResult = alarmComment();
+
     return (
       <Box
+        component={"div"}
+        onClick={markAlarmFucn}
         sx={{
           width: "100%",
           display: "flex",
-          padding: "0 0.5rem",
+          padding: "0.5rem 0.5rem",
           gap: 0.3,
           height: "3.5rem",
           marginBottom: type === "TEXT" ? "1rem" : "",
           cursor: "pointer",
-          backgroundColor: theme.palette.chatCardColor.unreadBg,
+          backgroundColor: isRead
+            ? theme.palette.chatCardColor.readBg
+            : theme.palette.chatCardColor.unreadBg,
         }}
       >
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "start",
             width: "inherit",
           }}
         >
@@ -64,20 +148,60 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
             sx={{ display: "flex", gap: 0.7, alignItems: "start" }}
           >
             <CustomAvatar sx={{ width: "1.8rem" }} />
-            <Typography
+            <Box
               sx={{
-                fontWeight: "bold",
-                fontSize: "0.8rem",
-                lineHeight: 1,
                 display: "flex",
-                alignItems: "center",
+                flexDirection: "column",
               }}
             >
-              닉네임{" "}
-              <span style={{ color: `${theme.palette.fontColor.icon}` }}>
-                님이 좋아요를 눌렀습니다.
-              </span>
-            </Typography>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  color: theme.palette.fontColor.icon,
+                  fontSize: "0.8rem",
+                  lineHeight: 1,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{ color: theme.palette.fontColor.main }}
+                >{`${senderNickname}`}</span>
+                님이 {`${alarmCommentResult}`}
+              </Typography>
+              <Typography
+                sx={{
+                  color: theme.palette.chatCardColor.readMsg,
+                  fontSize: "0.6rem",
+                }}
+              >
+                {formatRelativeTime(createdAt)}
+              </Typography>
+              <Box sx={{ display: "flex" }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      width: "0.4rem",
+                      height: "0.4rem",
+                      borderRadius: "70px",
+                      backgroundColor: isRead
+                        ? theme.palette.chatCardColor.readMsg
+                        : theme.palette.chatCardColor.unreadTime,
+                    }}
+                  />
+                </Box>
+                <Typography
+                  sx={{
+                    color: isRead
+                      ? theme.palette.chatCardColor.readMsg
+                      : theme.palette.chatCardColor.unreadTime,
+                    fontSize: "0.7rem",
+                  }}
+                >
+                  {isRead ? "읽음" : "읽지않음"}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
           <Box sx={{ marginLeft: "auto" }}>{alarmIcon()}</Box>
         </Box>

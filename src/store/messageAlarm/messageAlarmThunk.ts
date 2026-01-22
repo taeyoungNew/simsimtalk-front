@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { markAlarmAsReadByRoomAPI } from "../../apis/alarm";
-import { alarmsRead } from "../../sockets/alarmSocket";
+import { markMsgAlarmAsReadByRoomAPI } from "../../apis/msgAlarm";
+import { msgAlarmsRead } from "../../sockets/alarmSocket";
 interface Error {
   status: number;
   errorCode: string;
@@ -66,8 +66,8 @@ export const markAlarmAsReadByRoomThunk = createAsyncThunk<
   { rejectValue: Error }
 >("messageAlarm/markAlarmAsReadByRoom", async ({ chatRoomId }, thunkAPI) => {
   try {
-    const result = (await markAlarmAsReadByRoomAPI(chatRoomId)).data;
-    alarmsRead(chatRoomId);
+    const result = (await markMsgAlarmAsReadByRoomAPI(chatRoomId)).data;
+    msgAlarmsRead(chatRoomId);
     return { chatRoomId: result.chatRoomId };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

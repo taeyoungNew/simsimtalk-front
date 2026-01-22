@@ -10,6 +10,7 @@ import { chatSlice } from "./chat/chatSlice";
 import { messageSlice } from "./message/messageSlice";
 import { messageAlarmSlice } from "./messageAlarm/messageAlarmSlice";
 import { userRelationSlice } from "./userRelation/userRelationSlice";
+import { alarmSlice } from "./alarm/alarmSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     MessageSlice: messageSlice.reducer,
     messageAlarmSlice: messageAlarmSlice.reducer,
     UserRelationSlice: userRelationSlice.reducer,
+    AlarmSlice: alarmSlice.reducer,
   },
   devTools: true,
 });

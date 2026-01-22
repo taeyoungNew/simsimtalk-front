@@ -1,26 +1,26 @@
 import { getSocket } from ".";
 
-export const getAlarmsocket = () => {
+export const getMsgAlarmsSocket = () => {
   const socket = getSocket();
 
   if (!socket?.connected) {
     socket?.connect();
   }
 
-  socket?.emit("getAlarms", null, (res: any) => {
+  socket?.emit("getMsgAlarms", null, (res: any) => {
     if (!res.ok) {
-      getAlarmsocket();
+      getMsgAlarmsSocket();
       return;
     }
   });
 };
 
-export const alarmsRead = (chatRoomId: string) => {
+export const msgAlarmsRead = (chatRoomId: string) => {
   const socket = getSocket();
 
   if (!socket?.connected) {
     socket?.connect();
   }
 
-  socket?.emit("alarmsRead", { chatRoomId });
+  socket?.emit("msgAlarmsRead", { chatRoomId });
 };

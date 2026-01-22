@@ -51,7 +51,9 @@ export const Applayout = () => {
           <Box></Box>
         )}
 
-        <Outlet />
+        <Box sx={{ minWidth: 0 }}>
+          <Outlet />
+        </Box>
 
         {isLogin == true ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>

@@ -24,6 +24,8 @@ import {
   getFriendsThunk,
 } from "./store/userRelation/userRelationThunk";
 import { getChatsThunk } from "./store/chat/chatThunk";
+import { getAllAlarmByUserThunk } from "./store/alarm/alarmThunk";
+import { SuggestedFriendsPage } from "./pages/suggestedFriends/SuggestedFriendsPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -48,6 +50,7 @@ function App() {
       dispatch(getFollowingsThunk());
       dispatch(getFriendsThunk());
       dispatch(getChatsThunk());
+      dispatch(getAllAlarmByUserThunk());
     }
   }, [isLogin]);
   useEffect(() => {
@@ -100,10 +103,14 @@ function App() {
                   </AuthRoute>
                 }
               />
-              <Route path="/userPage/:id" element={<UserPageDetail />} />
+              <Route path="/userPage/:userId" element={<UserPageDetail />} />
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}
+              />
+              <Route
+                path="/suggestedFriendsPage"
+                element={<SuggestedFriendsPage />}
               />
               <Route path="*" element={<NoPage />} />
             </Route>

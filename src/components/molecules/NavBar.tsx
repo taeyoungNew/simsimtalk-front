@@ -5,16 +5,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/ChatQuote";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
@@ -23,17 +23,24 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 
 import { logoutThunk } from "../../store/auth/authThunk";
 import {
-  selectUnreadalarmCnt,
-  selectUnreadalarms,
+  selectUnreadMsgAlarmCnt,
+  selectUnreadMsgAlarms,
 } from "../../store/messageAlarm/messageAlarmSelector";
 import MessasgeAlarmItem from "../atoms/alram/MessageAlramItem";
 import AlarmItem from "../atoms/alram/AlramItem";
+import {
+  selectAlarms,
+  selectUnreadAlarmCount,
+} from "../../store/alarm/alarmSelector";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
-  let alarmCnt = useSelector(selectUnreadalarmCnt);
-  let alarms = useSelector(selectUnreadalarms);
+  let msgAlarmCnt = useSelector(selectUnreadMsgAlarmCnt);
+  let msgAlarms = useSelector(selectUnreadMsgAlarms);
+  let alarmCnt = useSelector(selectUnreadAlarmCount);
+  let alarms = useSelector(selectAlarms);
+  const navigate = useNavigate();
 
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -55,19 +62,19 @@ export default function NavBar() {
   };
 
   const showMsgAlarms = async (event: React.MouseEvent<HTMLElement>) => {
-    if (alarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
+    if (msgAlarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
   };
   const closeMsgAlarms = async () => {
     setShowMsgalarmAnchorEl(null);
   };
   const showAlarms = async (event: React.MouseEvent<HTMLElement>) => {
-    console.log("알림창열기");
-
     setShowAlarmAnchorEl(event.currentTarget);
-    console.log(showAlarms);
   };
   const closeAlarms = async () => {
     setShowAlarmAnchorEl(null);
+  };
+  const suggetedPage = () => {
+    navigate("/suggestedFriendsPage");
   };
 
   return (
@@ -111,11 +118,21 @@ export default function NavBar() {
             // 알람
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
+                onClick={suggetedPage}
+                size="large"
+                aria-label="show 4 new mails"
+              >
+                <PeopleAltOutlinedIcon
+                  sx={{ color: (theme) => theme.palette.fontColor.icon }}
+                />
+              </IconButton>
+
+              <IconButton
                 onClick={showAlarms}
                 size="large"
                 aria-label="show 4 new mails"
               >
-                <Badge badgeContent={4} color="error">
+                <Badge badgeContent={alarmCnt} color="error">
                   <NotificationsNoneIcon
                     sx={{ color: (theme) => theme.palette.fontColor.icon }}
                   />
@@ -126,6 +143,7 @@ export default function NavBar() {
                 slotProps={{
                   list: {
                     "aria-labelledby": "fade-button",
+                    disablePadding: true,
                   },
                   paper: {
                     sx: {
@@ -139,9 +157,22 @@ export default function NavBar() {
                 open={alarmOpen}
                 onClose={closeAlarms}
               >
-                <AlarmItem contentType="like" />
-                <AlarmItem contentType="follow" />
-                <AlarmItem contentType="comment" />
+                {alarms.map((el, index) => {
+                  return (
+                    <AlarmItem
+                      key={index}
+                      id={el.id}
+                      senderId={el.senderId}
+                      receiverId={el.receiverId}
+                      targetId={el.targetId}
+                      targetType={el.targetType}
+                      alarmType={el.alarmType}
+                      isRead={el.isRead}
+                      createdAt={el.createdAt}
+                      senderNickname={el.senderNickname}
+                    />
+                  );
+                })}
               </Menu>
               {/* 메세지알람 */}
               <IconButton
@@ -152,7 +183,7 @@ export default function NavBar() {
                 color="inherit"
               >
                 <Badge
-                  badgeContent={alarmCnt > 0 ? alarmCnt : undefined}
+                  badgeContent={msgAlarmCnt > 0 ? msgAlarmCnt : undefined}
                   color="error"
                 >
                   <MailOutlineIcon
@@ -165,6 +196,7 @@ export default function NavBar() {
                 slotProps={{
                   list: {
                     "aria-labelledby": "fade-button",
+                    disablePadding: true,
                   },
                   paper: {
                     sx: {
@@ -178,7 +210,7 @@ export default function NavBar() {
                 open={msgListOpen}
                 onClose={closeMsgAlarms}
               >
-                {alarms.map((el, index) => {
+                {msgAlarms.map((el, index) => {
                   return (
                     <MessasgeAlarmItem
                       key={index}

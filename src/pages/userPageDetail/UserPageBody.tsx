@@ -124,14 +124,14 @@ export const UserPageBody = ({
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [isEditMyInfoSuccess, dispatch]);
+  }, [isEditMyInfoSuccess, dispatch, userId]);
 
   // 타겟요소지정
   const lastPostRef = useRef(null);
   const observer = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     getUserPosts(userId, postLastId);
-  }, []);
+  }, [userId]);
 
   let isFetching = useRef(false);
   useEffect(() => {
