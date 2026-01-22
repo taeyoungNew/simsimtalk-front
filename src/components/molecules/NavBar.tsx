@@ -5,16 +5,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { ChatQuote } from "../../assets/icons/ChatQuote";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Badge from "@mui/material/Badge/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../store/hook";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
@@ -40,6 +40,7 @@ export default function NavBar() {
   let msgAlarms = useSelector(selectUnreadMsgAlarms);
   let alarmCnt = useSelector(selectUnreadAlarmCount);
   let alarms = useSelector(selectAlarms);
+  const navigate = useNavigate();
 
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -71,6 +72,9 @@ export default function NavBar() {
   };
   const closeAlarms = async () => {
     setShowAlarmAnchorEl(null);
+  };
+  const suggetedPage = () => {
+    navigate("/suggestedFriendsPage");
   };
 
   return (
@@ -113,6 +117,16 @@ export default function NavBar() {
           {isLogin === true ? (
             // 알람
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <IconButton
+                onClick={suggetedPage}
+                size="large"
+                aria-label="show 4 new mails"
+              >
+                <PeopleAltOutlinedIcon
+                  sx={{ color: (theme) => theme.palette.fontColor.icon }}
+                />
+              </IconButton>
+
               <IconButton
                 onClick={showAlarms}
                 size="large"

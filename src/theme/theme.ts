@@ -29,7 +29,23 @@ declare module "@mui/material/styles" {
       readBadgeBg: string;
       hoverBd: string;
     };
-
+    userCardColor: {
+      text: {
+        title: string;
+        section: string;
+        assist: string;
+      };
+      icon: {
+        suggest: string;
+        popular: string;
+      };
+      button: {
+        bg: string;
+        hover: string;
+        border: string;
+        text: string;
+      };
+    };
     alarmCardIconColor: {
       likeBg: string;
       likeIconColr: string;
@@ -71,6 +87,23 @@ declare module "@mui/material/styles" {
       readTime: string;
       readBadgeBg: string;
       hoverBd: string;
+    };
+    userCardColor: {
+      text: {
+        title: string;
+        section: string;
+        assist: string;
+      };
+      icon: {
+        suggest: string;
+        popular: string;
+      };
+      button: {
+        bg: string;
+        hover: string;
+        border: string;
+        text: string;
+      };
     };
     alarmCardIconColor: {
       likeBg: string;
@@ -163,6 +196,23 @@ export const theme = createTheme({
       commentIconColr: "#16a34a",
       followBg: "#f3e8ff",
       followIconColr: "",
+    },
+    userCardColor: {
+      text: {
+        title: "#0f172a",
+        section: "#1e293b",
+        assist: "#64748b",
+      },
+      icon: {
+        suggest: "#2563eb",
+        popular: "#f59e0b",
+      },
+      button: {
+        bg: "#2563eb",
+        hover: "#1d4ed8",
+        border: "#cbd5e1",
+        text: "#475569",
+      },
     },
   },
 

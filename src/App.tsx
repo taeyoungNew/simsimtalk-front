@@ -25,6 +25,7 @@ import {
 } from "./store/userRelation/userRelationThunk";
 import { getChatsThunk } from "./store/chat/chatThunk";
 import { getAllAlarmByUserThunk } from "./store/alarm/alarmThunk";
+import { SuggestedFriendsPage } from "./pages/suggestedFriends/SuggestedFriendsPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -106,6 +107,10 @@ function App() {
               <Route
                 path="/postDetail/:postId"
                 element={<PostDetail></PostDetail>}
+              />
+              <Route
+                path="/suggestedFriendsPage"
+                element={<SuggestedFriendsPage />}
               />
               <Route path="*" element={<NoPage />} />
             </Route>
