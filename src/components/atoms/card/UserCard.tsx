@@ -2,7 +2,21 @@ import { Box, Button, Typography } from "@mui/material";
 import { CustomAvatar } from "../../../assets/icons/Avatar";
 import { theme } from "../../../theme/theme";
 
-export const UserCard = () => {
+interface UserInfo {
+  userId: string;
+  nickname: string;
+  followerCnt: number;
+  mutualFriendsCount: number;
+  sectionType: "suggest" | "popular";
+}
+
+export const UserCard = ({
+  userId,
+  followerCnt,
+  mutualFriendsCount,
+  nickname,
+  sectionType,
+}: UserInfo) => {
   return (
     <Box
       sx={{
@@ -23,7 +37,7 @@ export const UserCard = () => {
           fontSize: "1.3rem",
         }}
       >
-        nickname
+        {nickname}
       </Typography>
 
       <Typography
@@ -32,7 +46,9 @@ export const UserCard = () => {
           color: theme.palette.userCardColor.text.assist,
         }}
       >
-        함께아는 친구 1명
+        {sectionType === "suggest"
+          ? `함께아는 친구 ${mutualFriendsCount}명`
+          : `팔로워 수 ${followerCnt}명`}
       </Typography>
       <Box sx={{ width: "100%" }}>
         <Button
