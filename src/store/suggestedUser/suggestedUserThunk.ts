@@ -11,17 +11,22 @@ interface UserInfo {
   nickname: string;
   followerCnt: number;
   mutualFriendsCount: number;
+  isFollowinged: boolean;
 }
 
-interface getSuggestedUser {
+interface getSuggestedUserReq {
+  sectionType: "suggest" | "popular";
+}
+
+interface getSuggestedUserRes {
   mutual: UserInfo[];
   popular: UserInfo[];
 }
-export const getSuggestedUserThunk = createAsyncThunk<
-  getSuggestedUser,
+export const getSuggestedUserInitThunk = createAsyncThunk<
+  getSuggestedUserRes,
   void,
   { rejectValue: Error }
->("getSuggestedUser/getAll", async (_, thunkAPI) => {
+>("getSuggestedUser/init", async (_, thunkAPI) => {
   try {
     const result = await getSuggestedUserAPI();
     return result.data;
@@ -33,3 +38,15 @@ export const getSuggestedUserThunk = createAsyncThunk<
     });
   }
 });
+
+export const getSuggestedUsersMoreThunk = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: Error }
+>("getSuggestedUser/more", async () => {});
+
+export const getPopularUsersMoreThunk = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: Error }
+>("getSuggestedUser/more", async () => {});

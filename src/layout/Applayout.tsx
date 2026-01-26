@@ -29,7 +29,7 @@ export const Applayout = () => {
 
   return (
     <>
-      <NavBar></NavBar>
+      <NavBar />
       <Box
         sx={{
           display: "grid",

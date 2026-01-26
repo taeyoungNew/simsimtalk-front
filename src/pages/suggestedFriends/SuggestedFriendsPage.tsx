@@ -3,13 +3,13 @@ import { theme } from "../../theme/theme";
 import { SuggestedUserSection } from "./SuggestedUserSection";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getSuggestedUserThunk } from "../../store/suggestedUser/suggestedUserThunk";
+import { getSuggestedUserInitThunk } from "../../store/suggestedUser/suggestedUserThunk";
 
 export const SuggestedFriendsPage = () => {
   const dispatch = useAppDispatch();
   const suggestedUsers = useAppSelector((state) => state.SuggestedUserSlice);
   const getSuggestedUsers = async () => {
-    await dispatch(getSuggestedUserThunk());
+    await dispatch(getSuggestedUserInitThunk());
   };
   useEffect(() => {
     getSuggestedUsers();

@@ -1,17 +1,25 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Badge, Box, Button, IconButton, Typography } from "@mui/material";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import EditButton from "../../components/atoms/buttons/EditButton";
 import { ShareButton } from "../../components/atoms/buttons/ShareButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../../store/hook";
-import { myInfoThunk, userInfoThunk } from "../../store/user/userInfoThunk";
+import {
+  changeMyProfileImgThunk,
+  myInfoThunk,
+  userInfoThunk,
+} from "../../store/user/userInfoThunk";
 import {
   followingCencelThunk,
   followingThunk,
 } from "../../store/follow/followThunk";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { theme } from "../../theme/theme";
+import { ChangeCircleCustomIcon } from "../../assets/icons/ChangeCircle";
+import { getMessageTypeFormFile } from "../../utils/getMessageType";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
@@ -30,6 +38,7 @@ export const UserPageHeader = ({
   onViewContent,
 }: HeaderProps) => {
   const dispatch = useAppDispatch();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const userInfo = useSelector((state: RootState) => state.UserInfo);
   const postCnt = useSelector((state: RootState) => state.UserInfo.postCnt);
 
@@ -41,6 +50,27 @@ export const UserPageHeader = ({
         followingNickname: userInfo.nickname,
       }),
     );
+  };
+
+  const handleOpenFile = () => {
+    fileInputRef.current?.click();
+  };
+
+  const getFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const type = getMessageTypeFormFile(file);
+    if (type !== "IMAGE") {
+      alert("이미지 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    const payment = {
+      file,
+    };
+
+    dispatch(changeMyProfileImgThunk(payment));
   };
 
   const followingCencel = async () => {
@@ -84,17 +114,44 @@ export const UserPageHeader = ({
           minHeight: "30%",
         }}
       >
-        <CustomAvatar
-          sx={{
-            width: "7.5rem",
-            position: "absolute",
-            translate: "-50% -50%",
-            left: "10%",
-            top: "95%",
-            maxHeight: { xs: "3.5rem", md: "7.5rem" },
-            maxWidth: { xs: "3.5rem", md: "7.5rem" },
-          }}
-        ></CustomAvatar>
+        <Box>
+          <CustomAvatar
+            sx={{
+              width: "7.5rem",
+              position: "absolute",
+              translate: "-50% -50%",
+              left: "10%",
+              top: "95%",
+              maxHeight: { xs: "3.5rem", md: "7.5rem" },
+              maxWidth: { xs: "3.5rem", md: "7.5rem" },
+            }}
+          />
+
+          {isMyPage ? (
+            <IconButton
+              sx={{
+                position: "absolute",
+                left: "5.9rem",
+                top: "8.9rem",
+                color: "white",
+              }}
+              onClick={() => handleOpenFile()}
+            >
+              <AutorenewIcon
+                sx={{
+                  border: `0.2px solid black`,
+                  borderRadius: "70%",
+                  backgroundColor: "#fff",
+                  fontSize: "1.5rem",
+                  color: theme.palette.fontColor.assist,
+                }}
+              />
+            </IconButton>
+          ) : (
+            <Box />
+          )}
+        </Box>
+
         <Box sx={{ display: "flex" }}>
           <Box sx={{ flex: 0.2 }}></Box>
           <Box sx={{ flex: 0.7 }}>
@@ -238,6 +295,14 @@ export const UserPageHeader = ({
           </Box>
         </Box>
       </Box>
+
+      {/* hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={getFile}
+      />
     </Box>
   );
 };

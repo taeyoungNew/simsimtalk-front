@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { editMyInfo, myInfoAPI, userInfoAPI } from "../../apis/user";
+import {
+  changeMyProfileImgAPI,
+  editMyInfo,
+  myInfoAPI,
+  userInfoAPI,
+} from "../../apis/user";
 
 interface Error {
   status: number;
@@ -55,6 +60,29 @@ interface UserRes {
   Followings: Followings[];
   isFollowingedIds: string[];
 }
+
+interface changeMyProfileImgReq {
+  file: File;
+}
+
+export const changeMyProfileImgThunk = createAsyncThunk<
+  { profileUrl: string },
+  changeMyProfileImgReq,
+  { rejectValue: Error }
+>("user/changeMyProfileImg", async ({ file }, thunkAPI) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await changeMyProfileImgAPI(formData);
+    return result.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
 export const myInfoThunk = createAsyncThunk<
   UserRes,
