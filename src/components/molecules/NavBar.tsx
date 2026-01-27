@@ -35,6 +35,7 @@ import {
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
+  const profileUrl = useSelector((state: RootState) => state.User.profileUrl);
   const userId = useSelector((state: RootState) => state.User.id);
   let msgAlarmCnt = useSelector(selectUnreadMsgAlarmCnt);
   let msgAlarms = useSelector(selectUnreadMsgAlarms);
@@ -233,7 +234,10 @@ export default function NavBar() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <CustomAvatar sx={{ width: "2rem" }}></CustomAvatar>
+                  <CustomAvatar
+                    profileUrl={profileUrl}
+                    sx={{ width: "2rem" }}
+                  ></CustomAvatar>
                 </IconButton>
               </NavLink>
               <IconButton

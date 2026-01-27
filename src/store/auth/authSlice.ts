@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authMeThunk, loginThunk, logoutThunk } from "./authThunk";
+import { changeMyProfileImgThunk } from "../user/userInfoThunk";
 
 interface Error {
   status: number;
@@ -13,6 +14,7 @@ interface UserInitialState {
   id: string;
   email: string;
   nickname: string;
+  profileUrl: string;
   isLoginSuccess: boolean;
   error: null | Error;
   initialized: boolean;
@@ -24,6 +26,7 @@ const initialState: UserInitialState = {
   id: "",
   email: "",
   nickname: "",
+  profileUrl: "",
   isLoginSuccess: false,
   initialized: false,
   error: {
@@ -46,6 +49,7 @@ export const userSlice = createSlice({
     setAuth: (state, action) => {
       state.isLogin = true;
       state.id = action.payload.id;
+      state.profileUrl = action.payload.profileUrl;
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
     },
@@ -53,6 +57,7 @@ export const userSlice = createSlice({
     deleteAuth: (state) => {
       state.isLogin = false;
       state.id = "";
+      state.profileUrl = "";
       state.email = "";
       state.nickname = "";
       state.error = null;
@@ -71,6 +76,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isLoginSuccess = true;
         state.id = action.payload?.data.id;
+        state.profileUrl = action.payload?.data.profileUrl;
         state.email = action.payload?.data.email;
         state.nickname = action.payload?.data.nickname;
       })
@@ -89,6 +95,17 @@ export const userSlice = createSlice({
         state.isLoading = false;
       });
     builder
+      .addCase(changeMyProfileImgThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(changeMyProfileImgThunk.fulfilled, (state, action) => {
+        state.profileUrl = action.payload.profileUrl;
+        state.isLoading = false;
+      })
+      .addCase(changeMyProfileImgThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+    builder
       .addCase(authMeThunk.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -99,6 +116,7 @@ export const userSlice = createSlice({
         state.nickname = action.payload.user.nickname;
         state.email = action.payload.user.email;
         state.id = action.payload.user.id;
+        state.profileUrl = action.payload.user.profileUrl;
         state.initialized = true;
       })
       .addCase(authMeThunk.rejected, (state, action) => {

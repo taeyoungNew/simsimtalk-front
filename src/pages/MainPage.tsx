@@ -111,6 +111,7 @@ export const MainPage = () => {
                   >
                     <PostCard
                       id={el.id}
+                      profileUrl={el.profileUrl}
                       userId={el.userId}
                       contents={el.content}
                       userNickname={el.userNickname}

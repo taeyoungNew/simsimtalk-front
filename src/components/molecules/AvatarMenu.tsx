@@ -11,6 +11,7 @@ import { chatThunk } from "../../store/chat/chatThunk";
 
 interface AvatarMenuProps {
   id: number;
+  profileUrl: string;
   userId: string;
   userNickname: string;
   isLiked: boolean;
@@ -23,6 +24,7 @@ interface AvatarMenuProps {
 export const AvatarMenu = ({
   sx,
   isOnline,
+  profileUrl,
   isMy,
   userId,
   userNickname,
@@ -66,7 +68,7 @@ export const AvatarMenu = ({
         onClick={(event) => handleClick(event)}
         sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
       >
-        <CustomAvatar sx={sx} isOnline={isOnline} />
+        <CustomAvatar sx={sx} profileUrl={profileUrl} isOnline={isOnline} />
       </Box>
       <Menu
         id="basic-menu"

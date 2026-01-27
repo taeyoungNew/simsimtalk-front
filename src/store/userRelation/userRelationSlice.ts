@@ -65,7 +65,7 @@ export const userRelationSlice = createSlice({
             email: el.email,
             friendId: el.friendId,
             nickname: el.nickname,
-            profileUrl: "",
+            profileUrl: el.profileUrl,
           });
         });
         state.isLoading = false;
@@ -87,9 +87,9 @@ export const userRelationSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(followingThunk.fulfilled, (state, action) => {
-        const { followId, followingNickname } = action.payload;
+        const { followId, followingNickname, profileUrl } = action.payload;
         state.followins.push({
-          profileUrl: "",
+          profileUrl,
           followingId: followId,
           followingNickname,
         });

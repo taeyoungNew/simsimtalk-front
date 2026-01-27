@@ -9,6 +9,7 @@ interface Error {
 
 interface FollowingUserInfoRes {
   followingId: string;
+  followingEmail: string;
   followingNickname: string;
   profileUrl: string;
 }

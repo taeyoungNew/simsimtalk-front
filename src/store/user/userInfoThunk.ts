@@ -13,6 +13,7 @@ interface Error {
 }
 
 interface UserInfo {
+  profileUrl: string;
   username: string;
   aboutMe: string;
   age: number;
@@ -20,6 +21,7 @@ interface UserInfo {
 }
 
 interface FollowInfo {
+  profileUrl: string;
   nickname: string;
   username: string;
 }
@@ -50,6 +52,7 @@ interface editMyInfoRes {
 
 interface UserRes {
   id: string;
+  profileUrl: string;
   email: string;
   isFollowinged: boolean;
   followerCnt: number;
@@ -74,7 +77,10 @@ export const changeMyProfileImgThunk = createAsyncThunk<
     const formData = new FormData();
     formData.append("file", file);
     const result = await changeMyProfileImgAPI(formData);
-    return result.data;
+
+    return {
+      profileUrl: result.data.url,
+    };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
@@ -113,6 +119,7 @@ export const userInfoThunk = createAsyncThunk<
 
     const payload: UserRes = {
       id: getUserInfo.id,
+      profileUrl: getUserInfo.profileUrl,
       email: getUserInfo.email,
       isFollowinged: getUserInfo.isFollowinged,
       followerCnt: getUserInfo.followerCnt,

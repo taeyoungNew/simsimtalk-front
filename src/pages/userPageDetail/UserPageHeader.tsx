@@ -125,6 +125,7 @@ export const UserPageHeader = ({
               maxHeight: { xs: "3.5rem", md: "7.5rem" },
               maxWidth: { xs: "3.5rem", md: "7.5rem" },
             }}
+            profileUrl={userInfo.profileUrl}
           />
 
           {isMyPage ? (

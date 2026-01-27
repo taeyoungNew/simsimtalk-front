@@ -47,6 +47,7 @@ export const MyFollowings = ({ followingCnt }: MyFollowingsProps) => {
                   userId={el.followingId}
                   nickname={el.followingNickname}
                   onlineUsers={onlineUsers}
+                  profileUrl={el.profileUrl}
                 />
               );
             })}

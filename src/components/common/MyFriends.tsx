@@ -44,7 +44,7 @@ export const MyFriends = () => {
               email={el.email}
               nickname={el.nickname}
               chatRoomId={el.chatRoomId}
-              profileUrl={""}
+              profileUrl={el.profileUrl}
               onlineUsers={onlineUsers}
             />
           );
