@@ -1,14 +1,26 @@
 import { Box, Typography } from "@mui/material";
-import { UserCard } from "../../components/atoms/card/userCard";
+import { UserCard } from "../../components/atoms/card/UserCard";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { theme } from "../../theme/theme";
 import StarRateIcon from "@mui/icons-material/StarRate";
+import { useEffect, useRef } from "react";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
+interface UserInfo {
+  userId: string;
+  nickname: string;
+  followerCnt: number;
+  mutualFriendsCount: number;
+  isFollowinged: boolean;
+}
 interface SuggestedFriendsPageProps {
+  suggestedUsers: UserInfo[];
   sectionType: "suggest" | "popular";
 }
 
 export const SuggestedUserSection = ({
   sectionType,
+  suggestedUsers,
 }: SuggestedFriendsPageProps) => {
   let title;
   switch (sectionType) {
@@ -77,21 +89,20 @@ export const SuggestedUserSection = ({
           },
         }}
       >
-        <Box sx={{ flexShrink: 0 }}>
-          <UserCard />
-        </Box>
-        <Box sx={{ flexShrink: 0 }}>
-          <UserCard />
-        </Box>
-        <Box sx={{ flexShrink: 0 }}>
-          <UserCard />
-        </Box>
-        <Box sx={{ flexShrink: 0 }}>
-          <UserCard />
-        </Box>
-        <Box sx={{ flexShrink: 0 }}>
-          <UserCard />
-        </Box>
+        {suggestedUsers.map((el, index) => {
+          return (
+            <Box key={index} sx={{ flexShrink: 0 }}>
+              <UserCard
+                userId={el.userId}
+                nickname={el.nickname}
+                followerCnt={el.followerCnt}
+                mutualFriendsCount={el.mutualFriendsCount}
+                sectionType={sectionType}
+                isFollowinged={el.isFollowinged}
+              />
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );

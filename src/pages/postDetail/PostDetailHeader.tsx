@@ -48,13 +48,6 @@ export const PostDetailHeader = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openDeletePostModal, setOpenDeletePostModal] = useState(false);
-  // const [openModifyPostModal, setOpenModifyPostModal] = useState(false);
-  // const { control, handleSubmit } = useForm<ModifyPost>({
-  //   defaultValues: {
-  //     title: "",
-  //     content: "",
-  //   },
-  // });
 
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
@@ -95,8 +88,6 @@ export const PostDetailHeader = ({
   };
 
   const following = async () => {
-    console.log(userNickname);
-
     await dispatch(
       followingThunk({
         followId: userId,

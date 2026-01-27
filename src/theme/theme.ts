@@ -45,6 +45,10 @@ declare module "@mui/material/styles" {
         border: string;
         text: string;
       };
+      border: {
+        border: string;
+        hover: string;
+      };
     };
     alarmCardIconColor: {
       likeBg: string;
@@ -103,6 +107,10 @@ declare module "@mui/material/styles" {
         hover: string;
         border: string;
         text: string;
+      };
+      border: {
+        border: string;
+        hover: string;
       };
     };
     alarmCardIconColor: {
@@ -212,6 +220,10 @@ export const theme = createTheme({
         hover: "#1d4ed8",
         border: "#cbd5e1",
         text: "#475569",
+      },
+      border: {
+        border: "#e2e8f0",
+        hover: "#93c5fd",
       },
     },
   },
