@@ -10,16 +10,21 @@ import { CustomAvatar } from "../assets/icons/Avatar";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import "../assets/style/emojiPicker/emojiPikerPost.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { selectUserProfileById } from "../store/user/usersEntitiesSelector";
 interface WritePost {
   content: string;
 }
 
 export const WritePost = () => {
+  const userId = useSelector((state: RootState) => state.User.id);
+  const profileUrl = useSelector(selectUserProfileById(userId));
+  const dispatch = useAppDispatch();
   const [emojiPos, setEmojiPos] = useState<{
     top: number;
     left: number;
   } | null>(null);
-  const dispatch = useAppDispatch();
   const { control, handleSubmit, reset, watch, setValue, getValues } =
     useForm<WritePost>({
       defaultValues: {
@@ -112,7 +117,7 @@ export const WritePost = () => {
         }}
       >
         <Box sx={{ padding: "0", marginRight: "0.8rem" }}>
-          <CustomAvatar sx={{ width: "2.5rem" }} />
+          <CustomAvatar profileUrl={profileUrl} sx={{ width: "2.5rem" }} />
         </Box>
         <Box sx={{ width: "100%" }}>
           <Box

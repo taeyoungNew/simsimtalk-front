@@ -14,6 +14,13 @@ export const changeMyProfileImgAPI = async (formData: FormData) => {
     { withCredentials: true },
   );
 };
+export const changeMyBackgroundImgAPI = async (formData: FormData) => {
+  return await axios.patch(
+    `${import.meta.env.VITE_API_BASE}user/my-background-img`,
+    formData,
+    { withCredentials: true },
+  );
+};
 
 // 나의 유저정보가져오기
 export const myInfoAPI = async () => {

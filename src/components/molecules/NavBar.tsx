@@ -32,6 +32,7 @@ import {
   selectAlarms,
   selectUnreadAlarmCount,
 } from "../../store/alarm/alarmSelector";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
@@ -41,7 +42,7 @@ export default function NavBar() {
   let alarmCnt = useSelector(selectUnreadAlarmCount);
   let alarms = useSelector(selectAlarms);
   const navigate = useNavigate();
-
+  const profileUrl = useSelector(selectUserProfileById(userId));
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [showAlarmAnchorEl, setShowAlarmAnchorEl] =
@@ -233,7 +234,10 @@ export default function NavBar() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <CustomAvatar sx={{ width: "2rem" }}></CustomAvatar>
+                  <CustomAvatar
+                    profileUrl={profileUrl}
+                    sx={{ width: "2rem" }}
+                  ></CustomAvatar>
                 </IconButton>
               </NavLink>
               <IconButton

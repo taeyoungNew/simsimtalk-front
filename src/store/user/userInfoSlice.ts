@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { editMyInfoThunk, myInfoThunk, userInfoThunk } from "./userInfoThunk";
+import {
+  changeMyProfileImgThunk,
+  editMyInfoThunk,
+  myInfoThunk,
+  userInfoThunk,
+} from "./userInfoThunk";
 import { followingCencelThunk, followingThunk } from "../follow/followThunk";
 import { useSelector } from "react-redux";
 import { RootState } from "..";
@@ -12,6 +17,7 @@ interface Error {
 
 interface Followers {
   id: string;
+  profileUrl: string;
   nickname: string;
   username: string;
   isFollowing: boolean;
@@ -19,6 +25,7 @@ interface Followers {
 
 interface Followings {
   id: string;
+  profileUrl: string;
   nickname: string;
   username: string;
   isFollowing: boolean;
@@ -33,6 +40,7 @@ interface UserInfoInitialState {
   success: boolean;
   successMessage: string;
   id?: string;
+  profileUrl: string;
   nickname: string;
   username: string;
   aboutMe: string;
@@ -68,6 +76,7 @@ const userInfoInitialState: UserInfoInitialState = {
   followers: [],
   followings: [],
   isFollowingedIds: [],
+  profileUrl: "",
 };
 
 export const userInfoSlice = createSlice({
@@ -96,6 +105,7 @@ export const userInfoSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(myInfoThunk.fulfilled, (state, action) => {
+        state.profileUrl = action.payload?.UserInfo.profileUrl;
         state.nickname = action.payload?.UserInfo.nickname;
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
@@ -108,6 +118,7 @@ export const userInfoSlice = createSlice({
         for (let idx = 0; idx < action.payload?.Followers.length; idx++) {
           state.followers.push({
             id: action.payload.Followers[idx].id,
+            profileUrl: action.payload.Followers[idx].UserInfo.profileUrl,
             nickname: action.payload.Followers[idx].UserInfo.nickname,
             username: action.payload.Followers[idx].UserInfo.username,
             isFollowing: false,
@@ -130,6 +141,7 @@ export const userInfoSlice = createSlice({
         for (let idx = 0; idx < action.payload?.Followings.length; idx++) {
           state.followings.push({
             id: action.payload.Followings[idx].id,
+            profileUrl: action.payload.Followings[idx].UserInfo.profileUrl,
             nickname: action.payload.Followings[idx].UserInfo.nickname,
             username: action.payload.Followings[idx].UserInfo.username,
             isFollowing: true,
@@ -170,6 +182,7 @@ export const userInfoSlice = createSlice({
           if (!followingsList.some((el) => el.id === action.payload.followId)) {
             state.followings.push({
               id: action.payload.followId,
+              profileUrl: action.payload.profileUrl,
               nickname: action.payload.nickname,
               username: action.payload.username,
               isFollowing: true,
@@ -184,6 +197,7 @@ export const userInfoSlice = createSlice({
             if (!followerList.some((el) => el.id === action.payload.myId)) {
               state.followers.push({
                 id: action.payload.myId,
+                profileUrl: action.payload.profileUrl,
                 nickname: action.payload.nickname,
                 username: action.payload.username,
                 isFollowing: false,
@@ -258,11 +272,26 @@ export const userInfoSlice = createSlice({
         state.isLoading = false;
       });
     builder
+      .addCase(changeMyProfileImgThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(changeMyProfileImgThunk.fulfilled, (state, action) => {
+        const profileUrl = action.payload.profileUrl;
+        state.profileUrl = profileUrl;
+
+        state.isLoading = false;
+      })
+      .addCase(changeMyProfileImgThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      });
+
+    builder
       .addCase(userInfoThunk.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(userInfoThunk.fulfilled, (state, action) => {
         state.id = action.payload.id;
+        state.profileUrl = action.payload?.UserInfo.profileUrl;
         state.nickname = action.payload?.UserInfo.nickname;
         state.username = action.payload?.UserInfo.username;
         state.aboutMe = action.payload?.UserInfo.aboutMe;
@@ -275,6 +304,7 @@ export const userInfoSlice = createSlice({
         for (let idx = 0; idx < action.payload?.Followers.length; idx++) {
           state.followers.push({
             id: action.payload.Followers[idx].id,
+            profileUrl: action.payload.Followers[idx].UserInfo.profileUrl,
             nickname: action.payload.Followers[idx].UserInfo.nickname,
             username: action.payload.Followers[idx].UserInfo.username,
             isFollowing: false,
@@ -284,6 +314,7 @@ export const userInfoSlice = createSlice({
         for (let idx = 0; idx < action.payload?.Followings.length; idx++) {
           state.followings.push({
             id: action.payload.Followings[idx].id,
+            profileUrl: action.payload.Followings[idx].UserInfo.profileUrl,
             nickname: action.payload.Followings[idx].UserInfo.nickname,
             username: action.payload.Followings[idx].UserInfo.username,
             isFollowing: false,

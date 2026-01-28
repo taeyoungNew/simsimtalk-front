@@ -12,6 +12,7 @@ import { messageAlarmSlice } from "./messageAlarm/messageAlarmSlice";
 import { userRelationSlice } from "./userRelation/userRelationSlice";
 import { alarmSlice } from "./alarm/alarmSlice";
 import { suggestedUserSlice } from "./suggestedUser/suggestedUserSlice";
+import { usersEntitiesSlice } from "./user/usersEntitiesSlice";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     UserRelationSlice: userRelationSlice.reducer,
     AlarmSlice: alarmSlice.reducer,
     SuggestedUserSlice: suggestedUserSlice.reducer,
+    UsersEntitiesSlice: usersEntitiesSlice.reducer,
   },
   devTools: true,
 });

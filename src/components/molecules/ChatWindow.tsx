@@ -31,6 +31,7 @@ import {
 } from "../../store/message/messageThunk";
 import { useAppDispatch } from "../../store/hook";
 import { markAlarmAsReadByRoomThunk } from "../../store/messageAlarm/messageAlarmThunk";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 type SendMessagePayload = {
   chatRoomId: string;
@@ -64,6 +65,7 @@ export const ChatWindow = ({
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const messages = useSelector(selectMessagesByRoom(chatRoomId));
   const dispath = useAppDispatch();
+  const profileUrl = useSelector(selectUserProfileById(targetUserId));
 
   useEffect(() => {
     dispath(markAlarmAsReadByRoomThunk({ chatRoomId }));
@@ -148,6 +150,7 @@ export const ChatWindow = ({
       >
         <Box sx={{ display: "flex", flexGrow: "1" }}>
           <CustomAvatar
+            profileUrl={profileUrl}
             sx={{ display: "flex", width: "1.5rem", marginRight: "0.2rem" }}
           />
           <Typography

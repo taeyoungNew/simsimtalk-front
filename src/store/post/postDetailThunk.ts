@@ -23,6 +23,7 @@ interface Comment {
 
 interface Post {
   id: number;
+  profileUrl: string;
   userId: string;
   title: string;
   content: string;

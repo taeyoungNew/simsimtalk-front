@@ -2,17 +2,21 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { theme } from "../../theme/theme";
 import { checkOnline } from "../../utils/checktOnline";
+import { NavLink } from "react-router-dom";
 
 interface FollowingProp {
+  profileUrl: string;
   userId: string;
   nickname: string;
   onlineUsers: string[];
 }
 export const FollowinCard = ({
+  profileUrl,
   userId,
   nickname,
   onlineUsers,
 }: FollowingProp) => {
+  const prevPathName = location.pathname;
   const isOnline = checkOnline(userId, onlineUsers);
   return (
     <Box sx={{ display: "flex", gap: 1 }}>
@@ -22,7 +26,16 @@ export const FollowinCard = ({
           alignItems: "center",
         }}
       >
-        <CustomAvatar sx={{ width: "2rem", height: "2rem" }} />
+        <NavLink
+          style={{ textDecorationLine: "none" }}
+          to={`/userPage/${userId}`}
+          state={{ myPage: false, prevPathName }}
+        >
+          <CustomAvatar
+            profileUrl={profileUrl}
+            sx={{ width: "2rem", height: "2rem" }}
+          />
+        </NavLink>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold" }}>

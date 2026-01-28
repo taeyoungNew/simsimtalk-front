@@ -1,6 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { forwardRef } from "react";
 import { AvatarMenu } from "../../molecules/AvatarMenu";
+import { CustomAvatar } from "../../../assets/icons/Avatar";
+import { useSelector } from "react-redux";
+import { selectUserProfileById } from "../../../store/user/usersEntitiesSelector";
 interface MessageAlarmProps {
   chatRoomId: string;
   content: string;
@@ -22,7 +25,7 @@ const MessageAlarmItem = forwardRef<HTMLInputElement, MessageAlarmProps>(
         type = "file";
         break;
     }
-    const to = location.pathname;
+    const profileUrl = useSelector(selectUserProfileById(senderId));
     return (
       <Box
         sx={{
@@ -36,14 +39,7 @@ const MessageAlarmItem = forwardRef<HTMLInputElement, MessageAlarmProps>(
       >
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Box sx={{ display: "flex" }}>
-            <AvatarMenu
-              sx={{ width: "1.8rem" }}
-              id={0}
-              userId={senderId}
-              userNickname={senderNickname}
-              isLiked={false}
-              to={to}
-            ></AvatarMenu>
+            <CustomAvatar profileUrl={profileUrl} sx={{ width: "1.8rem" }} />
           </Box>
           <Box></Box>
         </Box>

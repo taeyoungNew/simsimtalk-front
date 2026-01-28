@@ -11,6 +11,7 @@ import { markAlarmThunk } from "../../../store/alarm/alarmThunk";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { selectUserProfileById } from "../../../store/user/usersEntitiesSelector";
 interface messageAlarmProps {
   id: number;
   senderId: string;
@@ -39,6 +40,7 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
   ) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const profileUrl = useSelector(selectUserProfileById(senderId));
     const postId =
       targetType === "POST" || targetType === "COMMENT"
         ? Number(targetId)
@@ -147,7 +149,7 @@ const alarmItem = forwardRef<HTMLInputElement, messageAlarmProps>(
             alignItems="center"
             sx={{ display: "flex", gap: 0.7, alignItems: "start" }}
           >
-            <CustomAvatar sx={{ width: "1.8rem" }} />
+            <CustomAvatar profileUrl={profileUrl} sx={{ width: "1.8rem" }} />
             <Box
               sx={{
                 display: "flex",

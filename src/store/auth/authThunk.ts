@@ -19,6 +19,7 @@ interface AuthMeRes {
   isLogin: boolean;
   user: {
     id: string;
+    profileUrl: string;
     email: string;
     nickname: string;
   };
@@ -34,6 +35,7 @@ export const loginThunk = createAsyncThunk<
   {
     data: {
       id: string;
+      profileUrl: string;
       email: string;
       nickname: string;
     };
@@ -95,6 +97,7 @@ export const authMeThunk = createAsyncThunk<
       isLogin: res.data.isLogin,
       user: {
         id: res.data.user.id,
+        profileUrl: res.data.user.profileUrl,
         email: res.data.user.email,
         nickname: res.data.user.nickname,
       },

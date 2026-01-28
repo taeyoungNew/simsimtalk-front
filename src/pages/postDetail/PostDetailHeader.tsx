@@ -11,6 +11,7 @@ import {
   followingCencelThunk,
   followingThunk,
 } from "../../store/follow/followThunk";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 const style = {
   position: "absolute",
@@ -48,7 +49,7 @@ export const PostDetailHeader = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openDeletePostModal, setOpenDeletePostModal] = useState(false);
-
+  const profileUrl = useSelector(selectUserProfileById(userId));
   const myId = useSelector((state: RootState) => state.User.id);
   const detailPostLinkPath =
     myId === userId ? `/myPage` : `/userPage/${userId}`;
@@ -67,19 +68,6 @@ export const PostDetailHeader = ({
   const modifyPostHandler = () => {
     setIsModifyPost((prev) => !prev);
   };
-  // const modifyPostHandleClose = () => {
-  //   setOpenModifyPostModal(false);
-  // };
-
-  // const modifyPost = async (data: ModifyPost) => {
-  //   const payload: ModifyPost = {
-  //     id: postId,
-  //     title: data.title,
-  //     content: data.content,
-  //   };
-  //   await dispatch(modifyPostThunk(payload));
-  //   // modifyPostHandleClose();
-  // };
 
   const deletePost = async () => {
     await dispatch(deletePostThunk(postId));
@@ -174,7 +162,7 @@ export const PostDetailHeader = ({
                 state={{ myPage: isMyPage, prevPathName }}
               >
                 <Button>
-                  <CustomAvatar></CustomAvatar>
+                  <CustomAvatar profileUrl={profileUrl}></CustomAvatar>
                 </Button>
               </NavLink>
             </Box>

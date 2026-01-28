@@ -5,6 +5,8 @@ import { theme } from "../../theme/theme";
 import { useAppDispatch } from "../../store/hook";
 import { chatThunk } from "../../store/chat/chatThunk";
 import { checkOnline } from "../../utils/checktOnline";
+import { CustomAvatar } from "../../assets/icons/Avatar";
+import { NavLink } from "react-router-dom";
 
 interface FriendsProps {
   friendId: string;
@@ -23,6 +25,7 @@ export const FriendsCard = ({
   profileUrl,
   onlineUsers,
 }: FriendsProps) => {
+  const prevPathName = location.pathname;
   const dispatch = useAppDispatch();
   const isOnline = checkOnline(friendId, onlineUsers);
   const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
@@ -40,14 +43,16 @@ export const FriendsCard = ({
           alignItems: "center",
         }}
       >
-        <AvatarMenu
-          sx={{ width: "2.5rem" }}
-          id={0}
-          userId={"aa"}
-          userNickname={"wdas"}
-          isLiked={false}
-          to={"qd"}
-        />
+        <NavLink
+          style={{ textDecorationLine: "none" }}
+          to={`/userPage/${friendId}`}
+          state={{ myPage: false, prevPathName }}
+        >
+          <CustomAvatar
+            profileUrl={profileUrl}
+            sx={{ width: "2rem", height: "2rem" }}
+          />
+        </NavLink>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold" }}>

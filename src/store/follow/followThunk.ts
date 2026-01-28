@@ -11,6 +11,7 @@ interface Error {
 interface FollowingUserInfo {
   myId: string;
   followId: string;
+  profileUrl: string;
   isMyPage: boolean;
   nickname: string;
   username: string;
@@ -33,11 +34,14 @@ export const followingThunk = createAsyncThunk<
     try {
       const followingUserInfo = (await followingAPI({ followId, isMyPage }))
         .data.data;
+      console.log("followingUserInfo= ", followingUserInfo);
+
       const state: RootState = thunkAPI.getState() as RootState;
       const myId = state.User.id;
       return {
         myId,
         followId,
+        profileUrl: followingUserInfo.profileUrl,
         isMyPage,
         followingNickname,
         nickname: followingUserInfo.nickname,
@@ -71,6 +75,7 @@ export const followingCencelThunk = createAsyncThunk<
         followId,
         isMyPage,
         followingNickname,
+        profileUrl: followingUserInfo.profileUrl,
         nickname: followingUserInfo.nickname,
         username: followingUserInfo.username,
       };

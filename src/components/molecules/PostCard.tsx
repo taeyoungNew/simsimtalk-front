@@ -9,6 +9,7 @@ import { checkOnline } from "../../utils/checktOnline";
 import { AvatarMenu } from "./AvatarMenu";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 interface CardProps {
   id: number;
@@ -48,6 +49,8 @@ export const PostCard = ({
   const isOnline = onlineUsers ? checkOnline(userId, onlineUsers) : false;
   const myId = useSelector((state: RootState) => state.User.id);
   const isMy = myId === userId ? true : false;
+  const profileUrl = useSelector(selectUserProfileById(userId));
+
   return (
     <>
       <Box
@@ -74,6 +77,7 @@ export const PostCard = ({
           >
             <AvatarMenu
               sx={{ width: "2rem" }}
+              profileUrl={profileUrl}
               isOnline={isOnline}
               isMy={isMy}
               id={id}

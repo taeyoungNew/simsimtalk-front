@@ -18,6 +18,7 @@ interface Comment {
 }
 interface Post {
   id: number;
+  profileUrl: string;
   userId: string;
   userNickname: string;
   content: string;
@@ -82,6 +83,7 @@ export const getAllPostsSlice = createSlice({
         for (let idx = 0; idx < action.payload.posts.length; idx++) {
           state.posts.push({
             id: action.payload.posts[idx].id,
+            profileUrl: action.payload.posts[idx].profileUrl,
             userId: action.payload.posts[idx].userId,
             content: action.payload.posts[idx].content,
             userNickname: action.payload.posts[idx].userNickname,
