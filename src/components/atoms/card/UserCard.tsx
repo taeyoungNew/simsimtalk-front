@@ -7,6 +7,8 @@ import {
   followingCencelThunk,
   followingThunk,
 } from "../../../store/follow/followThunk";
+import { useSelector } from "react-redux";
+import { selectUserProfileById } from "../../../store/user/usersEntitiesSelector";
 
 interface UserInfo {
   userId: string;
@@ -27,6 +29,7 @@ export const UserCard = ({
 }: UserInfo) => {
   const dispatch = useAppDispatch();
   const prevPathName = location.pathname;
+  const profileUrl = useSelector(selectUserProfileById(userId));
   const following = async () => {
     await dispatch(
       followingThunk({
@@ -67,7 +70,7 @@ export const UserCard = ({
           },
         }}
       >
-        <CustomAvatar sx={{ width: "6rem" }} />
+        <CustomAvatar profileUrl={profileUrl} sx={{ width: "6rem" }} />
         <Typography
           sx={{
             color: theme.palette.userCardColor.text.title,

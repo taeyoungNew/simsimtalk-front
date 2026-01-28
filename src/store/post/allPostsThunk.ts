@@ -55,7 +55,6 @@ export const getPostsThunk = createAsyncThunk<
 >("post/getAllPosts", async (lastPostId, thunkAPI) => {
   try {
     const posts = await getPostsAPI(lastPostId);
-    console.log("posts = ", posts.data);
 
     return posts.data;
   } catch (error: any) {

@@ -9,6 +9,7 @@ interface Error {
 interface UserInfo {
   userId: string;
   nickname: string;
+  profileUrl: string;
   followerCnt: number;
   mutualFriendsCount: number;
   isFollowinged: boolean;

@@ -19,6 +19,8 @@ import {
 import { useAppDispatch } from "../../store/hook";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { CustomAvatar } from "../../assets/icons/Avatar";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 interface CommentsCardProps {
   commentId: number;
   userId: string;
@@ -50,6 +52,7 @@ export const CommentCard = ({
       content: content,
     },
   });
+  const profileUrl = useSelector(selectUserProfileById(userId));
 
   const myUserId = useSelector((state: RootState) => state.User.id);
   const isMyComment = myUserId === userId;
@@ -85,7 +88,7 @@ export const CommentCard = ({
         {isOpenModifyComment === true ? (
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              <CustomAvatar profileUrl={profileUrl} sx={{ width: "2.5rem" }} />
             </ListItemAvatar>
             <form
               onSubmit={(e) => {
@@ -127,7 +130,7 @@ export const CommentCard = ({
         ) : (
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              <CustomAvatar profileUrl={profileUrl} sx={{ width: "2.5rem" }} />
             </ListItemAvatar>
             <ListItemText
               primary={content}

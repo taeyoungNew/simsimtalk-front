@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  changeMyBackgroundImgAPI,
   changeMyProfileImgAPI,
   editMyInfo,
   myInfoAPI,
@@ -14,6 +15,7 @@ interface Error {
 
 interface UserInfo {
   profileUrl: string;
+  backgroundUrl: string;
   username: string;
   aboutMe: string;
   age: number;
@@ -53,6 +55,7 @@ interface editMyInfoRes {
 interface UserRes {
   id: string;
   profileUrl: string;
+  backgroundUrl: string;
   email: string;
   isFollowinged: boolean;
   followerCnt: number;
@@ -65,20 +68,57 @@ interface UserRes {
 }
 
 interface changeMyProfileImgReq {
+  userId: string;
   file: File;
 }
+interface changeMyProfileImgRes {
+  userId: string;
+  profileUrl: string;
+}
+
+interface changeMyBackgroundImgReq {
+  userId: string;
+  file: File;
+}
+interface changeMyBackgroundImgRes {
+  userId: string;
+  backgroundUrl: string;
+}
+
+export const changeMyBackgroundImgThunk = createAsyncThunk<
+  changeMyBackgroundImgRes,
+  changeMyBackgroundImgReq,
+  { rejectValue: Error }
+>("user/changeMyBackgroundImg", async ({ userId, file }, thunkAPI) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await changeMyBackgroundImgAPI(formData);
+    return {
+      userId,
+      backgroundUrl: result.data.url,
+    };
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      errorCode: error.response.data.errorCode,
+      status: error.response.status,
+      message: error.response.data.message,
+    });
+  }
+});
 
 export const changeMyProfileImgThunk = createAsyncThunk<
-  { profileUrl: string },
+  changeMyProfileImgRes,
   changeMyProfileImgReq,
   { rejectValue: Error }
->("user/changeMyProfileImg", async ({ file }, thunkAPI) => {
+>("user/changeMyProfileImg", async ({ userId, file }, thunkAPI) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
     const result = await changeMyProfileImgAPI(formData);
 
     return {
+      userId,
       profileUrl: result.data.url,
     };
   } catch (error: any) {
@@ -97,6 +137,7 @@ export const myInfoThunk = createAsyncThunk<
 >("user/myInfo", async (_, thunkAPI) => {
   try {
     const getMyInfo = await myInfoAPI();
+    console.log("getMyInfo = ", getMyInfo);
 
     return getMyInfo.data.data;
   } catch (error: any) {
@@ -119,7 +160,8 @@ export const userInfoThunk = createAsyncThunk<
 
     const payload: UserRes = {
       id: getUserInfo.id,
-      profileUrl: getUserInfo.profileUrl,
+      profileUrl: getUserInfo.UserInfo.profileUrl,
+      backgroundUrl: getUserInfo.UserInfo.backgroundUrl,
       email: getUserInfo.email,
       isFollowinged: getUserInfo.isFollowinged,
       followerCnt: getUserInfo.followerCnt,
@@ -130,6 +172,7 @@ export const userInfoThunk = createAsyncThunk<
       Followings: getUserInfo.Followings,
       isFollowingedIds: getUserInfoResult.data.isFollowingedIds,
     };
+
     return payload;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

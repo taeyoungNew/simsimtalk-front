@@ -5,9 +5,10 @@ import EditButton from "../../components/atoms/buttons/EditButton";
 import { ShareButton } from "../../components/atoms/buttons/ShareButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../store/hook";
 import {
+  changeMyBackgroundImgThunk,
   changeMyProfileImgThunk,
   myInfoThunk,
   userInfoThunk,
@@ -18,8 +19,13 @@ import {
 } from "../../store/follow/followThunk";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { theme } from "../../theme/theme";
-import { ChangeCircleCustomIcon } from "../../assets/icons/ChangeCircle";
+
 import { getMessageTypeFormFile } from "../../utils/getMessageType";
+import {
+  selectUserBackgroundById,
+  selectUserProfileById,
+} from "../../store/user/usersEntitiesSelector";
+import { ImageZoomDialog } from "../../components/common/ImageZoomDialog";
 
 interface HeaderProps {
   onViewContent: React.Dispatch<
@@ -38,10 +44,14 @@ export const UserPageHeader = ({
   onViewContent,
 }: HeaderProps) => {
   const dispatch = useAppDispatch();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const profileImgInputRef = useRef<HTMLInputElement>(null);
+  const backgroundImgInputRef = useRef<HTMLInputElement>(null);
   const userInfo = useSelector((state: RootState) => state.UserInfo);
   const postCnt = useSelector((state: RootState) => state.UserInfo.postCnt);
-
+  const profileUrl = useSelector(selectUserProfileById(userId));
+  const backgroundUrl = useSelector(selectUserBackgroundById(userId));
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [backgroundOpen, setBackgroundOpen] = useState(false);
   const following = async () => {
     await dispatch(
       followingThunk({
@@ -51,12 +61,28 @@ export const UserPageHeader = ({
       }),
     );
   };
+  const zoomInBackgroundImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("zoomInBackgroundImg");
 
-  const handleOpenFile = () => {
-    fileInputRef.current?.click();
+    setBackgroundOpen((prev) => !prev);
+  };
+  const zoomInProfileImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("zoomInProfileImg");
+
+    setProfileOpen((prev) => !prev);
   };
 
-  const getFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOpenProfileImg = () => {
+    profileImgInputRef.current?.click();
+  };
+
+  const handleOpenBackgroundImg = () => {
+    backgroundImgInputRef.current?.click();
+  };
+
+  const getBackgroundImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -67,6 +93,25 @@ export const UserPageHeader = ({
     }
 
     const payment = {
+      userId,
+      file,
+    };
+
+    dispatch(changeMyBackgroundImgThunk(payment));
+  };
+
+  const getProfileImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const type = getMessageTypeFormFile(file);
+    if (type !== "IMAGE") {
+      alert("이미지 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    const payment = {
+      userId,
       file,
     };
 
@@ -103,20 +148,29 @@ export const UserPageHeader = ({
       }}
     >
       <Box
+        onClick={zoomInBackgroundImg}
         sx={{
+          cursor: "pointer",
           padding: "1rem",
           display: "flex",
           flexDirection: "column-reverse",
           position: "relative",
           borderRadius: "10px 10px 0 0",
           flex: 1,
-          background: "linear-gradient(to right, #3b82f6, #9333ea)",
           minHeight: "30%",
+          backgroundImage: backgroundUrl
+            ? `url(${backgroundUrl})`
+            : "linear-gradient(to right, #3b82f6, #9333ea)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Box>
           <CustomAvatar
+            onClick={zoomInProfileImg}
             sx={{
+              cursor: "pointer",
               width: "7.5rem",
               position: "absolute",
               translate: "-50% -50%",
@@ -125,9 +179,18 @@ export const UserPageHeader = ({
               maxHeight: { xs: "3.5rem", md: "7.5rem" },
               maxWidth: { xs: "3.5rem", md: "7.5rem" },
             }}
-            profileUrl={userInfo.profileUrl}
+            profileUrl={profileUrl}
           />
-
+          <ImageZoomDialog
+            open={backgroundOpen}
+            onClose={() => setBackgroundOpen(false)}
+            src={backgroundUrl}
+          />
+          <ImageZoomDialog
+            open={profileOpen}
+            onClose={() => setProfileOpen(false)}
+            src={profileUrl}
+          />
           {isMyPage ? (
             <IconButton
               sx={{
@@ -136,7 +199,7 @@ export const UserPageHeader = ({
                 top: "8.9rem",
                 color: "white",
               }}
-              onClick={() => handleOpenFile()}
+              onClick={() => handleOpenProfileImg()}
             >
               <AutorenewIcon
                 sx={{
@@ -168,7 +231,15 @@ export const UserPageHeader = ({
               flex: 0.1,
             }}
           >
-            <PhotoOutlinedIcon sx={{ fontSize: "2rem" }}></PhotoOutlinedIcon>
+            {isMyPage ? (
+              <IconButton onClick={handleOpenBackgroundImg} sx={{ padding: 0 }}>
+                <PhotoOutlinedIcon
+                  sx={{ fontSize: "2rem", color: theme.palette.fontColor.main }}
+                />
+              </IconButton>
+            ) : (
+              <Box />
+            )}
           </Box>
         </Box>
       </Box>
@@ -297,12 +368,17 @@ export const UserPageHeader = ({
         </Box>
       </Box>
 
-      {/* hidden file input */}
       <input
         type="file"
-        ref={fileInputRef}
+        ref={profileImgInputRef}
         style={{ display: "none" }}
-        onChange={getFile}
+        onChange={getProfileImg}
+      />
+      <input
+        type="file"
+        ref={backgroundImgInputRef}
+        style={{ display: "none" }}
+        onChange={getBackgroundImg}
       />
     </Box>
   );

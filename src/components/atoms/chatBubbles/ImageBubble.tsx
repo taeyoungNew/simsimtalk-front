@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
-import { theme } from "../../../theme/theme";
-import as from "../../../assets/imgs/chat-quote.svg";
+
 import ImageZoom from "../../common/ImageZoom";
 
 interface ImageBubbleProps {

@@ -9,6 +9,7 @@ import { useAppDispatch } from "../../store/hook";
 import { useSelector } from "react-redux";
 import { selectUnreadMsgAlarmCntByRoom } from "../../store/messageAlarm/messageAlarmSelector";
 import { formatRelativeTime } from "../../utils/formatRelativeTime";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 interface ChatRoomCardProps {
   chatRoomId: string;
@@ -33,7 +34,7 @@ export const ChatRoomCard = ({
   const unreadMsgByChat = useSelector(
     selectUnreadMsgAlarmCntByRoom(chatRoomId),
   );
-
+  const profileUrl = useSelector(selectUserProfileById(targetUserId));
   const openChatWindow = async (e: { currentTarget: HTMLElement }) => {
     setTimeout(() => {
       dispatch(chatThunk({ targetUserId, targetUserNickname }));
@@ -64,7 +65,7 @@ export const ChatRoomCard = ({
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        <CustomAvatar sx={{ width: "1.8rem" }} />
+        <CustomAvatar profileUrl={profileUrl} sx={{ width: "1.8rem" }} />
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Typography

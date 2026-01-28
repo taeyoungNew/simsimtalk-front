@@ -32,17 +32,17 @@ import {
   selectAlarms,
   selectUnreadAlarmCount,
 } from "../../store/alarm/alarmSelector";
+import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
-  const profileUrl = useSelector((state: RootState) => state.User.profileUrl);
   const userId = useSelector((state: RootState) => state.User.id);
   let msgAlarmCnt = useSelector(selectUnreadMsgAlarmCnt);
   let msgAlarms = useSelector(selectUnreadMsgAlarms);
   let alarmCnt = useSelector(selectUnreadAlarmCount);
   let alarms = useSelector(selectAlarms);
   const navigate = useNavigate();
-
+  const profileUrl = useSelector(selectUserProfileById(userId));
   const [showMsgalarmAnchorEl, setShowMsgalarmAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [showAlarmAnchorEl, setShowAlarmAnchorEl] =
