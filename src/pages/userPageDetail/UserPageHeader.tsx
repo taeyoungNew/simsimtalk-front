@@ -148,7 +148,7 @@ export const UserPageHeader = ({
       }}
     >
       <Box
-        onClick={zoomInBackgroundImg}
+        // onClick={zoomInBackgroundImg}
         sx={{
           cursor: "pointer",
           padding: "1rem",
@@ -168,7 +168,7 @@ export const UserPageHeader = ({
       >
         <Box>
           <CustomAvatar
-            onClick={zoomInProfileImg}
+            // onClick={zoomInProfileImg}
             sx={{
               cursor: "pointer",
               width: "7.5rem",
