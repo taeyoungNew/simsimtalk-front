@@ -45,7 +45,9 @@ export const initSocket = (dispatch: AppDispath) => {
   socket.on("socketAuthenticated", async () => {
     getMsgAlarmsSocket();
   });
-  socket.on("emitalarms", async (params) => {
+  socket.on("emitAlarms", async (params) => {
+    console.log("emitAlarms event = ", params);
+
     dispatch(getmessageAlarmThunk(params));
   });
   socket.on("msgAlarmsRead", async (param) => {

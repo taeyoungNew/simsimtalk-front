@@ -2,6 +2,8 @@ import { Box, Typography } from "@mui/material";
 import { FriendsCard } from "../molecules/FriendCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { EmptyState } from "./empty/EmptyState";
+import { BaseEmptyState } from "./empty/BaseEmptyState";
 
 export const MyFriends = () => {
   const friends = useSelector(
@@ -36,19 +38,28 @@ export const MyFriends = () => {
           maxHeight: "inherit",
         }}
       >
-        {friends.map((el, index) => {
-          return (
-            <FriendsCard
-              key={index}
-              friendId={el.friendId}
-              email={el.email}
-              nickname={el.nickname}
-              chatRoomId={el.chatRoomId}
-              profileUrl={el.profileUrl}
-              onlineUsers={onlineUsers}
-            />
-          );
-        })}
+        {friends.length > 0 ? (
+          friends.map((el, index) => {
+            return (
+              <FriendsCard
+                key={index}
+                friendId={el.friendId}
+                email={el.email}
+                nickname={el.nickname}
+                chatRoomId={el.chatRoomId}
+                profileUrl={el.profileUrl}
+                onlineUsers={onlineUsers}
+              />
+            );
+          })
+        ) : (
+          <BaseEmptyState
+            title={"아직 친구가 없습니다"}
+            description={"친구를 팔로우하면 여기에 표시돼요"}
+            titleSize={0.7}
+            descriptionSize={0.7}
+          />
+        )}
       </Box>
     </Box>
   );

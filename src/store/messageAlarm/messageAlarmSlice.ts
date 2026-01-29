@@ -94,6 +94,7 @@ export const messageAlarmSlice = createSlice({
       })
       .addCase(getmessageAlarmThunk.fulfilled, (state, action) => {
         const getAlarms = action.payload.getAlarms;
+
         if (getAlarms) {
           getAlarms.forEach((el) => {
             const roomId = el.chatRoomId;

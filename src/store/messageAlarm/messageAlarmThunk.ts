@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { markMsgAlarmAsReadByRoomAPI } from "../../apis/msgAlarm";
+import {
+  getMyUnreadMessageAlramsAPI,
+  markMsgAlarmAsReadByRoomAPI,
+} from "../../apis/msgAlarm";
 import { msgAlarmsRead } from "../../sockets/alarmSocket";
 interface Error {
   status: number;
@@ -50,7 +53,7 @@ export const getmessageAlarmThunk = createAsyncThunk<
   { rejectValue: Error }
 >("messageAlarm", async (params, thunkAPI) => {
   try {
-    return params;
+    return { getAlarms: params.getAlarms };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
