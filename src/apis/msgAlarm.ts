@@ -8,3 +8,9 @@ export const markMsgAlarmAsReadByRoomAPI = async (chatRoomId: string) => {
     { withCredentials: true },
   );
 };
+
+export const getMyUnreadMessageAlramsAPI = async () => {
+  return await axios.get(`${import.meta.env.VITE_API_BASE}message-alarm/`, {
+    withCredentials: true,
+  });
+};

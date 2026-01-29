@@ -27,7 +27,7 @@ import { FileBubble } from "../atoms/chatBubbles/FileBubble";
 import { getMessageTypeFormFile } from "../../utils/getMessageType";
 import {
   fileUploadThunk,
-  imgageUploadThunk,
+  imgUploadThunk,
 } from "../../store/message/messageThunk";
 import { useAppDispatch } from "../../store/hook";
 import { markAlarmAsReadByRoomThunk } from "../../store/messageAlarm/messageAlarmThunk";
@@ -96,7 +96,7 @@ export const ChatWindow = ({
     };
 
     if (type === "IMAGE") {
-      dispath(imgageUploadThunk(payment));
+      dispath(imgUploadThunk(payment));
     } else {
       dispath(fileUploadThunk(payment));
     }

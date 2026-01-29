@@ -64,7 +64,7 @@ export const fileUploadThunk = createAsyncThunk<
   sendMessageEvent(payload);
 });
 
-export const imgageUploadThunk = createAsyncThunk<
+export const imgUploadThunk = createAsyncThunk<
   void,
   ImagOrFileUploadReq,
   { rejectValue: Error }

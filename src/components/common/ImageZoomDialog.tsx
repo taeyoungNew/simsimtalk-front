@@ -25,10 +25,12 @@ export const ImageZoomDialog = ({
             backgroundColor: "rgba(0,0,0,0.85)",
           },
         }}
+        sx={{}}
         PaperProps={{
           sx: {
             backgroundColor: "transparent",
             boxShadow: "none",
+            zIndex: 2000,
           },
         }}
       >

@@ -61,25 +61,25 @@ export const UserPageHeader = ({
       }),
     );
   };
-  const zoomInBackgroundImg = (e: React.MouseEvent) => {
+  const zoomInBackgroundImg = async (e: React.MouseEvent) => {
+    await setBackgroundOpen(true);
+    console.log("zoomInBackgroundImg = ", backgroundOpen);
     e.stopPropagation();
-    console.log("zoomInBackgroundImg");
-
-    setBackgroundOpen((prev) => !prev);
   };
   const zoomInProfileImg = (e: React.MouseEvent) => {
-    e.stopPropagation();
     console.log("zoomInProfileImg");
-
-    setProfileOpen((prev) => !prev);
+    setProfileOpen(true);
+    e.stopPropagation();
   };
 
-  const handleOpenProfileImg = () => {
+  const handleOpenProfileImg = (e: React.MouseEvent) => {
     profileImgInputRef.current?.click();
+    e.stopPropagation();
   };
 
-  const handleOpenBackgroundImg = () => {
+  const handleOpenBackgroundImg = (e: React.MouseEvent) => {
     backgroundImgInputRef.current?.click();
+    e.stopPropagation();
   };
 
   const getBackgroundImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +148,7 @@ export const UserPageHeader = ({
       }}
     >
       <Box
-        // onClick={zoomInBackgroundImg}
+        onClick={zoomInBackgroundImg}
         sx={{
           cursor: "pointer",
           padding: "1rem",
@@ -168,7 +168,7 @@ export const UserPageHeader = ({
       >
         <Box>
           <CustomAvatar
-            // onClick={zoomInProfileImg}
+            onClick={zoomInProfileImg}
             sx={{
               cursor: "pointer",
               width: "7.5rem",
@@ -181,16 +181,7 @@ export const UserPageHeader = ({
             }}
             profileUrl={profileUrl}
           />
-          <ImageZoomDialog
-            open={backgroundOpen}
-            onClose={() => setBackgroundOpen(false)}
-            src={backgroundUrl}
-          />
-          <ImageZoomDialog
-            open={profileOpen}
-            onClose={() => setProfileOpen(false)}
-            src={profileUrl}
-          />
+
           {isMyPage ? (
             <IconButton
               sx={{
@@ -199,7 +190,7 @@ export const UserPageHeader = ({
                 top: "8.9rem",
                 color: "white",
               }}
-              onClick={() => handleOpenProfileImg()}
+              onClick={(e) => handleOpenProfileImg(e)}
             >
               <AutorenewIcon
                 sx={{
@@ -232,7 +223,10 @@ export const UserPageHeader = ({
             }}
           >
             {isMyPage ? (
-              <IconButton onClick={handleOpenBackgroundImg} sx={{ padding: 0 }}>
+              <IconButton
+                onClick={(e) => handleOpenBackgroundImg(e)}
+                sx={{ padding: 0 }}
+              >
                 <PhotoOutlinedIcon
                   sx={{ fontSize: "2rem", color: theme.palette.fontColor.main }}
                 />
@@ -367,6 +361,17 @@ export const UserPageHeader = ({
           </Box>
         </Box>
       </Box>
+
+      <ImageZoomDialog
+        open={backgroundOpen}
+        onClose={() => setBackgroundOpen(false)}
+        src={backgroundUrl}
+      />
+      <ImageZoomDialog
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        src={profileUrl}
+      />
 
       <input
         type="file"

@@ -2,6 +2,8 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { FollowinCard } from "../molecules/FollowingCard";
+import { EmptyState } from "./empty/EmptyState";
+import { BaseEmptyState } from "./empty/BaseEmptyState";
 
 interface MyFollowingsProps {
   followingCnt: number;
@@ -53,9 +55,13 @@ export const MyFollowings = ({ followingCnt }: MyFollowingsProps) => {
             })}
           </Box>
         ) : (
-          <Box>
-            <Typography></Typography>
-          </Box>
+          <BaseEmptyState
+            sx={{ fontSize: "0.5rem" }}
+            title={"아직 팔로우한 사용자가 없습니다"}
+            description={""}
+            titleSize={0.7}
+            descriptionSize={0.5}
+          />
         )}
       </Box>
     </>

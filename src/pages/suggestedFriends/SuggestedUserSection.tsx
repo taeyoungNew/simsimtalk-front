@@ -6,6 +6,8 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import { useEffect, useRef } from "react";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { EmptyState } from "../../components/common/empty/EmptyState";
+import { BaseEmptyState } from "../../components/common/empty/BaseEmptyState";
 interface UserInfo {
   userId: string;
   nickname: string;
@@ -89,20 +91,29 @@ export const SuggestedUserSection = ({
           },
         }}
       >
-        {suggestedUsers.map((el, index) => {
-          return (
-            <Box key={index} sx={{ flexShrink: 0 }}>
-              <UserCard
-                userId={el.userId}
-                nickname={el.nickname}
-                followerCnt={el.followerCnt}
-                mutualFriendsCount={el.mutualFriendsCount}
-                sectionType={sectionType}
-                isFollowinged={el.isFollowinged}
-              />
-            </Box>
-          );
-        })}
+        {suggestedUsers.length > 0 ? (
+          suggestedUsers.map((el, index) => {
+            return (
+              <Box key={index} sx={{ flexShrink: 0 }}>
+                <UserCard
+                  userId={el.userId}
+                  nickname={el.nickname}
+                  followerCnt={el.followerCnt}
+                  mutualFriendsCount={el.mutualFriendsCount}
+                  sectionType={sectionType}
+                  isFollowinged={el.isFollowinged}
+                />
+              </Box>
+            );
+          })
+        ) : (
+          <BaseEmptyState
+            title={"아직 새로운 친구를 찾지 못했어요"}
+            description={"좀더 활동을 해볼까요"}
+            titleSize={0.7}
+            descriptionSize={0.7}
+          />
+        )}
       </Box>
     </Box>
   );

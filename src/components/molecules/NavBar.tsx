@@ -17,7 +17,7 @@ import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-
+import NotificationsPausedIcon from "@mui/icons-material/NotificationsPaused";
 import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 
@@ -33,7 +33,9 @@ import {
   selectUnreadAlarmCount,
 } from "../../store/alarm/alarmSelector";
 import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
-
+import { EmptyState } from "../common/empty/EmptyState";
+import { theme } from "../../theme/theme";
+import DraftsIcon from "@mui/icons-material/Drafts";
 export default function NavBar() {
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
   const userId = useSelector((state: RootState) => state.User.id);
@@ -63,7 +65,7 @@ export default function NavBar() {
   };
 
   const showMsgAlarms = async (event: React.MouseEvent<HTMLElement>) => {
-    if (msgAlarms.length > 0) setShowMsgalarmAnchorEl(event.currentTarget);
+    setShowMsgalarmAnchorEl(event.currentTarget);
   };
   const closeMsgAlarms = async () => {
     setShowMsgalarmAnchorEl(null);
@@ -158,22 +160,37 @@ export default function NavBar() {
                 open={alarmOpen}
                 onClose={closeAlarms}
               >
-                {alarms.map((el, index) => {
-                  return (
-                    <AlarmItem
-                      key={index}
-                      id={el.id}
-                      senderId={el.senderId}
-                      receiverId={el.receiverId}
-                      targetId={el.targetId}
-                      targetType={el.targetType}
-                      alarmType={el.alarmType}
-                      isRead={el.isRead}
-                      createdAt={el.createdAt}
-                      senderNickname={el.senderNickname}
-                    />
-                  );
-                })}
+                {alarms.length > 0 ? (
+                  alarms.map((el, index) => {
+                    return (
+                      <AlarmItem
+                        key={index}
+                        id={el.id}
+                        senderId={el.senderId}
+                        receiverId={el.receiverId}
+                        targetId={el.targetId}
+                        targetType={el.targetType}
+                        alarmType={el.alarmType}
+                        isRead={el.isRead}
+                        createdAt={el.createdAt}
+                        senderNickname={el.senderNickname}
+                      />
+                    );
+                  })
+                ) : (
+                  <EmptyState
+                    icon={
+                      <NotificationsPausedIcon
+                        sx={{
+                          color: theme.palette.fontColor.icon,
+                          width: "2rem",
+                        }}
+                      />
+                    }
+                    title={"알람이 없습니다"}
+                    description={"새로운 활동이 생기면 여기에 표시돼요"}
+                  />
+                )}
               </Menu>
               {/* 메세지알람 */}
               <IconButton
@@ -201,7 +218,7 @@ export default function NavBar() {
                   },
                   paper: {
                     sx: {
-                      width: "16rem", // ⭐ 메뉴 전체 폭
+                      width: msgAlarms.length > 0 ? "16rem" : "18rem", // ⭐ 메뉴 전체 폭
                       maxHeight: "14rem", // 스크롤 대비
                     },
                   },
@@ -211,18 +228,34 @@ export default function NavBar() {
                 open={msgListOpen}
                 onClose={closeMsgAlarms}
               >
-                {msgAlarms.map((el, index) => {
-                  return (
-                    <MessasgeAlarmItem
-                      key={index}
-                      chatRoomId={el.chatRoomId}
-                      content={el.content}
-                      contentType={el.contentType}
-                      senderId={el.senderId}
-                      senderNickname={el.senderNickname}
-                    />
-                  );
-                })}
+                {msgAlarms.length > 0 ? (
+                  msgAlarms.map((el, index) => {
+                    return (
+                      <MessasgeAlarmItem
+                        key={index}
+                        chatRoomId={el.chatRoomId}
+                        content={el.content}
+                        contentType={el.contentType}
+                        senderId={el.senderId}
+                        senderNickname={el.senderNickname}
+                        createdAt={el.createdAt}
+                      />
+                    );
+                  })
+                ) : (
+                  <EmptyState
+                    icon={
+                      <DraftsIcon
+                        sx={{
+                          color: theme.palette.fontColor.icon,
+                          width: "2rem",
+                        }}
+                      />
+                    }
+                    title={"읽지 않은 메시지가 없습니다"}
+                    description={"새로운 메시지가 오면 여기에 표시돼요"}
+                  />
+                )}
               </Menu>
               <NavLink to={`/myPage`} state={{ myPage: true, prevPathName }}>
                 <IconButton
