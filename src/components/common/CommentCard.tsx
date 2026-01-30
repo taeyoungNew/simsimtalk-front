@@ -17,7 +17,7 @@ import {
   modifyCommentThunk,
 } from "../../store/comment/commentThunk";
 import { useAppDispatch } from "../../store/hook";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";

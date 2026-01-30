@@ -1,16 +1,18 @@
 import { io, Socket } from "socket.io-client";
-import { setOnlineUsers } from "../store/onlineUsers/onlineUsersSlice";
+// import { setOnlineUsers } from "../store/onlineUsers/onlineUsersSlice";
 import { AppDispath } from "../store";
-import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
-import {
-  addmessageAlarmThunk,
-  clearalarmsByChatRoomThunk,
-  getmessageAlarmThunk,
-} from "../store/messageAlarm/messageAlarmThunk";
+// import { addMessage, setMessagesByRoom } from "../store/message/messageSlice";
+// import {
+//   addmessageAlarmThunk,
+//   clearalarmsByChatRoomThunk,
+//   getmessageAlarmThunk,
+// } from "../store/messageAlarm/messageAlarmThunk";
 import { getMsgAlarmsSocket } from "./alarmSocket";
-import { updateChatList } from "../store/chat/chatSlice";
+// import { updateChatList } from "../store/chat/chatSlice";
 import { loginSocket } from "./authSocket";
-import { getAlarmThunk } from "../store/alarm/alarmThunk";
+// import { getAlarmThunk } from "../store/alarm/alarmThunk";
+// import { startLoading, stopLoading } from "../store/loading/loadingSlice";
+import { socketEvents } from "./events/socketEvents";
 
 let socket: Socket | null = null;
 
@@ -18,47 +20,52 @@ export const getSocket = () => socket;
 
 export const initSocket = (dispatch: AppDispath) => {
   if (!socket) {
+    socketEvents.emit("initSocket");
     socket = io(`http://localhost:3001`, {
       withCredentials: true,
     });
   }
 
-  socket.on("connection", (msg) => {
-    console.log("initSocket");
+  socket.on("socket:ready", (msg) => {
     console.log(msg);
   });
   socket.on("socketReady", () => {
-    console.log("socket ready!");
+    socketEvents.emit("socketReady");
   });
   // 현재 로그인중인 유저의 리스트를 받기
   socket.on("onlineUsers", (params) => {
-    dispatch(setOnlineUsers(params));
+    socketEvents.emit("onlineUsers", params);
+    // dispatch(setOnlineUsers(params));
   });
 
   socket.on("receiveMessage", async (params) => {
-    dispatch(addMessage(params));
-    dispatch(updateChatList(params));
+    socketEvents.emit("receiveMessage", params);
+    // dispatch(addMessage(params));
+    // dispatch(updateChatList(params));
   });
   socket.on("chatHistory", async (params) => {
-    dispatch(setMessagesByRoom(params));
+    socketEvents.emit("chatHistory", params);
+    // dispatch(setMessagesByRoom(params));
   });
   socket.on("socketAuthenticated", async () => {
     getMsgAlarmsSocket();
   });
   socket.on("emitAlarms", async (params) => {
-    console.log("emitAlarms event = ", params);
-
-    dispatch(getmessageAlarmThunk(params));
+    // dispatch(getmessageAlarmThunk(params));
+    socketEvents.emit("emitAlarms", params);
   });
   socket.on("msgAlarmsRead", async (param) => {
-    dispatch(clearalarmsByChatRoomThunk(param));
+    socketEvents.emit("msgAlarmsRead", param);
+    // dispatch(clearalarmsByChatRoomThunk(param));
   });
   socket.on("notifyMessageAlarm", async (params) => {
-    dispatch(addmessageAlarmThunk(params));
-    dispatch(updateChatList(params));
+    socketEvents.emit("notifyMessageAlarm", params);
+    // dispatch(addmessageAlarmThunk(params));
+    // dispatch(updateChatList(params));
   });
   socket.on("sendAlarm", async (params) => {
-    dispatch(getAlarmThunk(params));
+    socketEvents.emit("sendAlarm", params);
+    // dispatch(getAlarmThunk(params));
   });
   return socket;
 };

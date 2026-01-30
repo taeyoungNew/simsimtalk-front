@@ -13,22 +13,24 @@ import { userRelationSlice } from "./userRelation/userRelationSlice";
 import { alarmSlice } from "./alarm/alarmSlice";
 import { suggestedUserSlice } from "./suggestedUser/suggestedUserSlice";
 import { usersEntitiesSlice } from "./user/usersEntitiesSlice";
+import { loadingSlice } from "./loading/loadingSlice";
 
 const store = configureStore({
   reducer: {
     User: userSlice.reducer,
+    UserInfo: userInfoSlice.reducer,
+    UserRelationSlice: userRelationSlice.reducer,
+    GetPostDetail: getPostDetailSlice.reducer,
+    GetAllPosts: getAllPostsSlice.reducer,
     GetUserPosts: getUserPostsSlice.reducer,
     Signup: signupSlice.reducer,
-    GetAllPosts: getAllPostsSlice.reducer,
-    GetPostDetail: getPostDetailSlice.reducer,
-    UserInfo: userInfoSlice.reducer,
+    messageAlarmSlice: messageAlarmSlice.reducer,
     OnlineUsersSlice: onlineUsersSlice.reducer,
     ChatRoomSlice: chatSlice.reducer,
     MessageSlice: messageSlice.reducer,
-    messageAlarmSlice: messageAlarmSlice.reducer,
-    UserRelationSlice: userRelationSlice.reducer,
-    AlarmSlice: alarmSlice.reducer,
     SuggestedUserSlice: suggestedUserSlice.reducer,
+    AlarmSlice: alarmSlice.reducer,
+    LoadingSlice: loadingSlice.reducer,
     UsersEntitiesSlice: usersEntitiesSlice.reducer,
   },
   devTools: true,

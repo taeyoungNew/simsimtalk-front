@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { checkOnline } from "../../utils/checktOnline";
 import { AvatarMenu } from "./AvatarMenu";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { selectUserProfileById } from "../../store/user/usersEntitiesSelector";
 
 interface CardProps {

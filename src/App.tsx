@@ -11,13 +11,13 @@ import { NoPage } from "./pages/NoPage";
 import { UserPageDetail } from "./pages/userPageDetail/UserPageDetail";
 import { Applayout } from "./layout/Applayout";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "./store/hook";
+import { useAppDispatch, useAppSelector } from "./store/hook";
 import UnAuthRoute from "./route/UnAuthRoute";
 import { authMeThunk } from "./store/auth/authThunk";
 import { PostDetail } from "./pages/postDetail/PostDetail";
 import AuthRoute from "./route/AuthRoute";
 import { useSelector } from "react-redux";
-import { RootState } from "./store";
+import type { RootState } from "./store";
 import { getSocket, initSocket } from "./sockets";
 import {
   getFollowingsThunk,
@@ -26,12 +26,13 @@ import {
 import { getChatsThunk } from "./store/chat/chatThunk";
 import { getAllAlarmByUserThunk } from "./store/alarm/alarmThunk";
 import { SuggestedFriendsPage } from "./pages/suggestedFriends/SuggestedFriendsPage";
+import GlobalLoading from "./components/common/loading/GlobalLoading";
 
 function App() {
   const dispatch = useAppDispatch();
   const isLogin = useSelector((state: RootState) => state.User.isLogin);
 
-  const { id, initialized } = useSelector((state: RootState) => state.User);
+  const { id } = useSelector((state: RootState) => state.User);
   useEffect(() => {
     const checkAuth = async () => {
       await dispatch(authMeThunk());
@@ -67,12 +68,9 @@ function App() {
     }
   }, [id]);
 
-  if (!initialized) {
-    return <div>로딩중</div>;
-  }
-
   return (
     <>
+      <GlobalLoading />
       <ThemeProvider theme={theme}>
         <CssBaseline></CssBaseline>
         <BrowserRouter>

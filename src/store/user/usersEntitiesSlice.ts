@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer";
 import { getPostsThunk } from "../post/allPostsThunk";
 import {
@@ -59,6 +59,26 @@ export const usersEntitiesSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      // .addCase(getPostsThunk.pending, (state, action) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(getPostsThunk.fulfilled, (state, action) => {
+      //   const posts = action.payload.posts;
+      //   posts.forEach((el) => {
+      //     const userId = el.userId;
+      //     const profileUrl = el.profileUrl;
+
+      //     state.entities[userId] = {
+      //       ...state.entities[userId],
+      //       id: userId,
+      //       profileUrl,
+      //     };
+      //   });
+      //   state.isLoading = false;
+      // })
+      // .addCase(getPostsThunk.rejected, (state, action) => {
+      //   state.isLoading = false;
+      // })
       .addCase(getSuggestedUserInitThunk.pending, (state, action) => {
         state.isLoading = true;
       })
@@ -143,26 +163,7 @@ export const usersEntitiesSlice = createSlice({
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(getPostsThunk.pending, (state, action) => {
-        state.isLoading = true;
-      })
-      .addCase(getPostsThunk.fulfilled, (state, action) => {
-        const posts = action.payload.posts;
-        posts.forEach((el) => {
-          const userId = el.userId;
-          const profileUrl = el.profileUrl;
 
-          state.entities[userId] = {
-            ...state.entities[userId],
-            id: userId,
-            profileUrl,
-          };
-        });
-        state.isLoading = false;
-      })
-      .addCase(getPostsThunk.rejected, (state, action) => {
-        state.isLoading = false;
-      })
       .addCase(changeMyBackgroundImgThunk.pending, (state, action) => {
         state.isLoading = true;
       })

@@ -7,7 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useAppDispatch } from "../store/hook";
 import { loginThunk } from "../store/auth/authThunk";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 import { resetLiked } from "../store/post/allPostsSlice";
 import {

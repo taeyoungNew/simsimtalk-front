@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { UserPageBody } from "./UserPageBody";
 import { UserPageHeader } from "./UserPageHeader";
 import { useEffect, useRef, useState } from "react";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { useLocation, useParams } from "react-router-dom";
 import { resetIsLast, resetUserPosts } from "../../store/post/userPostsSlice";
 import {

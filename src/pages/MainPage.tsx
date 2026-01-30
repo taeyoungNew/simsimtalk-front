@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hook";
 import { getPostsThunk } from "../store/post/allPostsThunk";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { WritePost } from "../components/WritePost";
 
 interface WritePost {

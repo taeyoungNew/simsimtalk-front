@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useAppDispatch } from "../store/hook";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import store from "../store/index";
 
 import { logoutThunk } from "../store/auth/authThunk";
 
@@ -11,10 +9,13 @@ const instance = axios.create({
 });
 
 const logout = async () => {
-  const userId = useSelector((state: RootState) => state.User.id);
-  const keepUserId = userId;
-  const dispatch = useAppDispatch();
-  await dispatch(logoutThunk({ userId: keepUserId }));
+  const state = store.getState();
+  const userId = state.User.id;
+  await store.dispatch(logoutThunk({ userId }));
+  // const userId = useSelector((state: RootState) => state.User.id);
+  // const keepUserId = userId;
+  // const dispatch = useAppDispatch();
+  // await dispatch(logoutThunk({ userId: keepUserId }));
 };
 
 instance.interceptors.response.use(

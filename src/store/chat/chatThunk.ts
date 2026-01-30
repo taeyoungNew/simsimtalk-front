@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createChatRoom, getChatListAPI } from "../../apis/chat";
-import { joinChatRoom } from "../../sockets/chatSocket";
+// import { joinChatRoom } from "../../sockets/chatSocket";
 
 type MessageType = "TEXT" | "IMAGE" | "FILE" | "SYSTEM";
 
@@ -61,7 +61,7 @@ export const chatThunk = createAsyncThunk<
   async ({ targetUserId, targetUserNickname }, thunkAPI) => {
     try {
       const chatRoomResult = (await createChatRoom(targetUserId)).data;
-      joinChatRoom(chatRoomResult.chatRoomId);
+      // joinChatRoom(chatRoomResult.chatRoomId);
       return {
         targetUserNickname,
         targetUserId,

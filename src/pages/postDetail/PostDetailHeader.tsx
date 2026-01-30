@@ -2,7 +2,7 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { CustomAvatar } from "../../assets/icons/Avatar";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { Dispatch, SetStateAction, useState } from "react";
 import { theme } from "../../theme/theme";
 import { useAppDispatch } from "../../store/hook";

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { ChatRoomCard } from "../molecules/ChatRoomCard";
 import { useAppSelector } from "../../store/hook";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { BaseEmptyState } from "./empty/BaseEmptyState";
 
 export const MyChattingRooms = () => {

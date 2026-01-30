@@ -1,8 +1,12 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { getPostsThunk } from "./allPostsThunk";
+import { createPostThunk, getPostsThunk } from "./allPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
-
 import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
+import { loginThunk, logoutThunk } from "../auth/authThunk";
+import {
+  createCommentThunk,
+  deleteCommentThunk,
+} from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -75,6 +79,19 @@ export const getAllPostsSlice = createSlice({
   },
   extraReducers: async (builder) => {
     builder
+      // .addCase(createPostThunk.pending, (state, action) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(createPostThunk.fulfilled, (state, action) => {
+      //   const newPost = action.payload;
+
+      //   state.posts.unshift(newPost);
+      //   state.isLoading = false;
+      // })
+      // .addCase(createPostThunk.rejected, (state, action) => {
+      //   state.isLoading = false;
+      // })
+
       .addCase(getPostsThunk.pending, (state) => {
         state.isLoading = true;
       })
@@ -106,9 +123,73 @@ export const getAllPostsSlice = createSlice({
         }
 
         state.isLoading = false;
-      });
+      })
+      .addCase(getPostsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCommentThunk.fulfilled, (state, action) => {
+        const postId = action.payload.postId;
+        const delta = 1;
+        const role = "add";
+        if (role === "add") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt += delta;
+        } else if (role === "remove") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt -= delta;
+        }
+        state.isLoading = false;
+      })
+      .addCase(deleteCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(createCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(createCommentThunk.fulfilled, (state, action) => {
+        const postId = action.payload.postId;
+        const delta = 1;
+        const role = "add";
+        if (role === "add") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt += delta;
+        } else if (role === "remove") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt -= delta;
+        }
+        state.isLoading = false;
+      })
+      .addCase(createCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(loginThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(loginThunk.fulfilled, (state, action) => {
+        state.posts.forEach((post) => {
+          post.isLiked = false;
+        });
+        state.isLoading = false;
+      })
+      .addCase(loginThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(logoutThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(logoutThunk.fulfilled, (state, action) => {
+        state.posts.forEach((post) => {
+          post.isLiked = false;
+        });
+        state.isLoading = false;
+      })
+      .addCase(logoutThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
 
-    builder
       .addCase(modifyPostThunk.pending, (state, action) => {
         state.isLoading = true;
       })

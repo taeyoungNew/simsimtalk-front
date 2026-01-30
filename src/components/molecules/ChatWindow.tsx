@@ -19,7 +19,7 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { leaveChatRoom, sendMessageEvent } from "../../sockets/chatSocket";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { selectMessagesByRoom } from "../../store/message/messageSelector";
 import { getSocket } from "../../sockets";
 import { ImageBubble } from "../atoms/chatBubbles/ImageBubble";

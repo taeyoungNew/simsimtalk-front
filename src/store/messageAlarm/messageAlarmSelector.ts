@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "..";
+import type { RootState } from "..";
 
 export const selectUnreadMsgAlarmCnt = (state: RootState) =>
   Object.values(state.messageAlarmSlice.alarmsByRoom).reduce(

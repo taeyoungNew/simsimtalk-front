@@ -6,8 +6,8 @@ import {
   userInfoThunk,
 } from "./userInfoThunk";
 import { followingCencelThunk, followingThunk } from "../follow/followThunk";
-import { useSelector } from "react-redux";
-import { RootState } from "..";
+// import { useSelector } from "react-redux";
+// import { RootState } from "..";
 
 interface Error {
   status: number;

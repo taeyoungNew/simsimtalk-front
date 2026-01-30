@@ -4,7 +4,7 @@ import { CustomAvatar } from "../../assets/icons/Avatar";
 import EditButton from "../../components/atoms/buttons/EditButton";
 import { ShareButton } from "../../components/atoms/buttons/ShareButton";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../store/hook";
 import {

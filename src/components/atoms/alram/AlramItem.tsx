@@ -10,7 +10,7 @@ import { useAppDispatch } from "../../../store/hook";
 import { markAlarmThunk } from "../../../store/alarm/alarmThunk";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import type { RootState } from "../../../store";
 import { selectUserProfileById } from "../../../store/user/usersEntitiesSelector";
 
 interface messageAlarmProps {

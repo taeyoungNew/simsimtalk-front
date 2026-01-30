@@ -2,7 +2,7 @@ import { Box, Button, List, TextField, Typography } from "@mui/material";
 import { CommentCard } from "../../components/common/CommentCard";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { useAppDispatch } from "../../store/hook";
 import { createCommentThunk } from "../../store/comment/commentThunk";
 

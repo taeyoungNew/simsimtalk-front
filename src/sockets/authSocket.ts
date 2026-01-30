@@ -1,7 +1,7 @@
 import { getSocket } from ".";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { useEffect } from "react";
+// import { useSelector } from "react-redux";
+// import type { RootState } from "../store";
+// import { useEffect } from "react";
 export const authenticatSocket = () => {
   const socket = getSocket();
   if (!socket?.connected) {

@@ -1,6 +1,6 @@
 import { JSX, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { Navigate } from "react-router-dom";
 
 export default function AuthRoute({ children }: { children: JSX.Element }) {

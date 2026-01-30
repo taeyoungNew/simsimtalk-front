@@ -18,7 +18,7 @@ import { useAppDispatch } from "../store/hook";
 import { signupUserThunk } from "../store/user/userSignupThunk";
 import { resetInitSignup } from "../store/user/userSignupSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { ErrNotificationBar } from "../components/atoms/notifications/ErrNotificationBar";
 import { SuccessNotification } from "../components/atoms/notifications/SuccessNotificationBar";
 

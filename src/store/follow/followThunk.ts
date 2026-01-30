@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { followingAPI, followingCencelAPI } from "../../apis/follow";
-import { RootState } from "..";
+import type { RootState } from "..";
 
 interface Error {
   status: number;
@@ -34,7 +34,6 @@ export const followingThunk = createAsyncThunk<
     try {
       const followingUserInfo = (await followingAPI({ followId, isMyPage }))
         .data.data;
-      console.log("followingUserInfo= ", followingUserInfo);
 
       const state: RootState = thunkAPI.getState() as RootState;
       const myId = state.User.id;

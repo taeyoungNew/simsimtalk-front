@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ChatWindow } from "../../molecules/ChatWindow";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import type { RootState } from "../../../store";
 
 interface chatContainerProps {
   roomId: string;

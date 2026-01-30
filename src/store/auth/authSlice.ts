@@ -89,6 +89,12 @@ export const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(logoutThunk.fulfilled, (state, action) => {
+        state.isLogin = false;
+        state.id = "";
+        state.profileUrl = "";
+        state.email = "";
+        state.nickname = "";
+        state.error = null;
         state.isLoading = false;
       })
       .addCase(logoutThunk.rejected, (state, action) => {

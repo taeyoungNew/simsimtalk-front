@@ -1,9 +1,9 @@
 import { getSocket } from ".";
-import { useAppDispatch } from "../store/hook";
-import { clearMessageByRoom } from "../store/message/messageSlice";
-import { messageThunk } from "../store/message/messageThunk";
+// import { useAppDispatch } from "../store/hook";
+// import { clearMessageByRoom } from "../store/message/messageSlice";
+// import { messageThunk } from "../store/message/messageThunk";
 import { AppDispath } from "../store";
-import { deleteChatRoom } from "../store/chat/chatSlice";
+// import { deleteChatRoom } from "../store/chat/chatSlice";
 
 interface SendMessage {
   chatRoomId: string;
@@ -28,13 +28,13 @@ export const leaveChatRoom = async (
     socket?.connect();
   }
   socket?.emit("leaveChatRoom", { chatRoomId });
-  dispatch(clearMessageByRoom(chatRoomId));
-  dispatch(deleteChatRoom(chatRoomId));
+  // dispatch(clearMessageByRoom(chatRoomId));
+  // dispatch(deleteChatRoom(chatRoomId));
 };
 
 export const receiveMessage = async (params: ReceiveMessage) => {
-  const dispatch = useAppDispatch();
-  await dispatch(messageThunk(params));
+  // const dispatch = useAppDispatch();
+  // await dispatch(messageThunk(params));
 };
 
 export const joinChatRoom = (chatRoomId: string) => {

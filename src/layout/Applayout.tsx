@@ -3,7 +3,7 @@ import NavBar from "../components/molecules/NavBar";
 import { Outlet, useLocation } from "react-router-dom";
 import { MyFollowings } from "../components/common/myFollowings";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { useAppDispatch } from "../store/hook";
 import { useEffect } from "react";
 import { resetUserError } from "../store/auth/authSlice";

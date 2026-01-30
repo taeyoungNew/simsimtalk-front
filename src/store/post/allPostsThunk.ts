@@ -1,7 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createPostAPI, getPostsAPI } from "../../apis/post";
-import { getAllPostsSlice } from "./allPostsSlice";
-import { getUserPostsSlice } from "./userPostsSlice";
 
 interface Error {
   status: number;
@@ -22,7 +20,7 @@ interface Comment {
   content: string;
   createAt: string;
 }
-interface Posts {
+interface Post {
   id: number;
   profileUrl: string;
   userId: string;
@@ -43,7 +41,7 @@ interface isLikedPostId {
 }
 
 interface GetPostsRes {
-  posts: Posts[];
+  posts: Post[];
 }
 
 export const getPostsThunk = createAsyncThunk<
@@ -67,18 +65,15 @@ export const getPostsThunk = createAsyncThunk<
 });
 
 export const createPostThunk = createAsyncThunk<
-  Posts,
+  Post,
   string,
   {
     rejectValue: Error;
   }
 >("post/createPost", async (content, thunkAPI) => {
   try {
-    const newPost = (await createPostAPI(content)).data.data;
-
-    thunkAPI.dispatch(getAllPostsSlice.actions.addPostToAllPosts(newPost));
-    thunkAPI.dispatch(getUserPostsSlice.actions.addPostToUserPosts(newPost));
-    return newPost;
+    const newPost = await createPostAPI(content);
+    return newPost.data.data as Post;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,

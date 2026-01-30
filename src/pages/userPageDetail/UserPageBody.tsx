@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../../store/hook";
 import { getUserPostsThunk } from "../../store/post/userPostsThunk";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { Controller, useForm } from "react-hook-form";
 import { editMyInfoThunk } from "../../store/user/userInfoThunk";
 import { resetInitMyInfo } from "../../store/user/userInfoSlice";

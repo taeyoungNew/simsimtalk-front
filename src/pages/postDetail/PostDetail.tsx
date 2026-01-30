@@ -3,7 +3,7 @@ import { PostDetailHeader } from "./PostDetailHeader";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { getPostDetailThunk } from "../../store/post/postDetailThunk";
 import { useAppDispatch } from "../../store/hook";
 import { PostDetailBody } from "./PostDetailBody";

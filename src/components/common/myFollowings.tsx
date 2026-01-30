@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { FollowinCard } from "../molecules/FollowingCard";
 import { EmptyState } from "./empty/EmptyState";
 import { BaseEmptyState } from "./empty/BaseEmptyState";

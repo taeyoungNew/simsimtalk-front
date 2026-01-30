@@ -4,8 +4,8 @@ import {
   deleteCommentAPI,
   modifyCommentAPI,
 } from "../../apis/comment";
-import { updatePostCommentCnt } from "../post/allPostsSlice";
-import { updateUserPostCommentCnt } from "../post/userPostsSlice";
+// import { updatePostCommentCnt } from "../post/allPostsSlice";
+// import { updateUserPostCommentCnt } from "../post/userPostsSlice";
 
 interface Error {
   status: number;
@@ -47,17 +47,18 @@ export const createCommentThunk = createAsyncThunk<
 >("comment/createComment", async (payload, thunkAPI) => {
   try {
     const result = (await createCommentAPI(payload)).data.plainComment;
+    // console.log("result = ", result);
 
-    thunkAPI.dispatch(
-      updatePostCommentCnt({ postId: payload.postId, delta: 1, role: "add" }),
-    );
-    thunkAPI.dispatch(
-      updateUserPostCommentCnt({
-        postId: payload.postId,
-        delta: 1,
-        role: "add",
-      }),
-    );
+    // thunkAPI.dispatch(
+    //   updatePostCommentCnt({ postId: payload.postId, delta: 1, role: "add" }),
+    // );
+    // thunkAPI.dispatch(
+    //   updateUserPostCommentCnt({
+    //     postId: payload.postId,
+    //     delta: 1,
+    //     role: "add",
+    //   }),
+    // );
     return result;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
@@ -94,20 +95,20 @@ export const deleteCommentThunk = createAsyncThunk<
 >("comment/deleteComment", async (payload, thunkAPI) => {
   try {
     await deleteCommentAPI(payload);
-    thunkAPI.dispatch(
-      updatePostCommentCnt({
-        postId: payload.postId,
-        delta: 1,
-        role: "remove",
-      }),
-    );
-    thunkAPI.dispatch(
-      updateUserPostCommentCnt({
-        postId: payload.postId,
-        delta: 1,
-        role: "remove",
-      }),
-    );
+    // thunkAPI.dispatch(
+    //   updatePostCommentCnt({
+    //     postId: payload.postId,
+    //     delta: 1,
+    //     role: "remove",
+    //   }),
+    // );
+    // thunkAPI.dispatch(
+    //   updateUserPostCommentCnt({
+    //     postId: payload.postId,
+    //     delta: 1,
+    //     role: "remove",
+    //   }),
+    // );
     return payload;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({

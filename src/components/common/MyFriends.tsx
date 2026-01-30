@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { FriendsCard } from "../molecules/FriendCard";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { EmptyState } from "./empty/EmptyState";
 import { BaseEmptyState } from "./empty/BaseEmptyState";
 

@@ -4,7 +4,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { theme } from "../../theme/theme";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { useEffect, useRef } from "react";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { EmptyState } from "../../components/common/empty/EmptyState";
 import { BaseEmptyState } from "../../components/common/empty/BaseEmptyState";

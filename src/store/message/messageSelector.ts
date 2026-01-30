@@ -1,4 +1,4 @@
-import { RootState } from "..";
+import type { RootState } from "..";
 
 export const selectMessagesByRoom =
   (chatRoomId: string) => (state: RootState) =>

@@ -9,6 +9,7 @@ import { getMsgAlarmsSocket } from "../../sockets/alarmSocket";
 import { deleteAuth } from "./authSlice";
 import { resetLiked } from "../post/allPostsSlice";
 import { reconnectSocket } from "../../sockets";
+// import { startLoading, stopLoading } from "../loading/loadingSlice";
 
 interface LoginReq {
   email: string;
@@ -46,15 +47,16 @@ export const loginThunk = createAsyncThunk<
     rejectValue: Error;
   }
 >("auth/login", async ({ email, password }, thunkAPI) => {
+  // thunkAPI.dispatch(startLoading());
   try {
     const loginResult = await loginAPI({
       email,
       password,
     });
-    thunkAPI.dispatch(resetLiked());
+    // thunkAPI.dispatch(resetLiked());
     const userId: string = loginResult.data.data.id;
-    reconnectSocket(userId);
-    getMsgAlarmsSocket();
+    // reconnectSocket(userId);
+    // getMsgAlarmsSocket();
     return { message: loginResult.data.message, data: loginResult.data.data };
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
@@ -62,6 +64,8 @@ export const loginThunk = createAsyncThunk<
       status: error.response.data.status,
       message: error.response.data.message,
     });
+  } finally {
+    // thunkAPI.dispatch(stopLoading());
   }
 });
 
@@ -70,18 +74,21 @@ export const logoutThunk = createAsyncThunk<
   { userId: string },
   { rejectValue: Error }
 >("auth/logout", async ({ userId }, thunkAPI) => {
+  // thunkAPI.dispatch(startLoading());
   try {
     const res = await logoutAPI();
-    thunkAPI.dispatch(resetLiked());
-    thunkAPI.dispatch(deleteAuth());
-    logoutSocket(userId);
-    alert(res.data.message);
+    // thunkAPI.dispatch(resetLiked());
+    // thunkAPI.dispatch(deleteAuth());
+    // logoutSocket(userId);
+    // alert(res.data.message);
   } catch (error: any) {
     return thunkAPI.rejectWithValue({
       errorCode: error.response.data.errorCode,
       status: error.response.data.status,
       message: error.response.data.message,
     });
+  } finally {
+    // thunkAPI.dispatch(stopLoading());
   }
 });
 
@@ -90,6 +97,12 @@ export const authMeThunk = createAsyncThunk<
   void,
   { rejectValue: Error }
 >("auth/auth-me", async (_, thunkAPI) => {
+  let showLoading = false;
+
+  const timer = setTimeout(() => {
+    showLoading = true;
+    // thunkAPI.dispatch(startLoading());
+  }, 200); // 200ms 넘으면 로딩표시
   try {
     const res = await authMeAPI();
 
@@ -108,5 +121,10 @@ export const authMeThunk = createAsyncThunk<
       status: error.response.status,
       message: error.response.data.message,
     });
+  } finally {
+    clearTimeout(timer);
+    if (showLoading) {
+      // thunkAPI.dispatch(stopLoading());
+    }
   }
 });

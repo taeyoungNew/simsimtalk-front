@@ -16,7 +16,7 @@ import { useAppDispatch } from "../../store/hook";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import type { RootState } from "../../store";
 import NotificationsPausedIcon from "@mui/icons-material/NotificationsPaused";
 import { NavSearchInput } from "../atoms/inputs/NavSearchInput";
 import { CustomAvatar } from "../../assets/icons/Avatar";

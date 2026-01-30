@@ -2,6 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUserPostsThunk } from "./userPostsThunk";
 import { deletePostThunk, modifyPostThunk } from "./postDetailThunk";
 import { postLikeCencelThunk, postLikeThunk } from "../like/postLikeThunk";
+import {
+  createCommentThunk,
+  deleteCommentThunk,
+} from "../comment/commentThunk";
 
 interface IsLastIsLoading {
   isLoading: boolean;
@@ -74,6 +78,44 @@ export const getUserPostsSlice = createSlice({
   },
   extraReducers: async (builder) => {
     builder
+      .addCase(deleteCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCommentThunk.fulfilled, (state, action) => {
+        const postId = action.payload.postId;
+        const delta = 1;
+        const role = "add";
+        if (role === "add") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt += delta;
+        } else if (role === "remove") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt -= delta;
+        }
+        state.isLoading = false;
+      })
+      .addCase(deleteCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(createCommentThunk.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(createCommentThunk.fulfilled, (state, action) => {
+        const postId = action.payload.postId;
+        const delta = 1;
+        const role = "add";
+        if (role === "add") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt += delta;
+        } else if (role === "remove") {
+          const post = state.posts.find((p) => p.id === postId);
+          if (post) post.commentCnt -= delta;
+        }
+        state.isLoading = false;
+      })
+      .addCase(createCommentThunk.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       .addCase(postLikeThunk.pending, (state, action) => {
         state.isLoading = true;
       })

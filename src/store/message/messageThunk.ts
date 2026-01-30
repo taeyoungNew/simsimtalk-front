@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { uploadFile, uploadImage } from "../../apis/upload";
-import { sendMessageEvent } from "../../sockets/chatSocket";
+// import { sendMessageEvent } from "../../sockets/chatSocket";
 interface Error {
   status: number;
   errorCode: string;
@@ -61,7 +61,7 @@ export const fileUploadThunk = createAsyncThunk<
     contentType: result.data.contentType,
   };
 
-  sendMessageEvent(payload);
+  // sendMessageEvent(payload);
 });
 
 export const imgUploadThunk = createAsyncThunk<
@@ -81,5 +81,5 @@ export const imgUploadThunk = createAsyncThunk<
     originalName: result.data.originalName,
     contentType: result.data.contentType,
   };
-  sendMessageEvent(payload);
+  // sendMessageEvent(payload);
 });

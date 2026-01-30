@@ -11,7 +11,7 @@ import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import "../assets/style/emojiPicker/emojiPikerPost.css";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { selectUserProfileById } from "../store/user/usersEntitiesSelector";
 interface WritePost {
   content: string;

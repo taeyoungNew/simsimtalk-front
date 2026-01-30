@@ -1,4 +1,4 @@
-import { RootState } from "..";
+import type { RootState } from "..";
 
 export const selectUserProfileById = (userId: string) => (state: RootState) =>
   state.UsersEntitiesSlice.entities[userId]?.profileUrl;
